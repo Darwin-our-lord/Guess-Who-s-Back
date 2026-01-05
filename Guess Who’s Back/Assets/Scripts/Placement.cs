@@ -14,6 +14,7 @@ public class Placement : MonoBehaviour
     public RoadMaker roadMaker;
     public Grid grid;
     public LayerMask layerMask;
+    public GameObject towersParent;
 
     void Update()
     {
@@ -32,7 +33,7 @@ public class Placement : MonoBehaviour
 
             if (hit == null) 
             {
-                Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity);
+                Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
                 //TowerObjPrefab = null;
                 roadMaker.ExtendRoad();
 

@@ -1,3 +1,4 @@
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -8,14 +9,34 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int rewardValue = 10;
 
     private float currentHealth;
-    private Vector3Int deathPosition;
+    private Vector3 deathPosition;
     private bool hasDied = false;
+
+    private int roadTargetNr = 0;
 
     private void Awake()
     {
         currentHealth = maxHealth;
     }
+    public void FixedUpdate()
+    {
+        if (!hasDied)
+        {
+            Vector3 targetPos = RoadMaker.roads[roadTargetNr].transform.position;
+            Vector3 direction = (targetPos - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
 
+            if (Vector3.Distance(transform.position, targetPos) < 0.05f)
+            {
+                roadTargetNr++;
+
+                if (roadTargetNr >= RoadMaker.roads.Count)
+                {
+                    //TODO: player lose
+                }
+            }
+        }
+    }
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
@@ -28,7 +49,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        deathPosition = GetCurrentGridPosition();
+        deathPosition = transform.position;
         hasDied = true;
 
         // TODO: Give player reward
@@ -41,29 +62,13 @@ public class Enemy : MonoBehaviour
     {
         currentHealth = maxHealth;
 
-        if (hasDied)
-        {
-            SetGridPosition(deathPosition);
-        }
-
         gameObject.SetActive(true);
-    }
-
-    private Vector3Int GetCurrentGridPosition()
-    {
-        // TODO: Convert world position to grid position using Unity Grid
-        return Vector3Int.zero;
-    }
-
-    private void SetGridPosition(Vector3Int gridPos)
-    {
-        // TODO: Convert grid position to world position and set transform
     }
 
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealth;
     public float Speed => speed;
     public int RewardValue => rewardValue;
-    public Vector3Int DeathPosition => deathPosition;
+    public Vector3 DeathPosition => deathPosition;
     public bool HasDied => hasDied;
 }

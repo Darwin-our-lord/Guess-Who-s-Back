@@ -7,6 +7,7 @@ public class RoadMaker : MonoBehaviour
 
     public GameObject RoadObjPrefab;
     public GameObject RoadEndObjPrefab;
+    public GameObject RoadStartObjPrefab;
 
     public LayerMask layerMask;
 
@@ -14,7 +15,7 @@ public class RoadMaker : MonoBehaviour
     public Vector2 lastlastRoadPos;
 
     public GameObject roadsParent;
-    public List<GameObject> roads = new List<GameObject>();
+    public static List<GameObject> roads = new List<GameObject>();
 
 
     private void Start()
@@ -35,6 +36,10 @@ public class RoadMaker : MonoBehaviour
 
             GameObject oldRoad = Instantiate(RoadObjPrefab, lastRoadPos, Quaternion.identity, roadsParent.transform);
             roads.Add(oldRoad);
+        }
+        else
+        {
+            GameObject oldRoad = Instantiate(RoadStartObjPrefab, lastRoadPos, Quaternion.identity, roadsParent.transform);
         }
 
         while (true)
