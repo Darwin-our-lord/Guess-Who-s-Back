@@ -6,12 +6,16 @@ public class RoadMaker : MonoBehaviour
     public Camera mainCamera;
 
     public GameObject RoadObjPrefab;
+    public GameObject RoadEndObjPrefab;
 
     public LayerMask layerMask;
 
     public Vector2 lastRoadPos = new Vector2(0.5f,0.5f);
     public Vector2 lastlastRoadPos;
+
+    public GameObject roadsParent;
     public List<GameObject> roads = new List<GameObject>();
+
 
     private void Start()
     {
@@ -23,6 +27,16 @@ public class RoadMaker : MonoBehaviour
     public void ExtendRoad()
     {
         int attempts = 0;
+
+        if(roads.Count != 0)
+        {
+            Destroy(roads[roads.Count - 1]);
+            roads.Remove(roads[roads.Count - 1]);
+
+            GameObject oldRoad = Instantiate(RoadObjPrefab, lastRoadPos, Quaternion.identity, roadsParent.transform);
+            roads.Add(oldRoad);
+        }
+
         while (true)
         {
             attempts++;
@@ -45,7 +59,7 @@ public class RoadMaker : MonoBehaviour
 
             if (hit == null)
             {
-                GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity);
+                GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                 roads.Add(newRoad);
                 lastlastRoadPos = lastRoadPos;
                 lastRoadPos = newRoadPos;
@@ -54,7 +68,7 @@ public class RoadMaker : MonoBehaviour
             else if (hit.gameObject.CompareTag("Tower"))
             {
                 Destroy(hit.gameObject);
-                GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity);
+                GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                 roads.Add(newRoad);
                 lastlastRoadPos = lastRoadPos;
                 lastRoadPos = newRoadPos;
@@ -64,7 +78,7 @@ public class RoadMaker : MonoBehaviour
             {
                 if (attempts < 7) continue;
 
-                GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity);
+                GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                 roads.Add(newRoad);
                 lastlastRoadPos = lastRoadPos;
                 lastRoadPos = newRoadPos;
