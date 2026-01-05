@@ -11,7 +11,7 @@ public class Placement : MonoBehaviour
 
     public GameObject TowerObjFake;
     public GameObject TowerObjPrefab;
-
+    public RoadMaker roadMaker;
     public Grid grid;
     public LayerMask layerMask;
 
@@ -34,7 +34,7 @@ public class Placement : MonoBehaviour
             {
                 Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity);
                 //TowerObjPrefab = null;
-
+                roadMaker.ExtendRoad();
 
                 //tower placesssed do!!! 
             }
