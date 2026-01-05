@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1350925805022019157}
   - component: {fileID: 3678980278443708274}
   - component: {fileID: 5874587498869111303}
+  - component: {fileID: -248797752199810874}
   m_Layer: 0
   m_Name: TEST BOX
   m_TagString: Tower
@@ -134,3 +135,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-248797752199810874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986570345613094686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 006d483c986f9f741b58b304c55e95de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 25
+  range: 3
+  fireRate: 1
+  cost: 50

@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float cameraSpeed;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        float hor = Input.GetAxisRaw("Horizontal");
+        float ver = Input.GetAxisRaw("Vertical");
+
+        transform.position += new Vector3(hor, ver, 0).normalized * cameraSpeed * Time.deltaTime;
+
     }
 }
