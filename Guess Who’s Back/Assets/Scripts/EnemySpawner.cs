@@ -48,7 +48,6 @@ public class EnemySpawner : MonoBehaviour
                 GameObject highestValueEnemy = null;
                 for (int i = 0; i < 3; i++)
                 {
-                    
                     GameObject enemiesChosen = enemies[UnityEngine.Random.Range(0, enemies.Count)];
                     if (highestValueEnemy == null)
                         highestValueEnemy = enemiesChosen;
