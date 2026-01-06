@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
             for (int i = 0; i < 2; i++)
             {
                 roadMaker.ExtendRoad();
-                yield return new WaitForSeconds(rate);
+                yield return new WaitForSeconds(rate/2);
             }
 
             foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
