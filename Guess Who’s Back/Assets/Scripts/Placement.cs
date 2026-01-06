@@ -31,7 +31,7 @@ public class Placement : MonoBehaviour
             {
                 Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
                 TowerObjPrefab = null;
-                
+                TowerObjFake.GetComponent<SpriteRenderer>().sprite = null;
 
                 //tower placesssed do!!! 
             }

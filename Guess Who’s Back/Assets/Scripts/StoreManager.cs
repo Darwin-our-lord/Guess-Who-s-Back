@@ -39,6 +39,7 @@ public class StoreManager : MonoBehaviour
     public void SelectTower(int buttonID)
     {
         placement.TowerObjPrefab = towersInShop[buttonID];
+        placement.TowerObjFake.GetComponent<SpriteRenderer>().sprite = towersInShop[buttonID].GetComponent<SpriteRenderer>().sprite;
         menuManager.StoreButton();
     }
 }
