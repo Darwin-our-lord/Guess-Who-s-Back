@@ -1,13 +1,18 @@
+
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public List<Wave> waves;
+    public List<GameObject> enemies = new List<GameObject>();
+    public int wave = 1;
+    public int waveValueTotal = 1;
     public Transform spawnPoint;
     public float timeBetweenWaves = 5f;
-    public float rate;
+    public float rate = 1f;
     public GameObject enemiesParent;
 
     void Start()
@@ -17,36 +22,40 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnLevel()
     {
-        foreach (Wave wave in waves)
+        while (true)
         {
-            foreach (EnemyGroup group in wave.enemyGroups)
+            int waveValue = 0;
+            int enemiesSpawned = 0;
+
+            while(waveValue < waveValueTotal && enemiesSpawned < 5)
             {
-                yield return StartCoroutine(SpawnGroup(group));
+                GameObject highestValueEnemy = null;
+                for (int i = 0; i < 3; i++)
+                {
+                    
+                    GameObject enemiesChosen = enemies[UnityEngine.Random.Range(0, enemies.Count)];
+                    if (highestValueEnemy == null)
+                        highestValueEnemy = enemiesChosen;
+                    else if (enemiesChosen.GetComponent<Enemy>().WaveValue > highestValueEnemy.GetComponent<Enemy>().WaveValue)
+                        highestValueEnemy = enemiesChosen;
+                }
+                
+
+                if (highestValueEnemy.GetComponent<Enemy>().WaveValue + waveValue <= waveValueTotal)
+                {
+                    waveValue += highestValueEnemy.GetComponent<Enemy>().WaveValue;
+                    enemiesSpawned++;
+                    Instantiate(highestValueEnemy, spawnPoint.position, spawnPoint.rotation, enemiesParent.transform);
+                    yield return new WaitForSeconds(rate);
+                }
             }
+
+            int waveMod = (int)math.floor(wave / 10f);
+            waveValueTotal+=waveMod+1;
+            wave++;
 
             yield return new WaitForSeconds(timeBetweenWaves);
         }
     }
 
-    IEnumerator SpawnGroup(EnemyGroup group)
-    {
-        for (int i = 0; i < group.count; i++)
-        {
-            Instantiate(group.enemyPrefab, spawnPoint.position, spawnPoint.rotation, enemiesParent.transform);
-            yield return new WaitForSeconds(rate);
-        }
-    }
-}
-
-[System.Serializable]
-public class EnemyGroup
-{
-    public GameObject enemyPrefab;
-    public int count;
-}
-
-[System.Serializable]
-public class Wave
-{
-    public List<EnemyGroup> enemyGroups; 
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3671108009756139151}
   - component: {fileID: 5956532897838411051}
   m_Layer: 0
-  m_Name: Walker
+  m_Name: Runner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.91771495, b: 0.5801887, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  speed: 1
-  rewardValue: 10
-  waveValue: 1
+  maxHealth: 30
+  speed: 3
+  rewardValue: 15
+  waveValue: 2

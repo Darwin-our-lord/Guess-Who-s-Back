@@ -40,6 +40,7 @@ public class RoadMaker : MonoBehaviour
         else
         {
             GameObject oldRoad = Instantiate(RoadStartObjPrefab, lastRoadPos, Quaternion.identity, roadsParent.transform);
+            roads.Add(oldRoad);
         }
 
         while (true)
@@ -81,7 +82,36 @@ public class RoadMaker : MonoBehaviour
             }
             else if (hit.gameObject.CompareTag("Road"))
             {
-                if (attempts < 7) continue;
+                if (hit.gameObject == roads[0]) continue;
+
+                Vector2 roadTest = lastRoadPos;
+                roadTest += new Vector2(1, 0);
+                Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                roadTest = lastRoadPos;
+                roadTest += new Vector2(-1, 0);
+                hit2 = null;
+                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                roadTest = lastRoadPos;
+                roadTest += new Vector2(0, 1);
+                hit2=null;
+                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                roadTest = lastRoadPos;
+                roadTest += new Vector2(0, -1);
+                hit2 = null;
+                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+
 
                 GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                 roads.Add(newRoad);
