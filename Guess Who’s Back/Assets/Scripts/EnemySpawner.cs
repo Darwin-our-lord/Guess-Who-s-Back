@@ -36,7 +36,6 @@ public class EnemySpawner : MonoBehaviour
             foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
             {
                 enemy.Respawn();
-                yield return new WaitForSeconds(rate/5);
             }
 
 
