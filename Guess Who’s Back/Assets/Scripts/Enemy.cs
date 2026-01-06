@@ -12,18 +12,20 @@ public class Enemy : MonoBehaviour
     private float currentHealth;
     private Vector3 deathPosition;
     private bool hasDied = false;
+    private RoadMaker roadMaker;
 
     private int roadTargetNr = 0;
 
     private void Awake()
     {
+        roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
         currentHealth = maxHealth;
     }
     public void FixedUpdate()
     {
-        if (!hasDied)
+        if (!hasDied && roadTargetNr < roadMaker.roads.Count)
         {
-            Vector3 targetPos = RoadMaker.roads[roadTargetNr].transform.position;
+            Vector3 targetPos = roadMaker.roads[roadTargetNr].transform.position;
             Vector3 direction = (targetPos - transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
 
@@ -31,9 +33,11 @@ public class Enemy : MonoBehaviour
             {
                 roadTargetNr++;
 
-                if (roadTargetNr >= RoadMaker.roads.Count)
+                if (roadTargetNr >= roadMaker.roads.Count)
                 {
-                    //TODO: player lose
+                    MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
+                    Time.timeScale = 0f;
+                    menuManager.loseUI.SetActive(true);
                 }
             }
         }

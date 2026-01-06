@@ -6,12 +6,14 @@ public class MenuManager : MonoBehaviour
     public GameObject mainUI;
     public GameObject settingsUI;
     public GameObject storeUI;
+    public GameObject loseUI;
 
     private bool inStore = false;
     //button functions
     public void StartButton()
     {
         SceneManager.LoadScene(1);
+        Time.timeScale = 1f;
     }
     public void QuitButton()
     {

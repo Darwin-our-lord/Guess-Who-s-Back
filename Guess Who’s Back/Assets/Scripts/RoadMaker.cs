@@ -15,7 +15,7 @@ public class RoadMaker : MonoBehaviour
     public Vector2 lastlastRoadPos;
 
     public GameObject roadsParent;
-    public static List<GameObject> roads = new List<GameObject>();
+    public List<GameObject> roads = new List<GameObject>();
 
 
     private void Start()
