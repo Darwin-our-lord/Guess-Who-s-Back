@@ -30,7 +30,7 @@ public class Placement : MonoBehaviour
             if (hit == null) 
             {
                 Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
-                //TowerObjPrefab = null;
+                TowerObjPrefab = null;
                 
 
                 //tower placesssed do!!! 

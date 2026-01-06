@@ -8,6 +8,8 @@ public class StoreManager : MonoBehaviour
     public List<GameObject> towersInShop = new List<GameObject>();
     public List<GameObject> towerButtons = new List<GameObject>();
 
+    public Placement placement;
+    public MenuManager menuManager;
     //[Header("UI elements")]
 
     private void Awake()
@@ -32,5 +34,11 @@ public class StoreManager : MonoBehaviour
             towerButtons[i].transform.GetChild(3).GetComponent<TMP_Text>().text = towersInShop[i].GetComponent<Tower>().description;
         }
 
+    }
+
+    public void SelectTower(int buttonID)
+    {
+        placement.TowerObjPrefab = towersInShop[buttonID];
+        menuManager.StoreButton();
     }
 }
