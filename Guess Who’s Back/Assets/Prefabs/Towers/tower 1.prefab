@@ -105,6 +105,7 @@ MonoBehaviour:
   range: 3
   fireRate: 1
   cost: 50
+  description: Basic tower
 --- !u!61 &6415892694410887876
 BoxCollider2D:
   m_ObjectHideFlags: 0

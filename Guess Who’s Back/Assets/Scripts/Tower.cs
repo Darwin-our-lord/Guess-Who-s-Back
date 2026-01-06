@@ -9,6 +9,8 @@ public class Tower : MonoBehaviour
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private int cost = 50;
 
+    public string description = "";
+
     private Vector3Int gridPosition;
     private float lastFireTime;
     private Enemy currentTarget;
