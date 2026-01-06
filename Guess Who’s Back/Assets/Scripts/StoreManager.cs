@@ -1,19 +1,24 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 public class StoreManager : MonoBehaviour
 {
     public List<GameObject> towers = new List<GameObject>();
     public List<GameObject> towersInShop = new List<GameObject>();
     public List<GameObject> towerButtons = new List<GameObject>();
+    public TMP_Text moneyText;
 
     public Placement placement;
     public MenuManager menuManager;
-    //[Header("UI elements")]
 
+    public int money = 50;
+    private int yetToBeAddedMoney = 0;
     private void Awake()
     {
+        money = 50;
+        UpdateMoneyUI();
         RerollStore();
     }
     public void RerollStore()
@@ -38,8 +43,35 @@ public class StoreManager : MonoBehaviour
 
     public void SelectTower(int buttonID)
     {
-        placement.TowerObjPrefab = towersInShop[buttonID];
-        placement.TowerObjFake.GetComponent<SpriteRenderer>().sprite = towersInShop[buttonID].GetComponent<SpriteRenderer>().sprite;
-        menuManager.StoreButton();
+        if (money >= towersInShop[buttonID].GetComponent<Tower>().Cost)
+        {
+            placement.TowerObjPrefab = towersInShop[buttonID];
+            placement.TowerObjFake.GetComponent<SpriteRenderer>().sprite = towersInShop[buttonID].GetComponent<SpriteRenderer>().sprite;
+            menuManager.StoreButton();
+            money -= towersInShop[buttonID].GetComponent<Tower>().Cost;
+            RerollStore();
+            UpdateMoneyUI();
+        }
+    }
+    public void UpdateMoneyUI()
+    {
+        if (moneyText != null)
+        {
+            moneyText.text = "Money: " + money.ToString();
+        }
+    }
+    public void AddMoney(int amount)
+    {
+        if (EnemySpawner.waveOngoing)
+        {
+            yetToBeAddedMoney += amount;
+        }
+        else
+        {
+            yetToBeAddedMoney += amount;
+            money += yetToBeAddedMoney;
+            yetToBeAddedMoney = 0;
+            UpdateMoneyUI();
+        }
     }
 }

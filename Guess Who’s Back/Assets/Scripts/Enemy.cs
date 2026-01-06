@@ -13,12 +13,13 @@ public class Enemy : MonoBehaviour
     private Vector3 deathPosition;
     private bool hasDied = false;
     private RoadMaker roadMaker;
-
+    private StoreManager storeManager;
     private int roadTargetNr = 0;
 
     private void Awake()
     {
         roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
+        storeManager = GameObject.Find("StoreManager").GetComponent<StoreManager>();
         currentHealth = maxHealth;
     }
     public void FixedUpdate()
@@ -57,8 +58,7 @@ public class Enemy : MonoBehaviour
         deathPosition = transform.position;
         hasDied = true;
 
-        // TODO: Give player reward
-        // TODO: Trigger death event/animation
+        storeManager.AddMoney(rewardValue);
 
         gameObject.SetActive(false);
     }

@@ -102,5 +102,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 30
   speed: 3
-  rewardValue: 15
+  rewardValue: 20
   waveValue: 2

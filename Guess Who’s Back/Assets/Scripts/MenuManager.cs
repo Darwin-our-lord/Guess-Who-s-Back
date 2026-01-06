@@ -8,6 +8,8 @@ public class MenuManager : MonoBehaviour
     public GameObject storeUI;
     public GameObject loseUI;
 
+    public StoreManager storeManager;
+
     private bool inStore = false;
     //button functions
     public void StartButton()
@@ -38,6 +40,7 @@ public class MenuManager : MonoBehaviour
         if (inStore)  storeUI.SetActive(false);  
         else if (!inStore) storeUI.SetActive(true);
         inStore = !inStore;
+        storeManager.UpdateMoneyUI();
     }
 
 }
