@@ -9,8 +9,6 @@ public class Tower : MonoBehaviour
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private int cost = 50;
 
-    public string description = "";
-
     private Vector3Int gridPosition;
     private float lastFireTime;
     private Enemy currentTarget;
@@ -75,6 +73,11 @@ public class Tower : MonoBehaviour
     {
         gridPosition = gridPos;
         // TODO: Convert grid position to world position
+    }
+
+    public string GetDescription()
+    {
+        return $"cost: {cost} \n dmg: {damage} \n range: {range} \n rate: {fireRate}";
     }
 
     public float Damage => damage;
