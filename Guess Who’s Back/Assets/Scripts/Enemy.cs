@@ -62,8 +62,10 @@ public class Enemy : MonoBehaviour
     public void Respawn()
     {
         currentHealth = maxHealth;
+        hasDied = false;
 
         gameObject.SetActive(true);
+
     }
 
     public float MaxHealth => maxHealth;

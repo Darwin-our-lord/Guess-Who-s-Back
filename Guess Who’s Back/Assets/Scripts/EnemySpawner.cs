@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -17,13 +16,21 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SpawnLevel());
+        StartCoroutine(SpawnWave());
     }
 
-    IEnumerator SpawnLevel()
+    IEnumerator SpawnWave()
     {
-        while (true)
+        while (true)//temp while loop
         {
+            
+            foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
+            {
+                enemy.Respawn();
+                yield return new WaitForSeconds(rate/2);
+            }
+
+
             int waveValue = 0;
             int enemiesSpawned = 0;
 
