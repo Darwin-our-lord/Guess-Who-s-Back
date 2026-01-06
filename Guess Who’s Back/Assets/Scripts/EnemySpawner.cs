@@ -13,17 +13,26 @@ public class EnemySpawner : MonoBehaviour
     public float timeBetweenWaves = 5f;
     public float rate = 1f;
     public GameObject enemiesParent;
+    public RoadMaker roadMaker;
 
-    void Start()
+    /*void Start()
+    {
+        StartCoroutine(SpawnWave());
+    }*/
+
+    public void StartWave()
     {
         StartCoroutine(SpawnWave());
     }
-
     IEnumerator SpawnWave()
     {
-        while (true)//temp while loop
-        {
-            
+
+            for (int i = 0; i < 2; i++)
+            {
+                roadMaker.ExtendRoad();
+                yield return new WaitForSeconds(rate);
+            }
+
             foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
             {
                 enemy.Respawn();
@@ -63,6 +72,6 @@ public class EnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(timeBetweenWaves);
         }
-    }
+    
 
 }

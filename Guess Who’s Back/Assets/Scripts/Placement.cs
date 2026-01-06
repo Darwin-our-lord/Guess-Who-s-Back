@@ -1,9 +1,5 @@
-using System;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEditor.Progress;
 
 public class Placement : MonoBehaviour
 {
@@ -27,7 +23,7 @@ public class Placement : MonoBehaviour
         TowerObjFake.transform.position = worldCenterPos;
 
         //places object---
-        if (Input.GetMouseButton(0) && TowerObjPrefab != null)
+        if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject())
         {
             Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
@@ -35,7 +31,7 @@ public class Placement : MonoBehaviour
             {
                 Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
                 //TowerObjPrefab = null;
-                roadMaker.ExtendRoad();
+                
 
                 //tower placesssed do!!! 
             }
