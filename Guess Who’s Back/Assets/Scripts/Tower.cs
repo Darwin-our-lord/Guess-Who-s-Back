@@ -28,7 +28,7 @@ public class Tower : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Enemy[] allEnemies = FindObjectsOfType<Enemy>();
+        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         List<Enemy> enemiesInRange = new List<Enemy>();
 
         foreach (Enemy enemy in allEnemies)
