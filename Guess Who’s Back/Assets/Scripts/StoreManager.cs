@@ -9,6 +9,7 @@ public class StoreManager : MonoBehaviour
     public List<GameObject> towersInShop = new List<GameObject>();
     public List<GameObject> towerButtons = new List<GameObject>();
     public TMP_Text moneyText;
+    public TMP_Text toBeAddedMoneyText;
 
     public Placement placement;
     public MenuManager menuManager;
@@ -55,16 +56,17 @@ public class StoreManager : MonoBehaviour
     }
     public void UpdateMoneyUI()
     {
-        if (moneyText != null)
-        {
-            moneyText.text = "Money: " + money.ToString();
-        }
+
+        moneyText.text = "Money: " + money.ToString();
+        toBeAddedMoneyText.text = "+" + yetToBeAddedMoney.ToString();
+        
     }
     public void AddMoney(int amount)
     {
         if (EnemySpawner.waveOngoing)
         {
             yetToBeAddedMoney += amount;
+            UpdateMoneyUI();
         }
         else
         {
