@@ -104,7 +104,7 @@ MonoBehaviour:
   damage: 25
   range: 3
   fireRate: 1
-  bulletSpeed: 5
+  bulletSpeed: 10
   cost: 50
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
 --- !u!61 &6415892694410887876
