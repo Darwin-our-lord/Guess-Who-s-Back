@@ -13,6 +13,7 @@ public class Tower : MonoBehaviour
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float bulletSpeed = 1;
     [SerializeField] private int cost = 50;
+    [SerializeField] private string overrideDesc = "";
 
     private GameObject bulletParent;
     private Vector3Int gridPosition;
@@ -124,7 +125,8 @@ public class Tower : MonoBehaviour
 
     public string GetDescription()
     {
-        return $"cost: {cost} \n dmg: {damage} \n range: {range} \n rate: {fireRate}";
+        if (overrideDesc == "") return $"cost: {cost} \n dmg: {damage} \n range: {range} \n rate: {fireRate}";
+        else return overrideDesc;
     }
 
     public float Damage => damage;

@@ -28,6 +28,8 @@ public class EnemySpawner : MonoBehaviour
     {
         waveOngoing = true;
         StoreManager.AddMoney(wave*10);
+        StoreManager.RerollStore();
+
         for (int i = 0; i < 2; i++)
         {
             yield return new WaitForSeconds(0.5f);
