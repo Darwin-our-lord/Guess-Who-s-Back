@@ -78,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
             if (enemiesParent.transform.Cast<Transform>().All(t => !t.gameObject.activeSelf))
             {
                 waveOngoing = false;
-                StoreManager.AddMoney(0);
+                StoreManager.AddMoney(10);
                 wave++;
             }
             yield return new WaitForSeconds(1f);
