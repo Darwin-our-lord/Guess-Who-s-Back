@@ -9,10 +9,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private int rewardValue = 10;
     [SerializeField] private int waveValue = 1;
+    [SerializeField] private int maxWavesAlive = 10;
 
     [Header("--DONT TOUCH--")]
     public Vector3 direction;
 
+    private int wavesAlive = 0;
     private float currentHealth;
     private Vector3 deathPosition;
     private bool hasDied = false;
@@ -61,6 +63,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (wavesAlive >= maxWavesAlive) Destroy(gameObject);
         deathPosition = transform.position;
         hasDied = true;
 
@@ -69,6 +72,7 @@ public class Enemy : MonoBehaviour
 
     public void Respawn()
     {
+        wavesAlive++;
         currentHealth = maxHealth;
         hasDied = false;
 

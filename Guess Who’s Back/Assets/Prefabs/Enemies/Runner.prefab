@@ -104,3 +104,5 @@ MonoBehaviour:
   speed: 3
   rewardValue: 20
   waveValue: 2
+  maxWavesAlive: 5
+  direction: {x: 0, y: 0, z: 0}
