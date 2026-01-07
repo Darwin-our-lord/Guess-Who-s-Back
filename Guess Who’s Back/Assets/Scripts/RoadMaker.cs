@@ -57,7 +57,7 @@ public class RoadMaker : MonoBehaviour
             Vector2 newRoadPos = lastRoadPos;
 
             //1=up   2=down   3=left   4=right
-            int direction = Random.Range(1, 5);
+            int direction = UnityEngine.Random.Range(1, 5);
             switch (direction)
             {
                 case 1: newRoadPos += new Vector2(1, 0);  break;
@@ -126,9 +126,42 @@ public class RoadMaker : MonoBehaviour
                 lastRoadPos = newRoadPos;
                 break;
             }
+            else if (hit.gameObject.CompareTag("Wall"))
+            {
+                Vector2 roadTest = lastRoadPos;
+                roadTest += new Vector2(1, 0);
+                Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                roadTest = lastRoadPos;
+                roadTest += new Vector2(-1, 0);
+                hit2 = null;
+                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                roadTest = lastRoadPos;
+                roadTest += new Vector2(0, 1);
+                hit2 = null;
+                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                roadTest = lastRoadPos;
+                roadTest += new Vector2(0, -1);
+                hit2 = null;
+                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+
+                Destroy(hit.gameObject);
+                continue;
+            }
             else
             {
-                continue;
+                Debug.LogError("INFINITE LOOP");
+                break;
             }
         }
     }
