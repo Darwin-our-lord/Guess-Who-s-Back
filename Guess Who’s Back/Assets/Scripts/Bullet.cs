@@ -1,0 +1,27 @@
+using System.Collections;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography;
+using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+    public float lifeTime;
+    public float speed;
+    public Vector3 target;
+    public GameObject targetGameObj;
+    void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
+
+    void Update()
+    {
+        if (!targetGameObj.activeSelf)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        transform.position += -(transform.position-target).normalized * speed * Time.deltaTime;
+    }
+
+}

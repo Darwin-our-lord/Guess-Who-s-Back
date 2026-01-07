@@ -10,6 +10,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int rewardValue = 10;
     [SerializeField] private int waveValue = 1;
 
+    [Header("--DONT TOUCH--")]
+    public Vector3 direction;
+
     private float currentHealth;
     private Vector3 deathPosition;
     private bool hasDied = false;
@@ -28,7 +31,7 @@ public class Enemy : MonoBehaviour
         if (!hasDied && roadTargetNr < roadMaker.roads.Count)
         {
             Vector3 targetPos = roadMaker.roads[roadTargetNr].transform.position;
-            Vector3 direction = (targetPos - transform.position).normalized;
+            direction = (targetPos - transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
 
             if (Vector3.Distance(transform.position, targetPos) < 0.05f)
