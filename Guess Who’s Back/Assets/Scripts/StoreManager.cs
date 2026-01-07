@@ -18,7 +18,7 @@ public class StoreManager : MonoBehaviour
     private int yetToBeAddedMoney = 0;
     private void Awake()
     {
-        money = 500;
+        money = 50;
         UpdateMoneyUI();
         RerollStore();
     }
