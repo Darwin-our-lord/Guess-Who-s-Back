@@ -34,7 +34,8 @@ public class Placement : MonoBehaviour
 
                 if (hit == null)
                 {
-                    Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
+                    GameObject clone = Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
+                    clone.name = TowerObjPrefab.name;
                     TowerObjPrefab = null;
                     TowerObjFake.GetComponent<SpriteRenderer>().sprite = null;
                     TowerObjFake.transform.GetChild(0).transform.localScale = new Vector3(0,0,1);

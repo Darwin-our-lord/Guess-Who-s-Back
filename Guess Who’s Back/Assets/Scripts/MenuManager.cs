@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
     public GameObject loseUI;
 
     public StoreManager storeManager;
+    public Placement placement;
 
     private bool inStore = false;
     //button functions
@@ -37,10 +38,12 @@ public class MenuManager : MonoBehaviour
     }
     public void StoreButton()
     {
-        if (inStore)  storeUI.SetActive(false);  
+
+        if (placement.TowerObjPrefab != null || inStore) storeUI.SetActive(false);
         else if (!inStore) storeUI.SetActive(true);
         inStore = !inStore;
         storeManager.UpdateMoneyUI();
+        
     }
 
 }

@@ -16,12 +16,18 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
+        if (targetGameObj == null) return;
+
         if (!targetGameObj.activeSelf || targetGameObj == null)
         {
             Destroy(gameObject);
             return;
         }
+
         transform.position += -(transform.position-target).normalized * speed * Time.deltaTime;
+
+        if (Vector3.Distance(transform.position, target) < 0.01f) Destroy(gameObject);
+        
     }
 
 }

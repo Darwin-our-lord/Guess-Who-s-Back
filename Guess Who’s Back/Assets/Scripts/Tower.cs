@@ -14,11 +14,13 @@ public class Tower : MonoBehaviour
     [SerializeField] private float bulletSpeed = 1;
     [SerializeField] private int cost = 50;
     [SerializeField] private string overrideDesc = "";
+    [SerializeField] private GameObject weaponVisual;
 
     private GameObject bulletParent;
     private Vector3Int gridPosition;
     private float lastFireTime;
     private Enemy currentTarget;
+
 
     public GameObject bulletPrefab;
      void Awake()
@@ -85,6 +87,8 @@ public class Tower : MonoBehaviour
         UnityEngine.Vector2 directionToIntercept = interceptPoint - (UnityEngine.Vector2)transform.position;
         float newAngle = Mathf.Atan2(directionToIntercept.y, directionToIntercept.x) * Mathf.Rad2Deg;
 
+        if(weaponVisual != null) weaponVisual.transform.rotation = UnityEngine.Quaternion.Euler(0, 0, newAngle+90);
+
         GameObject bullet = Instantiate(bulletPrefab, transform.position, UnityEngine.Quaternion.Euler(0, 0, newAngle),bulletParent.transform);
 
         bullet.GetComponent<Bullet>().speed = bulletSpeed;
@@ -108,6 +112,12 @@ public class Tower : MonoBehaviour
         float b = 2f * UnityEngine.Vector2.Dot(relativePosition, targetVelocity);
         float c = relativePosition.sqrMagnitude;
 
+        if (Mathf.Abs(a) < 0.0001f)
+        {
+
+            return relativePosition.magnitude / bulletSpeed;
+        }
+
         float determinant = b * b - 4f * a * c;
 
         if (determinant > 0)
@@ -125,7 +135,7 @@ public class Tower : MonoBehaviour
 
     public string GetDescription()
     {
-        if (overrideDesc == "") return $"cost: {cost} \n dmg: {damage} \n range: {range} \n rate: {fireRate}";
+        if (overrideDesc == "") return $"cost: {cost} \ndmg: {damage} \nrange: {range} \nrate: {fireRate}";
         else return overrideDesc;
     }
 
