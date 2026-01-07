@@ -100,7 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 75
   speed: 1
   rewardValue: 15
   waveValue: 1
+  maxWavesAlive: 10
+  direction: {x: 0, y: 0, z: 0}

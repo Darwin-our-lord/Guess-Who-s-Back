@@ -16,14 +16,13 @@ public class Placement : MonoBehaviour
     {
         if (TowerObjPrefab != null)
         {
-
-
             //finds what pos the mouse is hovering---
             Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = grid.WorldToCell(mousePos);
 
             Vector3 worldCenterPos = grid.GetCellCenterWorld(cellPos);
-
+            if (TowerObjPrefab.transform.localScale.x % 2 == 0 || TowerObjPrefab.transform.localScale.y % 2 == 0) worldCenterPos += new Vector3(0.5f,0.5f,0);
+            
             TowerObjFake.transform.position = worldCenterPos;
             TowerObjFake.transform.GetChild(0).transform.localScale
                 = new Vector3(TowerObjPrefab.GetComponent<Tower>().Range*2, TowerObjPrefab.GetComponent<Tower>().Range*2, 1);
