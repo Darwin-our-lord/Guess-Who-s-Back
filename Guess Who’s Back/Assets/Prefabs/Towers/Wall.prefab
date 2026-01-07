@@ -106,7 +106,7 @@ MonoBehaviour:
   fireRate: 0
   bulletSpeed: 0
   cost: 10
-  overrideDesc: blocks the road \n from advancing
+  overrideDesc: 'cost: 10 \n blocks the road from advancing'
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
 --- !u!61 &6415892694410887876
 BoxCollider2D:

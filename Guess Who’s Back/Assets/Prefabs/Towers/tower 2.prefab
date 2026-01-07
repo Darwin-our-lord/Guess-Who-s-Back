@@ -102,10 +102,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  range: 3
+  range: 4
   fireRate: 2
   bulletSpeed: 15
   cost: 40
+  overrideDesc: 
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
 --- !u!61 &6415892694410887876
 BoxCollider2D:

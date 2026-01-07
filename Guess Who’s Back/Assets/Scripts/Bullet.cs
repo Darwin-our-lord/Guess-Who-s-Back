@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        if (!targetGameObj.activeSelf)
+        if (!targetGameObj.activeSelf || targetGameObj == null)
         {
             Destroy(gameObject);
             return;
