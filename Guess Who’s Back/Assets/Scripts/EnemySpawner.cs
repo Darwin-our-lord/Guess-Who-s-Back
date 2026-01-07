@@ -27,6 +27,7 @@ public class EnemySpawner : MonoBehaviour
     IEnumerator SpawnWave()
     {
         waveOngoing = true;
+        StoreManager.AddMoney(wave*10);
         for (int i = 0; i < 2; i++)
         {
             roadMaker.ExtendRoad();
@@ -78,7 +79,7 @@ public class EnemySpawner : MonoBehaviour
             if (enemiesParent.transform.Cast<Transform>().All(t => !t.gameObject.activeSelf))
             {
                 waveOngoing = false;
-                StoreManager.AddMoney(10);
+                StoreManager.AddMoney(0);
                 wave++;
             }
             yield return new WaitForSeconds(1f);

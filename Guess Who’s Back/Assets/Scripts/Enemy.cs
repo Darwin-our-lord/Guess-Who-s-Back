@@ -64,8 +64,6 @@ public class Enemy : MonoBehaviour
         deathPosition = transform.position;
         hasDied = true;
 
-        storeManager.AddMoney(rewardValue);
-
         gameObject.SetActive(false);
     }
 

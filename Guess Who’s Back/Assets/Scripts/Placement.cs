@@ -25,7 +25,7 @@ public class Placement : MonoBehaviour
         //places object---
         if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject())
         {
-            Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
+            Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(TowerObjFake.transform.localScale.x * 0.9f, TowerObjFake.transform.localScale.y * 0.9f), 0f, layerMask);
 
             if (hit == null) 
             {

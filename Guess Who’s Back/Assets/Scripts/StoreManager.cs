@@ -48,6 +48,7 @@ public class StoreManager : MonoBehaviour
         {
             placement.TowerObjPrefab = towersInShop[buttonID];
             placement.TowerObjFake.GetComponent<SpriteRenderer>().sprite = towersInShop[buttonID].GetComponent<SpriteRenderer>().sprite;
+            placement.TowerObjFake.transform.localScale = towersInShop[buttonID].transform.localScale;
             menuManager.StoreButton();
             money -= towersInShop[buttonID].GetComponent<Tower>().Cost;
             RerollStore();
