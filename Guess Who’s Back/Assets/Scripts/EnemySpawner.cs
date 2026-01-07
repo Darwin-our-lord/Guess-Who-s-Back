@@ -30,8 +30,8 @@ public class EnemySpawner : MonoBehaviour
         StoreManager.AddMoney(wave*10);
         for (int i = 0; i < 2; i++)
         {
+            yield return new WaitForSeconds(0.5f);
             roadMaker.ExtendRoad();
-            yield return new WaitForSeconds(rate/2);
         }
 
         foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))

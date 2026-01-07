@@ -17,5 +17,7 @@ public class CameraController : MonoBehaviour
 
         transform.position += new Vector3(hor, ver, 0).normalized * cameraSpeed * Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.T)) transform.position = new Vector3 (0, 0,-10);
+        
     }
 }

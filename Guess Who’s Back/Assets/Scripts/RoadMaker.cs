@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,16 +21,22 @@ public class RoadMaker : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 7; i++) 
+        StartCoroutine(GenerateLevel());
+    }
+
+    IEnumerator GenerateLevel()
+    {
+        for (int i = 0; i < 8; i++)
         {
+
             ExtendRoad();
+            yield return new WaitForSeconds(0.5f);
         }
     }
     public void ExtendRoad()
     {
         int attempts = 0;
-
-        if(roads.Count != 0)
+        if (roads.Count != 0)
         {
             Destroy(roads[roads.Count - 1]);
             roads.Remove(roads[roads.Count - 1]);
