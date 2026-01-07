@@ -63,7 +63,8 @@ public class StoreManager : MonoBehaviour
     }
     public void AddMoney(int amount)
     {
-        if (EnemySpawner.waveOngoing)
+        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
+        if (enemySpawner.waveOngoing)
         {
             yetToBeAddedMoney += amount;
             UpdateMoneyUI();

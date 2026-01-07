@@ -1,4 +1,5 @@
 using System.Runtime.ConstrainedExecution;
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -37,8 +38,10 @@ public class Enemy : MonoBehaviour
                 if (roadTargetNr >= roadMaker.roads.Count)
                 {
                     MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
+                    EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
                     Time.timeScale = 0f;
                     menuManager.loseUI.SetActive(true);
+                    menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
                 }
             }
         }

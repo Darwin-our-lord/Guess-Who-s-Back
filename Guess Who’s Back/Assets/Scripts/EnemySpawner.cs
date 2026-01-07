@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
 {
     public List<GameObject> enemies = new List<GameObject>();
     public int wave = 1;
-    public static bool waveOngoing = false;
+    public bool waveOngoing = false;
     public int waveValueTotal = 1;
 
     public Transform spawnPoint;
@@ -66,7 +66,6 @@ public class EnemySpawner : MonoBehaviour
 
         int waveMod = (int)math.floor(wave / 10f);
         waveValueTotal+=waveMod+1;
-        wave++;
 
         StartCoroutine(CheckForEnemies());
 
@@ -80,7 +79,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 waveOngoing = false;
                 StoreManager.AddMoney(0);
-                
+                wave++;
             }
             yield return new WaitForSeconds(1f);
         }
