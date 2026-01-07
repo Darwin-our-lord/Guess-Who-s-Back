@@ -32,6 +32,7 @@ public class TowerDisplay : MonoBehaviour
                     towerUI.transform.GetChild(2).GetComponent<TMP_Text>().text = hit.gameObject.GetComponent<Tower>().GetDescription();
 
                     rangeCircle.SetActive(true);
+                    rangeCircle.transform.position = hit.gameObject.transform.position;
                     rangeCircle.transform.localScale
                         = new Vector3(hit.gameObject.GetComponent<Tower>().Range * 2, hit.gameObject.GetComponent<Tower>().Range * 2, 1);
 

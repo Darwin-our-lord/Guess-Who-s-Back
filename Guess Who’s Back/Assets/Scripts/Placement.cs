@@ -26,6 +26,7 @@ public class Placement : MonoBehaviour
             TowerObjFake.transform.position = worldCenterPos;
             TowerObjFake.transform.GetChild(0).transform.localScale
                 = new Vector3(TowerObjPrefab.GetComponent<Tower>().Range*2, TowerObjPrefab.GetComponent<Tower>().Range*2, 1);
+            TowerObjFake.transform.GetChild(0).transform.position = worldCenterPos;
 
             //places object---
             if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject())

@@ -23,7 +23,7 @@ public class Tower : MonoBehaviour
 
 
     public GameObject bulletPrefab;
-     void Awake()
+    void Awake()
     {
         bulletParent = GameObject.Find("Bullets");
     }
@@ -92,11 +92,12 @@ public class Tower : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, transform.position, UnityEngine.Quaternion.Euler(0, 0, newAngle),bulletParent.transform);
 
         bullet.GetComponent<Bullet>().speed = bulletSpeed;
-        bullet.GetComponent<Bullet>().lifeTime =  (transform.position-currentTarget.transform.position).magnitude / bulletSpeed;
+        float lifetime = (transform.position - currentTarget.transform.position).magnitude / bulletSpeed;
+        bullet.GetComponent<Bullet>().lifeTime =  lifetime;
         bullet.GetComponent<Bullet>().target = interceptPoint;
         bullet.GetComponent<Bullet>().targetGameObj = currentTarget.gameObject;
 
-        StartCoroutine(DamageTimer((transform.position - currentTarget.transform.position).magnitude / bulletSpeed));
+        StartCoroutine(DamageTimer(lifetime));
         
     }
     IEnumerator DamageTimer(float lifetime)
