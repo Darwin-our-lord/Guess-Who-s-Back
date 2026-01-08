@@ -16,6 +16,7 @@ public class EnemySpawner : MonoBehaviour
     public float timeBetweenWaves = 5f;
     public float rate = 1f;
 
+    public GameObject nextWavebutton;
     public GameObject enemiesParent;
     public RoadMaker roadMaker;
     public StoreManager StoreManager;
@@ -23,6 +24,7 @@ public class EnemySpawner : MonoBehaviour
     public void StartWave()
     {
         if (!waveOngoing) StartCoroutine(SpawnWave());
+        nextWavebutton.SetActive(false);
     }
     IEnumerator SpawnWave()
     {
@@ -83,6 +85,7 @@ public class EnemySpawner : MonoBehaviour
                 waveOngoing = false;
                 StoreManager.AddMoney(0);
                 wave++;
+                nextWavebutton.SetActive(true);
             }
             yield return new WaitForSeconds(1f);
         }
