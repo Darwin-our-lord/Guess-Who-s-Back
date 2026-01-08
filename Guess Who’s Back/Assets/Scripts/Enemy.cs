@@ -8,7 +8,6 @@ public class Enemy : MonoBehaviour
     [Header("Enemy Stats")]
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float speed = 2f;
-    [SerializeField] private int rewardValue = 10;
     [SerializeField] private int waveValue = 1;
     [SerializeField] private int maxWavesAlive = 10;
 
@@ -234,7 +233,6 @@ public class Enemy : MonoBehaviour
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealth;
     public float Speed => speed;
-    public int RewardValue => rewardValue;
     public int WaveValue => waveValue;
     public Vector3 DeathPosition => deathPosition;
     public bool HasDied => hasDied;

@@ -7,6 +7,7 @@ public class Settings : MonoBehaviour
 
     [Header("Visual")]
     public static bool ShowBullets = true;
+    public static bool monoChrome = false;
 
     //[Header("audio")]
     void Awake()
@@ -16,6 +17,7 @@ public class Settings : MonoBehaviour
 
         //visual---
         ShowBullets = true;
+        monoChrome = false;
     }
     #region gameplay
 
@@ -31,6 +33,10 @@ public class Settings : MonoBehaviour
     public static void ChangeShowBullets()
     {
         ShowBullets = !ShowBullets;
+    }
+    public static void ChangeMonoChrome()
+    {
+        monoChrome = !monoChrome;
     }
 
     #endregion

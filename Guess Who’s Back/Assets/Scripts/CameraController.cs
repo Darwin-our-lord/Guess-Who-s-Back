@@ -6,6 +6,13 @@ public class CameraController : MonoBehaviour
     public float cameraSprintSpeed;
     public float panBorderThickness;
 
+    public GameObject monoChrome;
+
+    void Awake()
+    {
+        if(Settings.monoChrome) monoChrome.SetActive(true);
+        else if(!Settings.monoChrome) monoChrome.SetActive(false);
+    }
     void Update()
     {
         float hor = Input.GetAxisRaw("Horizontal");
