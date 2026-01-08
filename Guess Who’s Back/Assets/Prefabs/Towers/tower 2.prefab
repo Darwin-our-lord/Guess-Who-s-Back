@@ -109,6 +109,7 @@ MonoBehaviour:
   cost: 40
   overrideDesc: 
   weaponVisual: {fileID: 4406615624441788712}
+  targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: f5bb2f5c7db4c49499829790fb6bfd8f, type: 3}
 --- !u!61 &6415892694410887876
 BoxCollider2D:
