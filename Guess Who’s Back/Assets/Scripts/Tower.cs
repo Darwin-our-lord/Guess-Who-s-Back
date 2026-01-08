@@ -76,7 +76,6 @@ public class Tower : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        currentTarget.TakeDamage(damage);
         lastFireTime = Time.time;
 
         UnityEngine.Vector2 targetVel = currentTarget.gameObject.GetComponent<Enemy>().Speed* currentTarget.gameObject.GetComponent<Enemy>().direction;

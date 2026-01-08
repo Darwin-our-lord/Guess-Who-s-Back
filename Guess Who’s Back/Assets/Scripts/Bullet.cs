@@ -25,9 +25,6 @@ public class Bullet : MonoBehaviour
         }
 
         transform.position += -(transform.position-target).normalized * speed * Time.deltaTime;
-
-        if (Vector3.Distance(transform.position, target) < 0.01f) Destroy(gameObject);
-        
     }
 
 }
