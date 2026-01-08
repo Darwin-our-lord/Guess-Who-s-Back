@@ -30,7 +30,7 @@ public class Tower : MonoBehaviour
     private Enemy currentTarget;
 
     [Header("other")]
-    public TargetType targetType = TargetType.closest;
+    public TargetType targetType = TargetType.first;
     public GameObject bulletPrefab;
 
 
