@@ -101,13 +101,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d483c986f9f741b58b304c55e95de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 100
+  damage: 200
   range: 10
   fireRate: 0.2
   bulletSpeed: 30
   cost: 80
   overrideDesc: 
   weaponVisual: {fileID: 0}
+  hasKnockback: 0
+  knockbackDistance: 0
+  hasFreeze: 0
+  freezeChance: 0
+  freezeDuration: 0
+  hasSlow: 0
+  slowAmount: 0
+  slowDuration: 0
+  hasDot: 0
+  dotDamage: 0
+  dotDuration: 0
+  dotTickRate: 0.5
+  hasAoe: 0
+  aoeRadius: 0
+  aoeDamageFalloff: 100
   targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
 --- !u!61 &6415892694410887876
