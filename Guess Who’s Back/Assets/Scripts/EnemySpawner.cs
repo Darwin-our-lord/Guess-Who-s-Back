@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
         int waveValue = 0;
         int enemiesSpawned = 0;
 
-        while(waveValue < waveValueTotal && enemiesSpawned < 5)
+        while(waveValue < waveValueTotal && enemiesSpawned < 30)
         {
             GameObject highestValueEnemy = null;
             for (int i = 0; i < 3; i++)
