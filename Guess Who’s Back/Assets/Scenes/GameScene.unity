@@ -155,10 +155,11 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  lastRoadPos: {x: 0.5, y: 0.5}
-  lastlastRoadPos: {x: 0, y: 0}
   roadsParent: {fileID: 1021450467}
-  roads: []
+  branchChance: 0.2
+  branchFronts: []
+  formerBranchFronts: []
+  enemySpawner: {fileID: 1215443786}
 --- !u!4 &28553211
 Transform:
   m_ObjectHideFlags: 0
@@ -1329,7 +1330,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
