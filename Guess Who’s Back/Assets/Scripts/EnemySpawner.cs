@@ -50,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
             enemy.Respawn();
         }
 
-
+        
         int waveValue = 0;
         int enemiesSpawned = 0;
 
