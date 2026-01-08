@@ -36,8 +36,14 @@ public class StoreManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             towerButtons[i].transform.GetChild(1).GetComponent<Image>().sprite = towersInShop[i].GetComponent<SpriteRenderer>().sprite;
-            towerButtons[i].transform.GetChild(2).GetComponent<TMP_Text>().text = towersInShop[i].name;
-            towerButtons[i].transform.GetChild(3).GetComponent<TMP_Text>().text = towersInShop[i].GetComponent<Tower>().GetDescription();
+            towerButtons[i].transform.GetChild(2).gameObject.SetActive(false);
+            if (towersInShop[i].transform.childCount != 0)
+            {
+                towerButtons[i].transform.GetChild(2).gameObject.SetActive(true);
+                towerButtons[i].transform.GetChild(2).GetComponent<Image>().sprite = towersInShop[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+            }
+            towerButtons[i].transform.GetChild(3).GetComponent<TMP_Text>().text = towersInShop[i].name;
+            towerButtons[i].transform.GetChild(4).GetComponent<TMP_Text>().text = towersInShop[i].GetComponent<Tower>().GetDescription();
         }
 
     }
