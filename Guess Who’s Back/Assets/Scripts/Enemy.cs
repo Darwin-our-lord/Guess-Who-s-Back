@@ -33,6 +33,8 @@ public class Enemy : MonoBehaviour
     private bool isBeingKnockedBack = false;
     private Vector3 knockbackVelocity = Vector3.zero;
     private float knockbackDecay = 10f;
+
+    public Transform roadTarget;
     private void Awake()
     {
         roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
@@ -60,22 +62,28 @@ public class Enemy : MonoBehaviour
 
         float effectiveSpeed = CalculateEffectiveSpeed();
 
-        if (!hasDied && !isBeingKnockedBack && roadTargetNr < roadMaker.roads.Count)
+        if (!hasDied && !isBeingKnockedBack)
         {
-            Vector3 targetPos = roadMaker.roads[roadTargetNr].transform.position;
-            direction = (targetPos - transform.position).normalized;
-            transform.position += direction * effectiveSpeed * Time.fixedDeltaTime;
+            if (roadTarget == null) roadTarget = roadMaker.firstRoad.transform;
 
-            if (Vector3.Distance(transform.position, targetPos) < 0.05f)
+            direction = (roadTarget.position - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
+
+            if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
             {
                 roadTargetNr++;
-                if (roadTargetNr >= roadMaker.roads.Count)
+
+                if (roadTarget.GetComponent<Road>().nextTiles.Count == 0)
                 {
                     MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
                     EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
                     Time.timeScale = 0f;
                     menuManager.loseUI.SetActive(true);
                     menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
+                }
+                else
+                {
+                    roadTarget = roadTarget.GetComponent<Road>().nextTiles[UnityEngine.Random.Range(0, roadTarget.GetComponent<Road>().nextTiles.Count)];
                 }
             }
         }
