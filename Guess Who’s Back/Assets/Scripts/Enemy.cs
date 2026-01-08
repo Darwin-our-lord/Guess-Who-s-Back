@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        if (wavesAlive >= maxWavesAlive) Destroy(gameObject);
+        if (wavesAlive >= maxWavesAlive) { Destroy(gameObject); Destroy(this); }
         deathPosition = transform.position;
         hasDied = true;
 
