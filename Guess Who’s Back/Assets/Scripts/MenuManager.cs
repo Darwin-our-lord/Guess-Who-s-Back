@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour
 
     public GameObject GameplaySettingsUI;
     public GameObject VisualSettingsUI;
+    public GameObject VisualEffectsSettingsUI;
+    public GameObject OtherVisualSettingsUI;
     public GameObject AudioSettingsUI;
 
     [Header("During Game")]
@@ -58,6 +60,16 @@ public class MenuManager : MonoBehaviour
 
         AudioSettingsUI.gameObject.SetActive(false);
         GameplaySettingsUI.gameObject.SetActive(false);
+    }
+    public void VisualEffectsMenuButton()
+    {
+        VisualEffectsSettingsUI.gameObject.SetActive(true);
+        OtherVisualSettingsUI.gameObject.SetActive(false);
+    }
+    public void OtherVisualMenuButton()
+    {
+        VisualEffectsSettingsUI.gameObject.SetActive(false);
+        OtherVisualSettingsUI.gameObject.SetActive(true);
     }
     public void BackButton()
     {
