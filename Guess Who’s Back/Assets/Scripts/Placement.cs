@@ -6,6 +6,7 @@ public class Placement : MonoBehaviour
     public Camera mainCamera;
 
     public GameObject TowerObjFake;
+    public GameObject RangeCicle;
     public GameObject TowerObjPrefab;
     public RoadMaker roadMaker;
     public Grid grid;
@@ -24,9 +25,9 @@ public class Placement : MonoBehaviour
             if (TowerObjPrefab.transform.localScale.x % 2 == 0 || TowerObjPrefab.transform.localScale.y % 2 == 0) worldCenterPos += new Vector3(0.5f,0.5f,0);
             
             TowerObjFake.transform.position = worldCenterPos;
-            TowerObjFake.transform.GetChild(0).transform.localScale
+            RangeCicle.transform.localScale
                 = new Vector3(TowerObjPrefab.GetComponent<Tower>().Range*2, TowerObjPrefab.GetComponent<Tower>().Range*2, 1);
-            TowerObjFake.transform.GetChild(0).transform.position = worldCenterPos;
+            RangeCicle.transform.position = worldCenterPos;
 
             //places object---
             if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject())
@@ -39,7 +40,7 @@ public class Placement : MonoBehaviour
                     clone.name = TowerObjPrefab.name;
                     TowerObjPrefab = null;
                     TowerObjFake.GetComponent<SpriteRenderer>().sprite = null;
-                    TowerObjFake.transform.GetChild(0).transform.localScale = new Vector3(0,0,1);
+                    RangeCicle.transform.localScale = new Vector3(0,0,1);
 
                     //tower placesssed do!!! 
                 }

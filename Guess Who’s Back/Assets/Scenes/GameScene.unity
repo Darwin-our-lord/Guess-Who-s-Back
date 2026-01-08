@@ -2027,8 +2027,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1074590703}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &916576228
@@ -2298,12 +2297,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074590702}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 884605956}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1074590704
 SpriteRenderer:
@@ -3604,6 +3603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 519420031}
   TowerObjFake: {fileID: 884605954}
+  RangeCicle: {fileID: 1074590702}
   TowerObjPrefab: {fileID: 0}
   roadMaker: {fileID: 28553210}
   grid: {fileID: 1732329704}
@@ -4807,6 +4807,7 @@ SceneRoots:
   - {fileID: 1557288662}
   - {fileID: 1170164411}
   - {fileID: 884605956}
+  - {fileID: 1074590703}
   - {fileID: 2146178995}
   - {fileID: 422894527}
   - {fileID: 1716182899}
