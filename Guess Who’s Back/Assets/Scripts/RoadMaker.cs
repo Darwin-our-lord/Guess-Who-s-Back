@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+
+
 
 public class RoadMaker : MonoBehaviour
 {
@@ -20,6 +23,9 @@ public class RoadMaker : MonoBehaviour
     public List<GameObject> fakeFronts = new List<GameObject>();
     public List<GameObject> formerBranchFronts = new List<GameObject>();
     public GameObject firstRoad;
+
+    public Tilemap roadTilemap;
+    public RuleTile roadTile;
 
     public EnemySpawner enemySpawner;
 
@@ -45,6 +51,13 @@ public class RoadMaker : MonoBehaviour
             GameObject oldRoad = Instantiate(RoadStartObjPrefab, new Vector2(0.5f, 0.5f), Quaternion.identity, roadsParent.transform);
             GameObject newRoad = Instantiate(RoadObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
             GameObject fakeRoad = Instantiate(RoadEndObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
+
+            Vector3Int cell = roadTilemap.WorldToCell(new Vector2(0.5f, 1.5f));
+
+            if (!roadTilemap.HasTile(cell))
+            {
+                roadTilemap.SetTile(cell, roadTile);
+            }
 
             fakeFronts.Add(fakeRoad);
             branchFronts.Add(newRoad);
@@ -119,6 +132,14 @@ public class RoadMaker : MonoBehaviour
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
 
+                    Vector3Int cell = roadTilemap.WorldToCell(newRoadPos);
+
+                    if (!roadTilemap.HasTile(cell))
+                    {
+                        roadTilemap.SetTile(cell, roadTile);
+                    }
+
+
                     branchFronts[branchStart].GetComponent<Road>().AddNextTile(newRoad.transform);
 
                     formerBranchFronts.Add(branchFronts[branchStart]);
@@ -133,6 +154,14 @@ public class RoadMaker : MonoBehaviour
 
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    Vector3Int cell = roadTilemap.WorldToCell(newRoadPos);
+
+                    if (!roadTilemap.HasTile(cell))
+                    {
+                        roadTilemap.SetTile(cell, roadTile);
+                    }
+
 
                     branchFronts[branchStart].GetComponent<Road>().AddNextTile(newRoad.transform);
 
@@ -178,6 +207,13 @@ public class RoadMaker : MonoBehaviour
 
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    Vector3Int cell = roadTilemap.WorldToCell(newRoadPos);
+
+                    if (!roadTilemap.HasTile(cell))
+                    {
+                        roadTilemap.SetTile(cell, roadTile);
+                    }
 
                     branchFronts[branchStart].GetComponent<Road>().AddNextTile(newRoad.transform);
 
@@ -258,6 +294,14 @@ public class RoadMaker : MonoBehaviour
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
 
+                    Vector3Int cell = roadTilemap.WorldToCell(newRoadPos);
+
+                    if (!roadTilemap.HasTile(cell))
+                    {
+                        roadTilemap.SetTile(cell, roadTile);
+                    }
+
+
                     branchFronts[i].GetComponent<Road>().AddNextTile(newRoad.transform);
 
                     formerBranchFronts[i] = branchFronts[i];
@@ -272,6 +316,14 @@ public class RoadMaker : MonoBehaviour
 
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    Vector3Int cell = roadTilemap.WorldToCell(newRoadPos);
+
+                    if (!roadTilemap.HasTile(cell))
+                    {
+                        roadTilemap.SetTile(cell, roadTile);
+                    }
+
 
                     branchFronts[i].GetComponent<Road>().AddNextTile(newRoad.transform);
 
@@ -317,6 +369,14 @@ public class RoadMaker : MonoBehaviour
 
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    Vector3Int cell = roadTilemap.WorldToCell(newRoadPos);
+
+                    if (!roadTilemap.HasTile(cell))
+                    {
+                        roadTilemap.SetTile(cell, roadTile);
+                    }
+
 
                     branchFronts[i].GetComponent<Road>().AddNextTile(newRoad.transform);
 
