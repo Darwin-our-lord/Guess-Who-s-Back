@@ -72,6 +72,7 @@ public class EnemySpawner : MonoBehaviour
         int waveMod = (int)math.floor(wave / 10f);
         waveValueTotal+=waveMod+1;
 
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(CheckForEnemies());
 
     }
@@ -80,6 +81,7 @@ public class EnemySpawner : MonoBehaviour
     {
         while (waveOngoing)
         {
+            yield return new WaitForSeconds(rate);
             if (enemiesParent.transform.Cast<Transform>().All(t => !t.gameObject.activeSelf))
             {
                 waveOngoing = false;
