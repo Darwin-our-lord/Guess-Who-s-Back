@@ -1,30 +1,51 @@
-using System.Collections;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float lifeTime;
-    public float speed;
-    public Vector3 target;
+    public float speed = 5f;
+    public float lifeTime = 2f;
+    public Vector2 target;
     public GameObject targetGameObj;
-    void Start()
-    {
-        Destroy(gameObject, lifeTime);
-    }
+    public Tower sourceTower; // Reference to the tower that fired this bullet
+
+    private float elapsedTime = 0f;
 
     void Update()
     {
-        if (targetGameObj == null) return;
+        elapsedTime += Time.deltaTime;
 
-        if (!targetGameObj.activeSelf || targetGameObj == null)
+        if (elapsedTime >= lifeTime)
         {
-            Destroy(gameObject);
-            return;
-        }
+            // Apply effects on impact
+            if (targetGameObj != null && sourceTower != null)
+            {
+                Enemy enemy = targetGameObj.GetComponent<Enemy>();
+                if (enemy != null && !enemy.HasDied)
+                {
+                    sourceTower.ApplyDamageAndEffects(enemy);
+                }
+            }
 
-        transform.position += -(transform.position-target).normalized * speed * Time.deltaTime;
+            Destroy(gameObject);
+        }
+        else
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Optional: Make bullet explode on contact
+        if (collision.CompareTag("Enemy"))
+        {
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy != null && !enemy.HasDied && sourceTower != null)
+            {
+                sourceTower.ApplyDamageAndEffects(enemy);
+            }
+
+            Destroy(gameObject);
+        }
+    }
 }

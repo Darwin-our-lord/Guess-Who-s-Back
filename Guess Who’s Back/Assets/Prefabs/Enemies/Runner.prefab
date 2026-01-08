@@ -105,4 +105,6 @@ MonoBehaviour:
   rewardValue: 20
   waveValue: 2
   maxWavesAlive: 5
+  knockbackResistance: 0
   direction: {x: 0, y: 0, z: 0}
+  roadTargetNr: 0

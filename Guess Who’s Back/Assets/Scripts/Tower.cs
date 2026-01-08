@@ -1,10 +1,8 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using Unity.Mathematics;
 using UnityEngine;
+
 public enum TargetType
 {
     closest,
@@ -13,6 +11,7 @@ public enum TargetType
     healthiest,
     random
 }
+
 public class Tower : MonoBehaviour
 {
     [Header("Tower Stats")]
@@ -24,6 +23,31 @@ public class Tower : MonoBehaviour
     [SerializeField] private string overrideDesc = "";
     [SerializeField] private GameObject weaponVisual;
 
+    [Header("Special Stats - Knockback")]
+    [SerializeField] private bool hasKnockback = false;
+    [SerializeField] private float knockbackDistance = 0f;
+
+    [Header("Special Stats - Freeze")]
+    [SerializeField] private bool hasFreeze = false;
+    [SerializeField][Range(0, 100)] private float freezeChance = 0f;
+    [SerializeField] private float freezeDuration = 0f;
+
+    [Header("Special Stats - Slow")]
+    [SerializeField] private bool hasSlow = false;
+    [SerializeField][Range(0, 100)] private float slowAmount = 0f;
+    [SerializeField] private float slowDuration = 0f;
+
+    [Header("Special Stats - DOT")]
+    [SerializeField] private bool hasDot = false;
+    [SerializeField] private float dotDamage = 0f;
+    [SerializeField] private float dotDuration = 0f;
+    [SerializeField] private float dotTickRate = 0.5f;
+
+    [Header("Special Stats - AOE")]
+    [SerializeField] private bool hasAoe = false;
+    [SerializeField] private float aoeRadius = 0f;
+    [SerializeField][Range(0, 100)] private float aoeDamageFalloff = 100f;
+
     private GameObject bulletParent;
     private Vector3Int gridPosition;
     private float lastFireTime;
@@ -33,11 +57,11 @@ public class Tower : MonoBehaviour
     public TargetType targetType = TargetType.first;
     public GameObject bulletPrefab;
 
-
     void Awake()
     {
         bulletParent = GameObject.Find("Bullets");
     }
+
     private void Update()
     {
         if (Time.time >= lastFireTime + (1f / fireRate))
@@ -55,12 +79,12 @@ public class Tower : MonoBehaviour
     {
         Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         List<Enemy> enemiesInRange = new List<Enemy>();
-        
+
         foreach (Enemy enemy in allEnemies)
         {
             if (!enemy.gameObject.activeInHierarchy) continue;
 
-            float distance = UnityEngine.Vector3.Distance(transform.position, enemy.transform.position);
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
 
             if (distance <= range)
             {
@@ -71,15 +95,15 @@ public class Tower : MonoBehaviour
         currentTarget = null;
         if (targetType == TargetType.closest)
         {
-            float maxDistance = 0f;
+            float minDistance = float.MaxValue;
 
             foreach (Enemy enemy in enemiesInRange)
             {
-                float distance = UnityEngine.Vector3.Distance(transform.position, enemy.transform.position);
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
 
-                if (distance > maxDistance)
+                if (distance < minDistance)
                 {
-                    maxDistance = distance;
+                    minDistance = distance;
                     currentTarget = enemy;
                 }
             }
@@ -117,10 +141,10 @@ public class Tower : MonoBehaviour
         else if (targetType == TargetType.healthiest)
         {
             Enemy currentHealthiestEnemy = null;
-            
+
             foreach (Enemy enemy in enemiesInRange)
             {
-                if(currentHealthiestEnemy == null)currentHealthiestEnemy = enemy;
+                if (currentHealthiestEnemy == null) currentHealthiestEnemy = enemy;
                 if (currentHealthiestEnemy.CurrentHealth < enemy.CurrentHealth)
                 {
                     currentHealthiestEnemy = enemy;
@@ -131,10 +155,9 @@ public class Tower : MonoBehaviour
         }
         else if (targetType == TargetType.random)
         {
-            if(enemiesInRange.Count > 0)
+            if (enemiesInRange.Count > 0)
             {
                 Enemy RandomEnemy = enemiesInRange[UnityEngine.Random.Range(0, enemiesInRange.Count)];
-
                 currentTarget = RandomEnemy;
             }
         }
@@ -148,50 +171,144 @@ public class Tower : MonoBehaviour
 
         if (Settings.ShowBullets)
         {
-            UnityEngine.Vector2 targetVel = currentTarget.gameObject.GetComponent<Enemy>().Speed * currentTarget.gameObject.GetComponent<Enemy>().direction;
+            Vector2 targetVel = currentTarget.gameObject.GetComponent<Enemy>().Speed * currentTarget.gameObject.GetComponent<Enemy>().direction;
 
             float interceptTime = CalculateInterceptTime(transform.position, currentTarget.transform.position, targetVel, bulletSpeed);
 
-            UnityEngine.Vector2 interceptPoint = (UnityEngine.Vector2)currentTarget.transform.position + (targetVel * interceptTime);
-            UnityEngine.Vector2 directionToIntercept = interceptPoint - (UnityEngine.Vector2)transform.position;
+            Vector2 interceptPoint = (Vector2)currentTarget.transform.position + (targetVel * interceptTime);
+            Vector2 directionToIntercept = interceptPoint - (Vector2)transform.position;
             float newAngle = Mathf.Atan2(directionToIntercept.y, directionToIntercept.x) * Mathf.Rad2Deg;
 
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, UnityEngine.Quaternion.Euler(0, 0, newAngle), bulletParent.transform);
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, newAngle), bulletParent.transform);
 
-            if (weaponVisual != null) weaponVisual.transform.rotation = UnityEngine.Quaternion.Euler(0, 0, newAngle + 90);
+            if (weaponVisual != null) weaponVisual.transform.rotation = Quaternion.Euler(0, 0, newAngle + 90);
 
-            bullet.GetComponent<Bullet>().speed = bulletSpeed;
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+            bulletScript.speed = bulletSpeed;
             float lifetime = (transform.position - currentTarget.transform.position).magnitude / bulletSpeed;
-            bullet.GetComponent<Bullet>().lifeTime = lifetime;
-            bullet.GetComponent<Bullet>().target = interceptPoint;
-            bullet.GetComponent<Bullet>().targetGameObj = currentTarget.gameObject;
+            bulletScript.lifeTime = lifetime;
+            bulletScript.target = interceptPoint;
+            bulletScript.targetGameObj = currentTarget.gameObject;
 
-            StartCoroutine(DamageTimer(lifetime));
+            bulletScript.sourceTower = this;
+
+            StartCoroutine(DamageTimer(lifetime, currentTarget));
         }
         else
         {
-
             float newAngle = Mathf.Atan2(currentTarget.gameObject.transform.position.y, currentTarget.gameObject.transform.position.x) * Mathf.Rad2Deg;
-            if (weaponVisual != null) weaponVisual.transform.rotation = UnityEngine.Quaternion.Euler(0, 0, newAngle + 90);
-            StartCoroutine(DamageTimer(0.5f));
+            if (weaponVisual != null) weaponVisual.transform.rotation = Quaternion.Euler(0, 0, newAngle + 90);
+            StartCoroutine(DamageTimer(0.5f, currentTarget));
         }
     }
-    IEnumerator DamageTimer(float lifetime)
+
+    IEnumerator DamageTimer(float lifetime, Enemy target)
     {
         yield return new WaitForSeconds(lifetime);
-        currentTarget.TakeDamage(damage);
+
+        if (target != null && !target.HasDied)
+        {
+            ApplyDamageAndEffects(target);
+        }
     }
-    float CalculateInterceptTime(UnityEngine.Vector2 shooterPos, UnityEngine.Vector2 targetPos, UnityEngine.Vector2 targetVelocity, float bulletSpeed)
+
+    public void ApplyDamageAndEffects(Enemy target)
     {
-        UnityEngine.Vector2 relativePosition = targetPos - shooterPos;
+        if (target == null || target.HasDied) return;
+
+        target.TakeDamage(damage);
+
+        if (hasKnockback && knockbackDistance > 0)
+        {
+            Vector3 knockbackDir = (target.transform.position - transform.position).normalized;
+            target.ApplyKnockback(knockbackDistance, knockbackDir);
+        }
+
+        if (hasFreeze && UnityEngine.Random.Range(0f, 100f) < freezeChance)
+        {
+            target.ApplyFreeze(freezeDuration);
+        }
+
+        if (hasSlow)
+        {
+            target.ApplySlow(slowAmount, slowDuration);
+        }
+
+        if (hasDot)
+        {
+            string dotSourceId = gameObject.GetInstanceID().ToString();
+            target.ApplyDot(dotDamage, dotDuration, dotTickRate, dotSourceId);
+        }
+
+        if (hasAoe && aoeRadius > 0)
+        {
+            ApplyAoeDamage(target.transform.position);
+        }
+    }
+
+    private void ApplyAoeDamage(Vector3 impactPosition)
+    {
+        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy enemy in allEnemies)
+        {
+            if (!enemy.gameObject.activeInHierarchy || enemy.HasDied) continue;
+            if (enemy == currentTarget) continue;
+
+            float distance = Vector3.Distance(impactPosition, enemy.transform.position);
+
+            if (distance <= aoeRadius)
+            {
+                float damageMultiplier = CalculateAoeDamageMultiplier(distance);
+                float aoeDamage = damage * damageMultiplier;
+
+                enemy.TakeDamage(aoeDamage);
+
+                if (hasKnockback && knockbackDistance > 0)
+                {
+                    Vector3 knockbackDir = (enemy.transform.position - impactPosition).normalized;
+                    enemy.ApplyKnockback(knockbackDistance * damageMultiplier, knockbackDir);
+                }
+
+                if (hasFreeze && UnityEngine.Random.Range(0f, 100f) < freezeChance)
+                {
+                    enemy.ApplyFreeze(freezeDuration);
+                }
+
+                if (hasSlow)
+                {
+                    enemy.ApplySlow(slowAmount * damageMultiplier, slowDuration);
+                }
+
+                if (hasDot)
+                {
+                    string dotSourceId = gameObject.GetInstanceID().ToString();
+                    enemy.ApplyDot(dotDamage * damageMultiplier, dotDuration, dotTickRate, dotSourceId);
+                }
+            }
+        }
+    }
+
+    private float CalculateAoeDamageMultiplier(float distance)
+    {
+        if (distance >= aoeRadius) return 0f;
+
+        float falloffMultiplier = aoeDamageFalloff / 100f;
+        float distanceRatio = distance / aoeRadius;
+
+        return 1f - (distanceRatio * (1f - falloffMultiplier));
+    }
+
+    float CalculateInterceptTime(Vector2 shooterPos, Vector2 targetPos, Vector2 targetVelocity, float bulletSpeed)
+    {
+        Vector2 relativePosition = targetPos - shooterPos;
 
         float a = targetVelocity.sqrMagnitude - (bulletSpeed * bulletSpeed);
-        float b = 2f * UnityEngine.Vector2.Dot(relativePosition, targetVelocity);
+        float b = 2f * Vector2.Dot(relativePosition, targetVelocity);
         float c = relativePosition.sqrMagnitude;
 
         if (Mathf.Abs(a) < 0.0001f)
         {
-
             return relativePosition.magnitude / bulletSpeed;
         }
 
@@ -207,31 +324,49 @@ public class Tower : MonoBehaviour
             if (t2 > 0) return t2;
         }
 
-        return relativePosition.magnitude / bulletSpeed; 
+        return relativePosition.magnitude / bulletSpeed;
     }
 
     public string GetDescription()
     {
-        if (overrideDesc == "") return $"cost: {cost} \ndmg: {damage} \nrange: {range} \nrate: {fireRate}";
-        else return overrideDesc;
+        if (overrideDesc != "")
+            return overrideDesc;
+
+        string desc = $"Cost: {cost}\nDmg: {damage}\nRange: {range}\nRate: {fireRate}";
+
+        if (hasKnockback) desc += $"\nKnockback: {knockbackDistance}";
+        if (hasFreeze) desc += $"\nFreeze: {freezeChance}% ({freezeDuration}s)";
+        if (hasSlow) desc += $"\nSlow: {slowAmount}% ({slowDuration}s)";
+        if (hasDot) desc += $"\nDOT: {dotDamage}/tick ({dotDuration}s)";
+        if (hasAoe) desc += $"\nAOE: {aoeRadius} radius";
+
+        return desc;
     }
+
     public void ChangeTargetType()
     {
         int count = System.Enum.GetValues(typeof(TargetType)).Length;
-
         int nextIndex = ((int)targetType + 1) % count;
-
         targetType = (TargetType)nextIndex;
     }
+
     public float Damage => damage;
     public float Range => range;
     public float FireRate => fireRate;
     public int Cost => cost;
     public Vector3Int GridPosition => gridPosition;
+    public bool HasAoe => hasAoe;
+    public float AoeRadius => aoeRadius;
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
+
+        if (hasAoe && aoeRadius > 0)
+        {
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, aoeRadius);
+        }
     }
 }
