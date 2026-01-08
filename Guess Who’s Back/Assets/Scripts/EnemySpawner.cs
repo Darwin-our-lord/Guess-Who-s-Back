@@ -17,14 +17,21 @@ public class EnemySpawner : MonoBehaviour
     public float rate = 1f;
 
     public GameObject nextWavebutton;
+    public GameObject storebutton;
     public GameObject enemiesParent;
+
     public RoadMaker roadMaker;
     public StoreManager StoreManager;
+    public MenuManager menuManager;
 
     public void StartWave()
     {
         if (!waveOngoing) StartCoroutine(SpawnWave());
         nextWavebutton.SetActive(false);
+        storebutton.SetActive(false);
+        if (menuManager.storeUI.activeSelf) menuManager.StoreButton();
+        
+        
     }
     IEnumerator SpawnWave()
     {
@@ -88,6 +95,7 @@ public class EnemySpawner : MonoBehaviour
                 StoreManager.AddMoney(0);
                 wave++;
                 nextWavebutton.SetActive(true);
+                storebutton.SetActive(true);
             }
             yield return new WaitForSeconds(1f);
         }

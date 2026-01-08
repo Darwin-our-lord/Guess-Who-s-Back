@@ -2938,9 +2938,11 @@ MonoBehaviour:
   timeBetweenWaves: 5
   rate: 1
   nextWavebutton: {fileID: 1993728840}
+  storebutton: {fileID: 2095525863}
   enemiesParent: {fileID: 354165020}
   roadMaker: {fileID: 28553210}
   StoreManager: {fileID: 1557288661}
+  menuManager: {fileID: 1716182900}
 --- !u!4 &1215443787
 Transform:
   m_ObjectHideFlags: 0
