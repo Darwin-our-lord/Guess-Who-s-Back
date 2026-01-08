@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoadMaker : MonoBehaviour
@@ -12,12 +13,15 @@ public class RoadMaker : MonoBehaviour
 
     public LayerMask layerMask;
 
-    public Vector2 lastRoadPos = new Vector2(0.5f,0.5f);
-    public Vector2 lastlastRoadPos;
-
     public GameObject roadsParent;
-    public List<GameObject> roads = new List<GameObject>();
 
+    public float branchChance = 0.05f;
+    public List<GameObject> branchFronts = new List<GameObject>();
+    public List<GameObject> fakeFronts = new List<GameObject>();
+    public List<GameObject> formerBranchFronts = new List<GameObject>();
+    public GameObject firstRoad;
+
+    public EnemySpawner enemySpawner;
 
     private void Start()
     {
@@ -26,142 +30,342 @@ public class RoadMaker : MonoBehaviour
 
     IEnumerator GenerateLevel()
     {
+
         for (int i = 0; i < 10; i++)
         {
-
             ExtendRoad();
             yield return new WaitForSeconds(0.5f);
         }
     }
+
     public void ExtendRoad()
     {
-        int attempts = 0;
-        if (roads.Count != 0)
+        if (branchFronts.Count == 0)
         {
-            Destroy(roads[roads.Count - 1]);
-            roads.Remove(roads[roads.Count - 1]);
+            GameObject oldRoad = Instantiate(RoadStartObjPrefab, new Vector2(0.5f, 0.5f), Quaternion.identity, roadsParent.transform);
+            GameObject newRoad = Instantiate(RoadObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
+            GameObject fakeRoad = Instantiate(RoadEndObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
 
-            GameObject oldRoad = Instantiate(RoadObjPrefab, lastRoadPos, Quaternion.identity, roadsParent.transform);
-            roads.Add(oldRoad);
+            fakeFronts.Add(fakeRoad);
+            branchFronts.Add(newRoad);
+            formerBranchFronts.Add(oldRoad);
+
+            firstRoad = newRoad;
         }
-        else
+        if (Random.value < branchChance && enemySpawner.wave >= 10)
         {
-            GameObject oldRoad = Instantiate(RoadStartObjPrefab, lastRoadPos, Quaternion.identity, roadsParent.transform);
-            roads.Add(oldRoad);
-        }
-
-        while (true)
-        {
-            attempts++;
-
-            Vector2 newRoadPos = lastRoadPos;
-
-            //1=up   2=down   3=left   4=right
-            int direction = UnityEngine.Random.Range(1, 5);
-            switch (direction)
+            List<int> possibleBranches = new List<int>();
+            for (int i = 0; i < branchFronts.Count;i++) 
             {
-                case 1: newRoadPos += new Vector2(1, 0);  break;
-                case 2: newRoadPos += new Vector2(-1,0);  break;
-                case 3: newRoadPos += new Vector2(0,-1);  break;
-                case 4: newRoadPos += new Vector2(0, 1);  break;
-            }
-
-            if (newRoadPos == lastlastRoadPos) continue;
-
-            Collider2D hit = Physics2D.OverlapBox(newRoadPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
-
-            if (hit == null)
-            {
-                GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
-                roads.Add(newRoad);
-                lastlastRoadPos = lastRoadPos;
-                lastRoadPos = newRoadPos;
-                break;
-            }
-            else if (hit.gameObject.CompareTag("Tower"))
-            {
-                Destroy(hit.gameObject);
-                GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
-                roads.Add(newRoad);
-                lastlastRoadPos = lastRoadPos;
-                lastRoadPos = newRoadPos;
-                break;
-            }
-            else if (hit.gameObject.CompareTag("Road"))
-            {
-                if (hit.gameObject == roads[0]) continue;
-
-                Vector2 roadTest = lastRoadPos;
+                int possiblePlaces = 0;
+                Vector2 roadTest = branchFronts[i].transform.position;
                 roadTest += new Vector2(1, 0);
                 Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+                if (hit2 == null || hit2.gameObject.CompareTag("Tower")) possiblePlaces++;
 
-                roadTest = lastRoadPos;
+                roadTest = branchFronts[i].transform.position;
                 roadTest += new Vector2(-1, 0);
                 hit2 = null;
                 hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+                if (hit2 == null || hit2.gameObject.CompareTag("Tower")) possiblePlaces++;
 
-                roadTest = lastRoadPos;
-                roadTest += new Vector2(0, 1);
-                hit2=null;
-                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
-
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
-
-                roadTest = lastRoadPos;
-                roadTest += new Vector2(0, -1);
-                hit2 = null;
-                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
-
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
-
-
-
-                GameObject newRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
-                roads.Add(newRoad);
-                lastlastRoadPos = lastRoadPos;
-                lastRoadPos = newRoadPos;
-                break;
-            }
-            else if (hit.gameObject.CompareTag("Wall"))
-            {
-                Vector2 roadTest = lastRoadPos;
-                roadTest += new Vector2(1, 0);
-                Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
-
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
-
-                roadTest = lastRoadPos;
-                roadTest += new Vector2(-1, 0);
-                hit2 = null;
-                hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
-
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
-
-                roadTest = lastRoadPos;
+                roadTest = branchFronts[i].transform.position;
                 roadTest += new Vector2(0, 1);
                 hit2 = null;
                 hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+                if (hit2 == null || hit2.gameObject.CompareTag("Tower")) possiblePlaces++;
 
-                roadTest = lastRoadPos;
+                roadTest = branchFronts[i].transform.position;
                 roadTest += new Vector2(0, -1);
                 hit2 = null;
                 hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
-                if (hit2 == null || hit.gameObject.CompareTag("Tower")) continue;
+                if (hit2 == null || hit2.gameObject.CompareTag("Tower")) possiblePlaces++;
 
-                Destroy(hit.gameObject);
-                continue;
+
+                if (possiblePlaces >= 2) possibleBranches.Add(i);
             }
-            else
+
+
+            while (true)
             {
-                Debug.LogError("INFINITE LOOP");
-                break;
+                if (possibleBranches.Count == 0)
+                {
+                    break;
+                }
+
+                int branchStart = possibleBranches[UnityEngine.Random.Range(0, possibleBranches.Count)];
+
+                Vector2 newRoadPos = branchFronts[branchStart].transform.position;
+
+                int direction = UnityEngine.Random.Range(1, 5);
+                switch (direction)
+                {
+                    case 1: newRoadPos += new Vector2(1, 0); break;//1=up 
+                    case 2: newRoadPos += new Vector2(-1, 0); break;//2=down
+                    case 3: newRoadPos += new Vector2(0, -1); break;//3=left
+                    case 4: newRoadPos += new Vector2(0, 1); break;//4=right
+                }
+
+                if (newRoadPos == new Vector2(formerBranchFronts[branchStart].transform.position.x, formerBranchFronts[branchStart].transform.position.y)) continue;
+
+                Collider2D hit = Physics2D.OverlapBox(newRoadPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit == null)
+                {
+                    GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+                    GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    branchFronts[branchStart].GetComponent<Road>().AddNextTile(newRoad.transform);
+
+                    formerBranchFronts.Add(branchFronts[branchStart]);
+                    branchFronts.Add(newRoad);
+                    fakeFronts.Add(fakeRoad);
+
+                    break;
+                }
+                else if (hit.gameObject.CompareTag("Tower"))
+                {
+                    Destroy(hit.gameObject);
+
+                    GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+                    GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    branchFronts[branchStart].GetComponent<Road>().AddNextTile(newRoad.transform);
+
+                    formerBranchFronts.Add(branchFronts[branchStart]);
+                    branchFronts.Add(newRoad);
+                    fakeFronts.Add(fakeRoad);
+
+                    break;
+                }
+                else if (hit.gameObject.CompareTag("Road"))
+                {
+                    if (hit.gameObject.name == RoadStartObjPrefab.name) continue;
+
+                    #region checkForValidSpotElsewhere
+                    Vector2 roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(1, 0);
+                    Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(-1, 0);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(0, 1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(0, -1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    #endregion
+
+                    GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+                    GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    branchFronts[branchStart].GetComponent<Road>().AddNextTile(newRoad.transform);
+
+                    formerBranchFronts.Add(branchFronts[branchStart]);
+                    branchFronts.Add(newRoad);
+                    fakeFronts.Add(fakeRoad);
+
+                    break;
+                }
+                else if (hit.gameObject.CompareTag("Wall"))
+                {
+                    #region checkForValidSpotElsewhere
+                    Vector2 roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(1, 0);
+                    Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(-1, 0);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(0, 1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[branchStart].transform.position;
+                    roadTest += new Vector2(0, -1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    #endregion
+
+                    Destroy(hit.gameObject);
+                    continue;
+                }
+                else
+                {
+                    Debug.LogError("INFINITE LOOP");
+                    break;
+                }
+
+            }
+
+        }
+        for (int i = 0; i < branchFronts.Count; i++)
+        {
+
+            Destroy(fakeFronts[i]);
+
+            while (true)
+            {
+                Vector2 newRoadPos = branchFronts[i].transform.position;
+
+                int direction = UnityEngine.Random.Range(1, 5);
+                switch (direction)
+                {
+                    case 1: newRoadPos += new Vector2(1, 0); break;//1=up 
+                    case 2: newRoadPos += new Vector2(-1, 0); break;//2=down
+                    case 3: newRoadPos += new Vector2(0, -1); break;//3=left
+                    case 4: newRoadPos += new Vector2(0, 1); break;//4=right
+                }
+
+                if (newRoadPos == new Vector2(formerBranchFronts[i].transform.position.x, formerBranchFronts[i].transform.position.y)) continue;
+
+                Collider2D hit = Physics2D.OverlapBox(newRoadPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                if (hit == null)
+                {
+                    GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+                    GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    branchFronts[i].GetComponent<Road>().AddNextTile(newRoad.transform);
+
+                    formerBranchFronts[i] = branchFronts[i];
+                    branchFronts[i] = newRoad;
+                    fakeFronts[i] =fakeRoad;
+
+                    break;
+                }
+                else if (hit.gameObject.CompareTag("Tower"))
+                {
+                    Destroy(hit.gameObject);
+
+                    GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+                    GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    branchFronts[i].GetComponent<Road>().AddNextTile(newRoad.transform);
+
+                    formerBranchFronts[i] = branchFronts[i];
+                    branchFronts[i] = newRoad;
+                    fakeFronts[i] = fakeRoad;
+
+                    break;
+                }
+                else if (hit.gameObject.CompareTag("Road"))
+                {
+                    if (hit.gameObject.name == RoadStartObjPrefab.name) continue;
+
+                    #region checkForValidSpotElsewhere
+                    Vector2 roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(1, 0);
+                    Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(-1, 0);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(0, 1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(0, -1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    #endregion
+
+                    GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+                    GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
+
+                    branchFronts[i].GetComponent<Road>().AddNextTile(newRoad.transform);
+
+                    formerBranchFronts[i] = branchFronts[i];
+                    branchFronts[i] = newRoad;
+                    fakeFronts[i] = fakeRoad;
+
+                    break;
+                }
+                else if (hit.gameObject.CompareTag("Wall"))
+                {
+                    #region checkForValidSpotElsewhere
+                    Vector2 roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(1, 0);
+                    Collider2D hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(-1, 0);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(0, 1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    roadTest = branchFronts[i].transform.position;
+                    roadTest += new Vector2(0, -1);
+                    hit2 = null;
+                    hit2 = Physics2D.OverlapBox(roadTest, new Vector2(0.9f, 0.9f), 0f, layerMask);
+
+                    if (hit2 == null || hit2.gameObject.CompareTag("Tower")) continue;
+
+                    #endregion
+
+                    Destroy(hit.gameObject);
+                    continue;
+                }
+                else
+                {
+                    Debug.LogError("INFINITE LOOP");
+                    break;
+                }
             }
         }
     }
