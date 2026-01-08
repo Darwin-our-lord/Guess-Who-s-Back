@@ -4,7 +4,13 @@ using System.Collections.Generic;
 using System.Numerics;
 using Unity.Mathematics;
 using UnityEngine;
-
+public enum TargetType
+{
+    closest,
+    first,
+    strongest,
+    healthiest
+}
 public class Tower : MonoBehaviour
 {
     [Header("Tower Stats")]
@@ -21,8 +27,11 @@ public class Tower : MonoBehaviour
     private float lastFireTime;
     private Enemy currentTarget;
 
-
+    [Header("other")]
+    public TargetType targetType = TargetType.closest;
     public GameObject bulletPrefab;
+
+
     void Awake()
     {
         bulletParent = GameObject.Find("Bullets");
@@ -58,17 +67,65 @@ public class Tower : MonoBehaviour
         }
 
         currentTarget = null;
-        float maxDistance = 0f;
-
-        foreach (Enemy enemy in enemiesInRange)
+        if (targetType == TargetType.closest)
         {
-            float distance = UnityEngine.Vector3.Distance(transform.position, enemy.transform.position);
+            float maxDistance = 0f;
 
-            if (distance > maxDistance)
+            foreach (Enemy enemy in enemiesInRange)
             {
-                maxDistance = distance;
-                currentTarget = enemy;
+                float distance = UnityEngine.Vector3.Distance(transform.position, enemy.transform.position);
+
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                    currentTarget = enemy;
+                }
             }
+        }
+        else if (targetType == TargetType.first)
+        {
+            Enemy currentFirstEnemy = null;
+
+            foreach (Enemy enemy in enemiesInRange)
+            {
+                if (currentFirstEnemy == null) currentFirstEnemy = enemy;
+                if (currentFirstEnemy.roadTargetNr < enemy.roadTargetNr)
+                {
+                    currentFirstEnemy = enemy;
+                }
+            }
+
+            currentTarget = currentFirstEnemy;
+        }
+        else if (targetType == TargetType.strongest)
+        {
+            Enemy currentStrongestEnemy = null;
+
+            foreach (Enemy enemy in enemiesInRange)
+            {
+                if (currentStrongestEnemy == null) currentStrongestEnemy = enemy;
+                if (currentStrongestEnemy.MaxHealth < enemy.MaxHealth)
+                {
+                    currentStrongestEnemy = enemy;
+                }
+            }
+
+            currentTarget = currentStrongestEnemy;
+        }
+        else if (targetType == TargetType.healthiest)
+        {
+            Enemy currentHealthiestEnemy = null;
+            
+            foreach (Enemy enemy in enemiesInRange)
+            {
+                if(currentHealthiestEnemy == null)currentHealthiestEnemy = enemy;
+                if (currentHealthiestEnemy.CurrentHealth < enemy.CurrentHealth)
+                {
+                    currentHealthiestEnemy = enemy;
+                }
+            }
+
+            currentTarget = currentHealthiestEnemy;
         }
     }
 
@@ -138,7 +195,14 @@ public class Tower : MonoBehaviour
         if (overrideDesc == "") return $"cost: {cost} \ndmg: {damage} \nrange: {range} \nrate: {fireRate}";
         else return overrideDesc;
     }
+    public void ChangeTargetType()
+    {
+        int count = System.Enum.GetValues(typeof(TargetType)).Length;
 
+        int nextIndex = ((int)targetType + 1) % count;
+
+        targetType = (TargetType)nextIndex;
+    }
     public float Damage => damage;
     public float Range => range;
     public float FireRate => fireRate;

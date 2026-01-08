@@ -21,31 +21,33 @@ public class TowerDisplay : MonoBehaviour
 
             Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
-            if (hit != null)
+        if (hit != null)
+        {
+            if (hit.gameObject.CompareTag("Tower") || hit.gameObject.CompareTag("Wall"))
             {
-                if (hit.gameObject.CompareTag("Tower") || hit.gameObject.CompareTag("Wall"))
+                towerUI.SetActive(true);
+                towerUI.transform.position = mousePos + new Vector2(1.5f, -2);
+
+                towerUI.transform.GetChild(1).GetComponent<TMP_Text>().text = hit.gameObject.name;
+                towerUI.transform.GetChild(2).GetComponent<TMP_Text>().text = hit.gameObject.GetComponent<Tower>().GetDescription();
+                towerUI.transform.GetChild(3).GetComponent<TMP_Text>().text = "Target: "+hit.gameObject.GetComponent<Tower>().targetType.ToString();
+
+                rangeCircle.SetActive(true);
+                rangeCircle.transform.position = hit.gameObject.transform.position;
+                rangeCircle.transform.localScale
+                    = new Vector3(hit.gameObject.GetComponent<Tower>().Range * 2, hit.gameObject.GetComponent<Tower>().Range * 2, 1);
+
+                if (Input.GetMouseButtonDown(0))
                 {
-                    towerUI.SetActive(true);
-                    towerUI.transform.position = mousePos + new Vector2(1.5f, -2);
-
-                    towerUI.transform.GetChild(1).GetComponent<TMP_Text>().text = hit.gameObject.name;
-                    towerUI.transform.GetChild(2).GetComponent<TMP_Text>().text = hit.gameObject.GetComponent<Tower>().GetDescription();
-
-                    rangeCircle.SetActive(true);
-                    rangeCircle.transform.position = hit.gameObject.transform.position;
-                    rangeCircle.transform.localScale
-                        = new Vector3(hit.gameObject.GetComponent<Tower>().Range * 2, hit.gameObject.GetComponent<Tower>().Range * 2, 1);
-
-
+                    hit.gameObject.GetComponent<Tower>().ChangeTargetType();
                 }
             }
-            else
-            {
-                towerUI.SetActive(false);
-                rangeCircle.transform.localScale = new Vector3(0,0,1);
-            }
+        }
+        else
+        {
+            towerUI.SetActive(false);
+            rangeCircle.transform.localScale = new Vector3(0,0,1);
+        }
         
-
-
     }
 }

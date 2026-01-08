@@ -1,5 +1,6 @@
 using System.Runtime.ConstrainedExecution;
 using TMPro;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -20,7 +21,7 @@ public class Enemy : MonoBehaviour
     private bool hasDied = false;
     private RoadMaker roadMaker;
     private StoreManager storeManager;
-    private int roadTargetNr = 0;
+    public int roadTargetNr = 0;
 
     private void Awake()
     {
