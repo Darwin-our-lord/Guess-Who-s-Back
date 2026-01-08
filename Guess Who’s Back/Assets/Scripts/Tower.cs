@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -9,7 +10,8 @@ public enum TargetType
     closest,
     first,
     strongest,
-    healthiest
+    healthiest,
+    random
 }
 public class Tower : MonoBehaviour
 {
@@ -126,6 +128,15 @@ public class Tower : MonoBehaviour
             }
 
             currentTarget = currentHealthiestEnemy;
+        }
+        else if (targetType == TargetType.random)
+        {
+            if(enemiesInRange.Count > 0)
+            {
+                Enemy RandomEnemy = enemiesInRange[UnityEngine.Random.Range(0, enemiesInRange.Count)];
+
+                currentTarget = RandomEnemy;
+            }
         }
     }
 
