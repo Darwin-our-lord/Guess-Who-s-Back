@@ -3,6 +3,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float cameraSpeed;
+    public float cameraSprintSpeed;
     public float panBorderThickness;
 
     void Update()
@@ -15,9 +16,11 @@ public class CameraController : MonoBehaviour
         if (Input.mousePosition.x >= Screen.width - panBorderThickness)  { hor =  1; }//right
         if (Input.mousePosition.x <= panBorderThickness)                 { hor = -1; }//left
 
-        transform.position += new Vector3(hor, ver, 0).normalized * cameraSpeed * Time.deltaTime;
-
+        if (Input.GetKey(KeyCode.LeftShift)) transform.position += new Vector3(hor, ver, 0).normalized * cameraSprintSpeed * Time.deltaTime; 
+        else transform.position += new Vector3(hor, ver, 0).normalized * cameraSpeed * Time.deltaTime;
+        
         if (Input.GetKeyDown(KeyCode.T)) transform.position = new Vector3 (0, 0,-10);
+
         
     }
 }

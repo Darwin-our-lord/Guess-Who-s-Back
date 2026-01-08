@@ -1296,6 +1296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraSpeed: 7
+  cameraSprintSpeed: 15
   panBorderThickness: 50
 --- !u!1 &619394800
 GameObject:
