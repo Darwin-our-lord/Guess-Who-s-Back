@@ -146,26 +146,35 @@ public class Tower : MonoBehaviour
 
         lastFireTime = Time.time;
 
-        UnityEngine.Vector2 targetVel = currentTarget.gameObject.GetComponent<Enemy>().Speed* currentTarget.gameObject.GetComponent<Enemy>().direction;
+        if (Settings.ShowBullets)
+        {
+            UnityEngine.Vector2 targetVel = currentTarget.gameObject.GetComponent<Enemy>().Speed * currentTarget.gameObject.GetComponent<Enemy>().direction;
 
-        float interceptTime = CalculateInterceptTime(transform.position, currentTarget.transform.position, targetVel, bulletSpeed);
+            float interceptTime = CalculateInterceptTime(transform.position, currentTarget.transform.position, targetVel, bulletSpeed);
 
-        UnityEngine.Vector2 interceptPoint = (UnityEngine.Vector2)currentTarget.transform.position + (targetVel * interceptTime);
-        UnityEngine.Vector2 directionToIntercept = interceptPoint - (UnityEngine.Vector2)transform.position;
-        float newAngle = Mathf.Atan2(directionToIntercept.y, directionToIntercept.x) * Mathf.Rad2Deg;
+            UnityEngine.Vector2 interceptPoint = (UnityEngine.Vector2)currentTarget.transform.position + (targetVel * interceptTime);
+            UnityEngine.Vector2 directionToIntercept = interceptPoint - (UnityEngine.Vector2)transform.position;
+            float newAngle = Mathf.Atan2(directionToIntercept.y, directionToIntercept.x) * Mathf.Rad2Deg;
 
-        if(weaponVisual != null) weaponVisual.transform.rotation = UnityEngine.Quaternion.Euler(0, 0, newAngle+90);
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, UnityEngine.Quaternion.Euler(0, 0, newAngle), bulletParent.transform);
 
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, UnityEngine.Quaternion.Euler(0, 0, newAngle),bulletParent.transform);
+            if (weaponVisual != null) weaponVisual.transform.rotation = UnityEngine.Quaternion.Euler(0, 0, newAngle + 90);
 
-        bullet.GetComponent<Bullet>().speed = bulletSpeed;
-        float lifetime = (transform.position - currentTarget.transform.position).magnitude / bulletSpeed;
-        bullet.GetComponent<Bullet>().lifeTime =  lifetime;
-        bullet.GetComponent<Bullet>().target = interceptPoint;
-        bullet.GetComponent<Bullet>().targetGameObj = currentTarget.gameObject;
+            bullet.GetComponent<Bullet>().speed = bulletSpeed;
+            float lifetime = (transform.position - currentTarget.transform.position).magnitude / bulletSpeed;
+            bullet.GetComponent<Bullet>().lifeTime = lifetime;
+            bullet.GetComponent<Bullet>().target = interceptPoint;
+            bullet.GetComponent<Bullet>().targetGameObj = currentTarget.gameObject;
 
-        StartCoroutine(DamageTimer(lifetime));
-        
+            StartCoroutine(DamageTimer(lifetime));
+        }
+        else
+        {
+
+            float newAngle = Mathf.Atan2(currentTarget.gameObject.transform.position.y, currentTarget.gameObject.transform.position.x) * Mathf.Rad2Deg;
+            if (weaponVisual != null) weaponVisual.transform.rotation = UnityEngine.Quaternion.Euler(0, 0, newAngle + 90);
+            StartCoroutine(DamageTimer(0.5f));
+        }
     }
     IEnumerator DamageTimer(float lifetime)
     {
