@@ -114,13 +114,26 @@ public class Tower : MonoBehaviour
 
             foreach (Enemy enemy in enemiesInRange)
             {
-                if (currentFirstEnemy == null) currentFirstEnemy = enemy;
-                if(currentFirstEnemy.walkType == WalkType.flying)
+                if (enemy.roadTarget == null)
+                    continue;
+
+                if (currentFirstEnemy == null)
                 {
-                    if (Vector3.Distance(currentFirstEnemy.transform.position, currentFirstEnemy.roadTarget.position) < 3) currentFirstEnemy = enemy;
+                    currentFirstEnemy = enemy;
+                    continue;
                 }
-                else if (currentFirstEnemy.roadTargetNr < enemy.roadTargetNr) currentFirstEnemy = enemy;
                 
+                if (enemy.roadTargetNr > currentFirstEnemy.roadTargetNr)
+                {
+                    currentFirstEnemy = enemy;
+                }
+                else if (enemy.walkType == WalkType.flying)
+                {
+                    float enemyDistance = Vector3.Distance(enemy.transform.position, enemy.roadTarget.position);
+                    float currentFirstDistance = Vector3.Distance(currentFirstEnemy.transform.position, currentFirstEnemy.roadTarget.position);
+
+                    if (enemyDistance < currentFirstDistance) currentFirstEnemy = enemy;
+                }
             }
 
             currentTarget = currentFirstEnemy;
