@@ -1,8 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
-
+public enum WalkType
+{
+    flying,
+    normal
+}
 public class Enemy : MonoBehaviour
 {
     [Header("Enemy Stats")]
@@ -10,6 +15,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private int waveValue = 1;
     [SerializeField] private int maxWavesAlive = 10;
+    [SerializeField] public WalkType walkType = WalkType.normal;
+
 
     [Header("Resistances")]
     [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
@@ -63,26 +70,52 @@ public class Enemy : MonoBehaviour
 
         if (!hasDied && !isBeingKnockedBack)
         {
-            if (roadTarget == null) roadTarget = roadMaker.firstRoad.transform;
-
-            direction = (roadTarget.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-
-            if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
+            if (walkType == WalkType.normal)
             {
-                roadTargetNr++;
+                if (roadTarget == null) roadTarget = roadMaker.firstRoad.transform;
 
-                if (roadTarget.GetComponent<Road>().nextTiles.Count == 0)
+                direction = (roadTarget.position - transform.position).normalized;
+                transform.position += direction * speed * Time.deltaTime;
+
+                if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
+                {
+                    roadTargetNr++;
+
+                    if (roadTarget.GetComponent<Road>().nextTiles.Count == 0)
+                    {
+                        MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
+                        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
+                        Time.timeScale = 0f;
+                        menuManager.loseUI.SetActive(true);
+                        menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
+                    }
+                    else
+                    {
+                        roadTarget = roadTarget.GetComponent<Road>().nextTiles[UnityEngine.Random.Range(0, roadTarget.GetComponent<Road>().nextTiles.Count)];
+                    }
+                }
+            }
+            else if (walkType == WalkType.flying)
+            {
+                if (roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
+                for (int i = 0; i < roadMaker.branchFronts.Count; i++)
+                {
+                    if (Vector3.Distance(roadMaker.branchFronts[i].transform.position, transform.position) > Vector3.Distance(roadTarget.position, transform.position))
+                    {
+                        roadTarget = roadMaker.branchFronts[i].transform;
+                    }
+                }
+
+                direction = (roadTarget.position - transform.position).normalized;
+                transform.position += direction * speed * Time.deltaTime;
+
+                if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
                 {
                     MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
                     EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
                     Time.timeScale = 0f;
                     menuManager.loseUI.SetActive(true);
                     menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
-                }
-                else
-                {
-                    roadTarget = roadTarget.GetComponent<Road>().nextTiles[UnityEngine.Random.Range(0, roadTarget.GetComponent<Road>().nextTiles.Count)];
                 }
             }
         }

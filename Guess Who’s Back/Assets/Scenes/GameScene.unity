@@ -3308,6 +3308,7 @@ MonoBehaviour:
   - {fileID: 42628739759191034, guid: c07b85769f2e9ce47838fdc7b70ca11b, type: 3}
   - {fileID: 42628739759191034, guid: 7c66276d802a1f74ebbf2e920fefbbb1, type: 3}
   - {fileID: 42628739759191034, guid: f0f2733b26c83b54b95ed95fba926988, type: 3}
+  - {fileID: 42628739759191034, guid: 4e80baf33df3fad4593c914984183b84, type: 3}
   wave: 1
   waveOngoing: 0
   waveValueTotal: 1
