@@ -102,7 +102,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 800
   speed: 0.4
-  rewardValue: 50
   waveValue: 5
   maxWavesAlive: 5
+  knockbackResistance: 75
   direction: {x: 0, y: 0, z: 0}
+  roadTargetNr: 0
+  roadTarget: {fileID: 0}
