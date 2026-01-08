@@ -3,8 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    [Header("MainMenu")]
     public GameObject mainUI;
     public GameObject settingsUI;
+
+    public GameObject GameplaySettingsUI;
+    public GameObject VisualSettingsUI;
+    public GameObject AudioSettingsUI;
+
+    [Header("During Game")]
     public GameObject storeUI;
     public GameObject loseUI;
 
@@ -30,6 +37,27 @@ public class MenuManager : MonoBehaviour
     {
         mainUI.gameObject.SetActive(false);
         settingsUI.gameObject.SetActive(true);
+    }
+    public void GameplaySettingsMenuButton()
+    {
+        AudioSettingsUI.gameObject.SetActive(false);
+        VisualSettingsUI.gameObject.SetActive(false);
+
+        GameplaySettingsUI.gameObject.SetActive(true);
+    }
+    public void AudioSettingsMenuButton()
+    {
+        AudioSettingsUI.gameObject.SetActive(true);
+
+        VisualSettingsUI.gameObject.SetActive(false);
+        GameplaySettingsUI.gameObject.SetActive(false);
+    }
+    public void VisualSettingsMenuButton()
+    {
+        VisualSettingsUI.gameObject.SetActive(true);
+
+        AudioSettingsUI.gameObject.SetActive(false);
+        GameplaySettingsUI.gameObject.SetActive(false);
     }
     public void BackButton()
     {
