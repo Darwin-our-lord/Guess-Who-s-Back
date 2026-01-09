@@ -103,7 +103,7 @@ MonoBehaviour:
   maxHealth: 100
   speed: 1
   waveValue: 5
-  maxWavesAlive: 5
+  maxWavesAlive: 10
   walkType: 0
   knockbackResistance: 0
   direction: {x: 0, y: 0, z: 0}
