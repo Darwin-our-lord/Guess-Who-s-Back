@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.91771495, b: 0.5801887, a: 1}
   m_FlipX: 0
@@ -102,9 +102,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 20
   speed: 2.5
-  rewardValue: 20
   waveValue: 2
   maxWavesAlive: 5
+  walkType: 1
   knockbackResistance: 0
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
+  roadTarget: {fileID: 0}
