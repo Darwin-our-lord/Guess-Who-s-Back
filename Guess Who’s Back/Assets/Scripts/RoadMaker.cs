@@ -34,7 +34,7 @@ public class RoadMaker : MonoBehaviour
     IEnumerator GenerateLevel()
     {
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 10; i++)
         {
             ExtendRoad();
             yield return new WaitForSeconds(0.1f);
