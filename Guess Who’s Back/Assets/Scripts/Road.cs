@@ -94,8 +94,42 @@ public class Road : MonoBehaviour
 
         Vector3Int outDir = Vector3Int.RoundToInt(outDirRaw);
 
+        if(nextTiles.Count > 1)
+        {
 
-        if (!stacked)
+            HashSet<Vector3Int> outDirs = new HashSet<Vector3Int>();
+
+            foreach (Transform t in nextTiles)
+            {
+                if (t == null) continue;
+                Vector3Int d = Vector3Int.RoundToInt((t.position - transform.position).normalized);
+                outDirs.Add(d);
+            }
+
+            // Combine in + out directions
+            bool left = outDirs.Contains(Vector3Int.left) || inDir == Vector3Int.left;
+            bool right = outDirs.Contains(Vector3Int.right) || inDir == Vector3Int.right;
+            bool up = outDirs.Contains(Vector3Int.up) || inDir == Vector3Int.up;
+            bool down = outDirs.Contains(Vector3Int.down) || inDir == Vector3Int.down;
+
+            int connections =
+                (left ? 1 : 0) +
+                (right ? 1 : 0) +
+                (up ? 1 : 0) +
+                (down ? 1 : 0);
+
+            // ----- T JUNCTIONS -----
+            if (connections == 3)
+            {
+                if (!up) sr.sprite = roadSprites[15]; // T missing up
+                else if (!down) sr.sprite = roadSprites[16]; // T missing down
+                else if (!left) sr.sprite = roadSprites[17]; // T missing left
+                else if (!right) sr.sprite = roadSprites[18]; // T missing right
+                return;
+            }
+
+        }
+        else if (!stacked)
         {
             switch (inDir, outDir)
             {
@@ -160,7 +194,7 @@ public class Road : MonoBehaviour
                 default:
                     //shii idk twin
                     sr.sprite = roadSprites[14];
-                    sr.sortingOrder = 8;
+                    sr.sortingOrder = 80;
                     break;
             }
         }
