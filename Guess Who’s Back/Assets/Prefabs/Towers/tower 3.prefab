@@ -108,7 +108,7 @@ MonoBehaviour:
   bulletSpeed: 30
   cost: 80
   overrideDesc: 
-  weaponVisual: {fileID: 0}
+  weaponVisual: {fileID: 4602335820611744101}
   hasKnockback: 0
   knockbackDistance: 0
   hasFreeze: 0

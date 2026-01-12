@@ -8,6 +8,7 @@ public class StoreManager : MonoBehaviour
     public List<GameObject> towers = new List<GameObject>();
     public List<GameObject> towersInShop = new List<GameObject>();
     public List<GameObject> towerButtons = new List<GameObject>();
+    public GameObject rerollButton;
     public TMP_Text moneyText;
     public TMP_Text toBeAddedMoneyText;
 
@@ -59,6 +60,7 @@ public class StoreManager : MonoBehaviour
             money -= towersInShop[buttonID].GetComponent<Tower>().Cost;
             RerollStore();
             UpdateMoneyUI();
+            if (rerollButton.activeSelf)rerollButton.SetActive(false);
         }
     }
     public void UpdateMoneyUI()
