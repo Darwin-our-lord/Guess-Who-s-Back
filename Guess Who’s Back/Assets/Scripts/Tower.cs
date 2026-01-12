@@ -9,6 +9,7 @@ public enum TargetType
     first,
     strongest,
     healthiest,
+    flying,
     random
 }
 
@@ -136,6 +137,49 @@ public class Tower : MonoBehaviour
                 }
             }
 
+            currentTarget = currentFirstEnemy;
+        }
+        else if (targetType == TargetType.flying)
+        {
+            Enemy currentFirstEnemy = null;
+            bool flyingInRange = false;
+
+            foreach (Enemy enemy in enemiesInRange)
+            {
+                if (enemy.walkType == WalkType.flying)
+                {
+                    flyingInRange = true;
+                    if (currentFirstEnemy == null)
+                    {
+                        currentFirstEnemy = enemy;
+                        continue;
+                    }
+                    float enemyDistance = Vector3.Distance(enemy.transform.position, enemy.roadTarget.position);
+                    float currentFirstDistance = Vector3.Distance(currentFirstEnemy.transform.position, currentFirstEnemy.roadTarget.position);
+
+                    if (enemyDistance < currentFirstDistance) currentFirstEnemy = enemy;
+                }
+            }
+            if (flyingInRange == false)
+            {
+                foreach (Enemy enemy in enemiesInRange)
+                {
+                    if (enemy.roadTarget == null)
+                        continue;
+
+                    if (currentFirstEnemy == null)
+                    {
+                        currentFirstEnemy = enemy;
+                        continue;
+                    }
+
+                    if (enemy.roadTargetNr > currentFirstEnemy.roadTargetNr)
+                    {
+                        currentFirstEnemy = enemy;
+                    }
+                }
+            }
+            flyingInRange = false;
             currentTarget = currentFirstEnemy;
         }
         else if (targetType == TargetType.strongest)
