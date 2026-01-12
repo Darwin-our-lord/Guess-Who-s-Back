@@ -66,7 +66,7 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time >= lastFireTime + (1f / fireRate))
+        if (Time.time >= lastFireTime + (fireRate))
         {
             AcquireTarget();
 
