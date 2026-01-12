@@ -106,7 +106,12 @@ public class Enemy : MonoBehaviour
                 if (roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
                 for (int i = 0; i < roadMaker.branchFronts.Count; i++)
                 {
-                    if (Vector3.Distance(roadMaker.branchFronts[i].transform.position, transform.position) > Vector3.Distance(roadTarget.position, transform.position))
+                    if(roadTarget == null)
+                    {
+                        roadTarget = roadMaker.branchFronts[i].transform;
+                        continue;
+                    }
+                    if (Vector3.Distance(roadMaker.branchFronts[i].transform.position, transform.position) < Vector3.Distance(roadTarget.position, transform.position))
                     {
                         roadTarget = roadMaker.branchFronts[i].transform;
                     }

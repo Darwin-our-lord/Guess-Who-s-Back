@@ -18,6 +18,7 @@ public class Tower : MonoBehaviour
     [Header("Tower Stats")]
     [SerializeField] private float damage = 25f;
     [SerializeField] private float range = 3f;
+    [SerializeField] private float rangeAngle = 3f;
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float bulletSpeed = 1;
     [SerializeField] private int cost = 50;
@@ -86,7 +87,7 @@ public class Tower : MonoBehaviour
             if (!enemy.gameObject.activeInHierarchy) continue;
 
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
-
+            //Collider2D hit2 = Physics2D.
             if (distance <= range)
             {
                 enemiesInRange.Add(enemy);

@@ -18,7 +18,7 @@ public class RoadMaker : MonoBehaviour
 
     public GameObject roadsParent;
 
-    public float branchChance = 0.05f;
+    public float branchChance = 0.02f;
     public List<GameObject> branchFronts = new List<GameObject>();
     public List<GameObject> fakeFronts = new List<GameObject>();
     public List<GameObject> formerBranchFronts = new List<GameObject>();
