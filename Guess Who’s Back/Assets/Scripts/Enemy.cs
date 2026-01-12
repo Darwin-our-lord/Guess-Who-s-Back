@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor.Rendering;
 using UnityEngine;
 public enum WalkType
@@ -21,8 +22,13 @@ public class Enemy : MonoBehaviour
     [Header("Resistances")]
     [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
 
+    [Header("CorpseStuff")]
+    public GameObject corpsePrefab;
+    private GameObject corpse;
+
     [Header("--DONT TOUCH--")]
     public Vector3 direction;
+
     private int wavesAlive = 0;
     private float currentHealth;
     private Vector3 deathPosition;
@@ -234,6 +240,8 @@ public class Enemy : MonoBehaviour
             Destroy(this);
         }
 
+        corpse = Instantiate(corpsePrefab,transform.position,Quaternion.identity);
+
         deathPosition = transform.position;
         hasDied = true;
         gameObject.SetActive(false);
@@ -248,6 +256,9 @@ public class Enemy : MonoBehaviour
 
     public void Respawn()
     {
+        Destroy(corpse);
+        corpse = null;
+
         wavesAlive++;
         currentHealth = maxHealth;
         hasDied = false;

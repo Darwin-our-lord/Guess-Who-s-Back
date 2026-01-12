@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3671108009756139151}
   - component: {fileID: 5956532897838411051}
   m_Layer: 0
-  m_Name: Walker
+  m_Name: Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 4354231566380549168, guid: 69d49d5d5f10bc84d9407ec2b6eff117, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -100,12 +100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 75
-  speed: 1
-  waveValue: 1
-  maxWavesAlive: 10
+  maxHealth: 50
+  speed: 1.5
+  waveValue: 0
+  maxWavesAlive: 100
   walkType: 1
   knockbackResistance: 0
+  corpsePrefab: {fileID: 2419133657992460214, guid: 991bbfab89d1dbf458b549932e18b618, type: 3}
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
   roadTarget: {fileID: 0}
