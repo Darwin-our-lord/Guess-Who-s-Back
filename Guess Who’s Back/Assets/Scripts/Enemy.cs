@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private int waveValue = 1;
     [SerializeField] private int maxWavesAlive = 10;
+    [SerializeField] public int waveReq = 0;
     [SerializeField] public WalkType walkType = WalkType.normal;
 
 
@@ -296,7 +297,7 @@ public class DotEffect
     public float damage;
     public float remainingDuration;
     public float tickRate;
-    public float timeSinceLastTick;
+    public float timeSinceLastTick = 0;
     public string sourceId;
 }
 

@@ -103,7 +103,8 @@ MonoBehaviour:
   maxHealth: 50
   speed: 1.5
   waveValue: 0
-  maxWavesAlive: 100
+  maxWavesAlive: 999
+  waveReq: 0
   walkType: 1
   knockbackResistance: 0
   corpsePrefab: {fileID: 2419133657992460214, guid: 991bbfab89d1dbf458b549932e18b618, type: 3}
