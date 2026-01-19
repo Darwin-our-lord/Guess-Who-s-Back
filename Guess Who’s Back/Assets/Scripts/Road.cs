@@ -140,10 +140,10 @@ public class Road : MonoBehaviour
             // ----- T JUNCTIONS -----
             if (connections == 3)
             {
-                if (!up) sr.sprite = roadSprites[15]; // T missing up
-                else if (!down) sr.sprite = roadSprites[16]; // T missing down
-                else if (!left) sr.sprite = roadSprites[17]; // T missing left
-                else if (!right) sr.sprite = roadSprites[18]; // T missing right
+                if (!up) sr.sprite = roadSprites[16]; // T missing up
+                else if (!down) sr.sprite = roadSprites[15]; // T missing down
+                else if (!left) sr.sprite = roadSprites[18]; // T missing left
+                else if (!right) sr.sprite = roadSprites[17]; // T missing right
                 return;
             }
 
