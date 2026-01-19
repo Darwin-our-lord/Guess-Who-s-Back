@@ -18,6 +18,7 @@ public class Tower : MonoBehaviour
     [Header("Tower Stats")]
     [SerializeField] private float damage = 25f;
     [SerializeField] private float range = 3f;
+    [SerializeField] private float rangeAngle = 360f;
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float bulletSpeed = 1;
     [SerializeField] private int cost = 50;
@@ -65,7 +66,7 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time >= lastFireTime + (1f / fireRate))
+        if (Time.time >= lastFireTime + (fireRate))
         {
             AcquireTarget();
 
@@ -81,15 +82,23 @@ public class Tower : MonoBehaviour
         Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         List<Enemy> enemiesInRange = new List<Enemy>();
 
+        float coneAngle = rangeAngle;
+
         foreach (Enemy enemy in allEnemies)
         {
             if (!enemy.gameObject.activeInHierarchy) continue;
 
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            Vector2 directionToEnemy = (enemy.transform.position - transform.position);
+            float distance = directionToEnemy.magnitude;
 
             if (distance <= range)
             {
-                enemiesInRange.Add(enemy);
+                float angle = Vector2.Angle(transform.right, directionToEnemy);
+
+                if (angle <= coneAngle / 2f)
+                {
+                    enemiesInRange.Add(enemy);
+                }
             }
         }
 

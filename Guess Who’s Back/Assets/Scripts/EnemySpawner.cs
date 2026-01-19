@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
     IEnumerator SpawnWave()
     {
         waveOngoing = true;
-        StoreManager.AddMoney(wave*10);
+        StoreManager.AddMoney((wave*10)/2+10);
         StoreManager.RerollStore();
 
         for (int i = 0; i < 2; i++)
@@ -65,8 +65,9 @@ public class EnemySpawner : MonoBehaviour
                 else if (enemiesChosen.GetComponent<Enemy>().WaveValue > highestValueEnemy.GetComponent<Enemy>().WaveValue)
                     highestValueEnemy = enemiesChosen;
             }
-                
-
+            
+            if(highestValueEnemy.GetComponent<Enemy>().waveReq > wave) continue;
+            
             if (highestValueEnemy.GetComponent<Enemy>().WaveValue + waveValue <= waveValueTotal)
             {
                 waveValue += highestValueEnemy.GetComponent<Enemy>().WaveValue;

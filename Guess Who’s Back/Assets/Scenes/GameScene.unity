@@ -883,7 +883,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 200
   m_TargetDisplay: 0
 --- !u!224 &422894527
 RectTransform:
@@ -4524,6 +4524,7 @@ MonoBehaviour:
   - {fileID: 956663640235827072, guid: a71188f050b58e14daef7afb8ae85ca3, type: 3}
   - {fileID: 956663640235827072, guid: 348aa7e5da0e8574aa8aca7b175a0766, type: 3}
   - {fileID: 956663640235827072, guid: 2fa1960310b3c8a43bfdeeb55a501e37, type: 3}
+  - {fileID: 956663640235827072, guid: 36d76b9c447d35948b6a733100fab510, type: 3}
   - {fileID: 956663640235827072, guid: 110cef1155743b94ab638a9a2b873b45, type: 3}
   towersInShop:
   - {fileID: 0}

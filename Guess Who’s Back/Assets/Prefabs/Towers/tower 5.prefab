@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 20
   range: 2
+  rangeAngle: 360
   fireRate: 1
   bulletSpeed: 10
   cost: 60

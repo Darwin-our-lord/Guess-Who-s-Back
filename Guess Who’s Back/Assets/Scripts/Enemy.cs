@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor.Rendering;
 using UnityEngine;
 public enum WalkType
@@ -15,14 +16,20 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private int waveValue = 1;
     [SerializeField] private int maxWavesAlive = 10;
+    [SerializeField] public int waveReq = 0;
     [SerializeField] public WalkType walkType = WalkType.normal;
 
 
     [Header("Resistances")]
     [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
 
+    [Header("CorpseStuff")]
+    public GameObject corpsePrefab;
+    private GameObject corpse;
+
     [Header("--DONT TOUCH--")]
     public Vector3 direction;
+
     private int wavesAlive = 0;
     private float currentHealth;
     private Vector3 deathPosition;
@@ -100,7 +107,12 @@ public class Enemy : MonoBehaviour
                 if (roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
                 for (int i = 0; i < roadMaker.branchFronts.Count; i++)
                 {
-                    if (Vector3.Distance(roadMaker.branchFronts[i].transform.position, transform.position) > Vector3.Distance(roadTarget.position, transform.position))
+                    if(roadTarget == null)
+                    {
+                        roadTarget = roadMaker.branchFronts[i].transform;
+                        continue;
+                    }
+                    if (Vector3.Distance(roadMaker.branchFronts[i].transform.position, transform.position) < Vector3.Distance(roadTarget.position, transform.position))
                     {
                         roadTarget = roadMaker.branchFronts[i].transform;
                     }
@@ -234,6 +246,8 @@ public class Enemy : MonoBehaviour
             Destroy(this);
         }
 
+        corpse = Instantiate(corpsePrefab,transform.position,Quaternion.identity);
+
         deathPosition = transform.position;
         hasDied = true;
         gameObject.SetActive(false);
@@ -248,6 +262,9 @@ public class Enemy : MonoBehaviour
 
     public void Respawn()
     {
+        Destroy(corpse);
+        corpse = null;
+
         wavesAlive++;
         currentHealth = maxHealth;
         hasDied = false;
@@ -280,7 +297,7 @@ public class DotEffect
     public float damage;
     public float remainingDuration;
     public float tickRate;
-    public float timeSinceLastTick;
+    public float timeSinceLastTick = 0;
     public string sourceId;
 }
 
