@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 public class Road : MonoBehaviour
 {
     public List<Transform> nextTiles = new List<Transform>();
+    public Transform fromtile;
     public Transform lastTile;
 
     //public List<Sprite> roadSprites = new List<Sprite>();
@@ -22,7 +25,11 @@ public class Road : MonoBehaviour
     }
     public void UpdateSprite(Transform fromTransform)
     {
+        fromtile = fromTransform;
         bool stacked = false;
+        Vector3Int inDir2 = new Vector3Int();
+        Vector3Int outDir2 = new Vector3Int();
+
         Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
         foreach (Collider2D hit in hits)
@@ -30,6 +37,16 @@ public class Road : MonoBehaviour
             if (hit != null && hit != GetComponent<Collider2D>())
             {
                 stacked = true;
+
+                Vector3 inDirRaw2 = (hit.gameObject.transform.position - hit.gameObject.GetComponent<Road>().fromtile.position).normalized;
+
+                inDir2 = Vector3Int.RoundToInt(inDirRaw2);
+
+                Vector3 outDirRaw2 = (hit.gameObject.GetComponent<Road>().nextTiles[0].position - hit.gameObject.transform.position).normalized;
+
+
+                outDir2 = Vector3Int.RoundToInt(outDirRaw2);
+
                 break;
             }
         }
@@ -37,10 +54,11 @@ public class Road : MonoBehaviour
 
         SpriteRenderer sr = this.gameObject.GetComponent<SpriteRenderer>();
 
-        Vector3 inDirRaw = (transform.position - fromTransform.position).normalized;
+        Vector3 inDirRaw = (transform.position - fromtile.position).normalized;
 
         Vector3Int inDir = Vector3Int.RoundToInt(inDirRaw);
 
+        #region oldcode(doesnt do anything)
         if (nextTiles.Count == 0 && !stacked)
         {
             switch (inDir)
@@ -88,6 +106,7 @@ public class Road : MonoBehaviour
 
             return;
         }
+        #endregion
 
         Vector3 outDirRaw = (nextTiles[0].position - transform.position).normalized;
 
@@ -189,14 +208,47 @@ public class Road : MonoBehaviour
         }
         else if (stacked)
         {
-            switch (inDir, outDir)
+
+            HashSet<Vector3Int> outDirs = new HashSet<Vector3Int>();
+            HashSet<Vector3Int> inDirs = new HashSet<Vector3Int>();
+
+            foreach (Transform t in nextTiles)
             {
-                default:
-                    //shii idk twin
-                    sr.sprite = roadSprites[14];
-                    sr.sortingOrder = 80;
-                    break;
+                if (t == null) continue;
+                Vector3Int d = Vector3Int.RoundToInt((t.position - transform.position).normalized);
+                outDirs.Add(d);
             }
+            outDirs.Add(outDir2);
+
+            inDirs.Add(inDir);
+            inDirs.Add(inDir2);
+
+            // Combine in + out directions
+            bool left = outDirs.Contains(Vector3Int.left) || inDirs.Contains(Vector3Int.right);
+            bool right = outDirs.Contains(Vector3Int.right) || inDirs.Contains(Vector3Int.left);
+            bool up = outDirs.Contains(Vector3Int.up) || inDirs.Contains(Vector3Int.down);
+            bool down = outDirs.Contains(Vector3Int.down) || inDirs.Contains(Vector3Int.up);
+
+            int connections =
+                (left ? 1 : 0) +
+                (right ? 1 : 0) +
+                (up ? 1 : 0) +
+                (down ? 1 : 0);
+
+            // ----- T JUNCTIONS -----
+            if (connections == 3)
+            { 
+                if (!up) sr.sprite = roadSprites[16]; // T missing up
+                else if (!down) sr.sprite = roadSprites[15]; // T missing down
+                else if (!left) sr.sprite = roadSprites[18]; // T missing left
+                else if (!right) sr.sprite = roadSprites[17]; // T missing right
+            }
+            else
+            {
+                sr.sprite = roadSprites[14];
+            }
+
+            sr.sortingOrder = 80;
         }
         
     }
