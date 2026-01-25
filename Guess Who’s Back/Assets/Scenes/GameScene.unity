@@ -2053,6 +2053,88 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757927125}
   m_CullTransparentMesh: 1
+--- !u!1 &802688483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 802688485}
+  - component: {fileID: 802688484}
+  m_Layer: 0
+  m_Name: Backgroundtiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &802688484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802688483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e109e9ac518184090fcc526d1f5011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileOptions:
+  - tileSprite: {fileID: -1154156499, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 1214932770, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 1794562269, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 1570540325, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -955464181, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -2085012823, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -375090421, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -953689425, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 892649389, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 202183916, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 997630649, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -2045983920, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -1259658931, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: -1803496322, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 1432404782, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 1838645534, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 10
+  - tileSprite: {fileID: 1930167048, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+    spawnChance: 2
+  padding: 5
+  sortingLayerName: Background
+  sortingOrder: 0
+--- !u!4 &802688485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802688483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &855545047
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,3 +5849,4 @@ SceneRoots:
   - {fileID: 422894527}
   - {fileID: 1716182899}
   - {fileID: 612528174}
+  - {fileID: 802688485}
