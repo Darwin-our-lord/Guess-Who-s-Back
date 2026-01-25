@@ -99,7 +99,7 @@ public class TiledBackground : MonoBehaviour
         return tileOptions[0].tileSprite;
     }
 
-    public void RecenterBackground()
+    public void RecenterBackground() // Makker trykker "T"
     {
         for (int x = 0; x < gridWidth; x++)
         {
