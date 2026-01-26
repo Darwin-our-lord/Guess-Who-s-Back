@@ -48,6 +48,7 @@ public class Tower : MonoBehaviour
     [Header("Special Stats - AOE")]
     [SerializeField] private bool hasAoe = false;
     [SerializeField] private float aoeRadius = 0f;
+    [SerializeField] private GameObject AoeCircle;
     [SerializeField][Range(0, 100)] private float aoeDamageFalloff = 100f;
 
     private GameObject bulletParent;
@@ -310,10 +311,21 @@ public class Tower : MonoBehaviour
 
         if (hasAoe && aoeRadius > 0)
         {
+            StartCoroutine(AOECircleSpawn(target.transform.position));
+
             ApplyAoeDamage(target.transform.position);
         }
     }
 
+    private IEnumerator AOECircleSpawn(Vector3 impactPosition)
+    {
+        GameObject cloe = Instantiate(AoeCircle);
+        cloe.transform.position = impactPosition;
+        cloe.GetComponent<SpriteRenderer>().sortingOrder = 500;
+        cloe.transform.localScale = new Vector3(aoeRadius, aoeRadius, 1);
+        yield return new WaitForSeconds(0.3f);
+        Destroy(cloe);
+    }
     private void ApplyAoeDamage(Vector3 impactPosition)
     {
         Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);

@@ -124,6 +124,7 @@ MonoBehaviour:
   dotTickRate: 0.5
   hasAoe: 1
   aoeRadius: 1
+  AoeCircle: {fileID: 5419374562607776820, guid: 1003387f9b3855846be3d98e3b1b2a7c, type: 3}
   aoeDamageFalloff: 100
   targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: dac738a9e1978494ba51cb867fe727b9, type: 3}
