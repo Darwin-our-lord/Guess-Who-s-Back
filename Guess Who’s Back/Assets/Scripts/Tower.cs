@@ -87,7 +87,10 @@ public class Tower : MonoBehaviour
             }
         }
     }
-
+    public void ResetFireRateTimer()
+    {
+        lastFireTime = 0;
+    }
     private void AcquireTarget()
     {
         Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);

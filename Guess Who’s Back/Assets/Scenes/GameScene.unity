@@ -3535,6 +3535,7 @@ MonoBehaviour:
   nextWavebutton: {fileID: 1993728840}
   storebutton: {fileID: 2095525863}
   enemiesParent: {fileID: 354165020}
+  towersParent: {fileID: 445468627}
   roadMaker: {fileID: 28553210}
   StoreManager: {fileID: 1557288661}
   menuManager: {fileID: 1716182900}
@@ -4622,9 +4623,12 @@ MonoBehaviour:
   - towerPrefab: {fileID: 956663640235827072, guid: 8603500fac35ec14eb06ec8b8605a8b3, type: 3}
     rarity: 5
   towersInShop:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - towerPrefab: {fileID: 0}
+    rarity: 0
+  - towerPrefab: {fileID: 0}
+    rarity: 0
+  - towerPrefab: {fileID: 0}
+    rarity: 0
   towerButtons:
   - {fileID: 334942284}
   - {fileID: 1268902186}

@@ -31,6 +31,11 @@ public class MenuManager : MonoBehaviour
     {
         Application.Quit();
     }
+    public void CreditsButton()
+    {
+        SceneManager.LoadScene(2);
+        Time.timeScale = 1f;
+    }
     public void MainMenuButton()
     {
         SceneManager.LoadScene(0);

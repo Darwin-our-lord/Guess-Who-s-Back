@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject nextWavebutton;
     public GameObject storebutton;
     public GameObject enemiesParent;
+    public GameObject towersParent;
 
     public RoadMaker roadMaker;
     public StoreManager StoreManager;
@@ -26,6 +27,10 @@ public class EnemySpawner : MonoBehaviour
 
     public void StartWave()
     {
+        foreach (Tower tower in towersParent.transform.GetComponentsInChildren<Tower>())
+        {
+            tower.ResetFireRateTimer();
+        }
         if (!waveOngoing) StartCoroutine(SpawnWave());
         nextWavebutton.SetActive(false);
         storebutton.SetActive(false);
