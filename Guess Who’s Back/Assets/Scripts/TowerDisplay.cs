@@ -42,6 +42,11 @@ public class TowerDisplay : MonoBehaviour
                     hit.gameObject.GetComponent<Tower>().ChangeTargetType();
                 }
             }
+            else
+            {
+                towerUI.SetActive(false);
+                rangeCircle.transform.localScale = new Vector3(0, 0, 1);
+            }
         }
         else
         {
