@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public enum TargetType
@@ -11,6 +12,15 @@ public enum TargetType
     healthiest,
     flying,
     random
+}
+public enum Rarities
+{
+    common,
+    uncommon,
+    rare,
+    epic,
+    legendary,
+    mytical
 }
 
 public class Tower : MonoBehaviour

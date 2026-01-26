@@ -4601,13 +4601,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towers:
-  - {fileID: 956663640235827072, guid: 9ea6f86bd584df340be458a1114ee915, type: 3}
-  - {fileID: 956663640235827072, guid: 368b148ececc29a4897ffc0d5e27fc52, type: 3}
-  - {fileID: 956663640235827072, guid: a71188f050b58e14daef7afb8ae85ca3, type: 3}
-  - {fileID: 956663640235827072, guid: 348aa7e5da0e8574aa8aca7b175a0766, type: 3}
-  - {fileID: 956663640235827072, guid: 2fa1960310b3c8a43bfdeeb55a501e37, type: 3}
-  - {fileID: 956663640235827072, guid: 36d76b9c447d35948b6a733100fab510, type: 3}
-  - {fileID: 956663640235827072, guid: 110cef1155743b94ab638a9a2b873b45, type: 3}
+  - towerPrefab: {fileID: 956663640235827072, guid: 368b148ececc29a4897ffc0d5e27fc52, type: 3}
+    rarity: 0
+  - towerPrefab: {fileID: 956663640235827072, guid: a71188f050b58e14daef7afb8ae85ca3, type: 3}
+    rarity: 1
+  - towerPrefab: {fileID: 956663640235827072, guid: 36d76b9c447d35948b6a733100fab510, type: 3}
+    rarity: 2
+  - towerPrefab: {fileID: 956663640235827072, guid: 9ea6f86bd584df340be458a1114ee915, type: 3}
+    rarity: 0
+  - towerPrefab: {fileID: 956663640235827072, guid: 110cef1155743b94ab638a9a2b873b45, type: 3}
+    rarity: 0
+  - towerPrefab: {fileID: 956663640235827072, guid: 348aa7e5da0e8574aa8aca7b175a0766, type: 3}
+    rarity: 2
+  - towerPrefab: {fileID: 956663640235827072, guid: 2fa1960310b3c8a43bfdeeb55a501e37, type: 3}
+    rarity: 3
+  - towerPrefab: {fileID: 956663640235827072, guid: 058339a0b93a5a5479c7387b3b82901f, type: 3}
+    rarity: 4
+  - towerPrefab: {fileID: 956663640235827072, guid: 058339a0b93a5a5479c7387b3b82901f, type: 3}
+    rarity: 4
+  - towerPrefab: {fileID: 956663640235827072, guid: 8603500fac35ec14eb06ec8b8605a8b3, type: 3}
+    rarity: 5
   towersInShop:
   - {fileID: 0}
   - {fileID: 0}
