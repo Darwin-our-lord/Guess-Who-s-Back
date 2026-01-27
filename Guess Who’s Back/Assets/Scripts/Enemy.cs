@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour
             }
             else if (walkType == WalkType.flying)
             {
-                if (roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
+                roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
                 for (int i = 0; i < roadMaker.branchFronts.Count; i++)
                 {
                     if(roadTarget == null)
