@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class EnemySpawner : MonoBehaviour
     public int wave = 1;
     public bool waveOngoing = false;
     public int waveValueTotal = 1;
+    public TMP_Text currentWaveText;
 
     public Transform spawnPoint;
     public float timeBetweenWaves = 5f;
@@ -35,8 +37,8 @@ public class EnemySpawner : MonoBehaviour
         nextWavebutton.SetActive(false);
         storebutton.SetActive(false);
         if (menuManager.storeUI.activeSelf) menuManager.StoreButton();
-        
-        
+
+
     }
     IEnumerator SpawnWave()
     {
@@ -102,6 +104,7 @@ public class EnemySpawner : MonoBehaviour
                 wave++;
                 nextWavebutton.SetActive(true);
                 storebutton.SetActive(true);
+                currentWaveText.text = "Next wave: " + wave.ToString();
             }
             yield return new WaitForSeconds(1f);
         }
