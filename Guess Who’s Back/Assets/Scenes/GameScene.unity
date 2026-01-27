@@ -4622,6 +4622,8 @@ MonoBehaviour:
     rarity: 4
   - towerPrefab: {fileID: 956663640235827072, guid: 8603500fac35ec14eb06ec8b8605a8b3, type: 3}
     rarity: 5
+  - towerPrefab: {fileID: 956663640235827072, guid: 9d3a1773c0d3e1441be9b8670d1b1ac6, type: 3}
+    rarity: 0
   towersInShop:
   - towerPrefab: {fileID: 0}
     rarity: 0

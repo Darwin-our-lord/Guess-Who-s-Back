@@ -61,6 +61,9 @@ public class Tower : MonoBehaviour
     [SerializeField] private GameObject AoeCircle;
     [SerializeField][Range(0, 100)] private float aoeDamageFalloff = 100f;
 
+    [Header("Special Stats - Trap")]
+    [SerializeField] public bool isTrap = false;
+
     private GameObject bulletParent;
     private Vector3Int gridPosition;
     private float lastFireTime;
@@ -115,6 +118,7 @@ public class Tower : MonoBehaviour
                 }
             }
         }
+
 
         currentTarget = null;
         if (targetType == TargetType.closest)
