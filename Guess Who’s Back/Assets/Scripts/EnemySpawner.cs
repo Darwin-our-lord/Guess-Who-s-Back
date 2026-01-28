@@ -106,6 +106,10 @@ public class EnemySpawner : MonoBehaviour
                 storebutton.SetActive(true);
                 currentWaveText.text = "Next wave: " + wave.ToString();
             }
+            foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>())
+            {
+                if(enemy.walkType == WalkType.flying) enemy.UpdateFlyingTarget();
+            }
             yield return new WaitForSeconds(1f);
         }
 

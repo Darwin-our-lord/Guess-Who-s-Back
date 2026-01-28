@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour
             }
             else if (walkType == WalkType.flying)
             {
-                roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
+                if(roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
                 for (int i = 0; i < roadMaker.branchFronts.Count; i++)
                 {
                     if(roadTarget == null)
@@ -131,6 +131,11 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateFlyingTarget()
+    {
+        if (walkType == WalkType.flying) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
     }
 
     private void UpdateStatusEffects(float deltaTime)
