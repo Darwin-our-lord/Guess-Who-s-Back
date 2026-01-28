@@ -33,9 +33,9 @@ public class EnemySpawner : MonoBehaviour
         {
             tower.ResetFireRateTimer();
         }
-        if (!waveOngoing) StartCoroutine(SpawnWave());
         nextWavebutton.SetActive(false);
         storebutton.SetActive(false);
+        if (!waveOngoing) StartCoroutine(SpawnWave());
         if (menuManager.storeUI.activeSelf) menuManager.StoreButton();
 
 
