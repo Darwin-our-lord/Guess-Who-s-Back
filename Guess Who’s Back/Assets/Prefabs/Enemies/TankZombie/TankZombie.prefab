@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4496626844766496127}
   - component: {fileID: 3671108009756139151}
   - component: {fileID: 5956532897838411051}
-  - component: {fileID: 8543426855282585174}
+  - component: {fileID: -7835859578227713248}
   m_Layer: 0
-  m_Name: Flyer
+  m_Name: TankZombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 9205053340877304949, guid: 152896dcef32af344acda9accc0f4e7c, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -101,19 +101,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  speed: 1
-  waveValue: 5
-  maxWavesAlive: 10
-  waveReq: 10
-  walkType: 0
-  knockbackResistance: 0
-  corpsePrefab: {fileID: 2419133657992460214, guid: 5f597ad0ff878f742be9f72d12ea24c9, type: 3}
+  maxHealth: 2500
+  speed: 0.3
+  waveValue: 20
+  maxWavesAlive: 5
+  waveReq: 7
+  walkType: 1
+  knockbackResistance: 100
+  corpsePrefab: {fileID: 2419133657992460214, guid: d0c1590ad698a664fbde54258a6d54ea, type: 3}
   healthBarPrefab: {fileID: 5485443110060960743, guid: 71813c995fd034d4b83ef04c4e5f5e94, type: 3}
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
   roadTarget: {fileID: 0}
---- !u!61 &8543426855282585174
+--- !u!61 &-7835859578227713248
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,15 +147,15 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.875}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.0625}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0

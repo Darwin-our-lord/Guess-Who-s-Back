@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
@@ -19,13 +19,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] public int waveReq = 0;
     [SerializeField] public WalkType walkType = WalkType.normal;
 
-
     [Header("Resistances")]
     [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
 
     [Header("CorpseStuff")]
     public GameObject corpsePrefab;
     private GameObject corpse;
+
+    [Header("HealthBar")]
+    [SerializeField] private GameObject healthBarPrefab;
+    private EnemyHealthBar healthBarInstance;
+    private bool isMouseOver = false;
 
     [Header("--DONT TOUCH--")]
     public Vector3 direction;
@@ -48,12 +52,48 @@ public class Enemy : MonoBehaviour
     private float knockbackDecay = 10f;
 
     public Transform roadTarget;
+
     private void Awake()
     {
         roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
         storeManager = GameObject.Find("StoreManager").GetComponent<StoreManager>();
         currentHealth = maxHealth;
         baseSpeed = speed;
+
+        if (healthBarPrefab != null)
+        {
+            GameObject canvasObj = GameObject.Find("UI");
+            if (canvasObj != null)
+            {
+                Canvas canvas = canvasObj.GetComponent<Canvas>();
+                if (canvas != null)
+                {
+                    GameObject healthBarObj = Instantiate(healthBarPrefab, canvas.transform);
+                    healthBarInstance = healthBarObj.GetComponent<EnemyHealthBar>();
+                    if (healthBarInstance != null)
+                    {
+                        healthBarInstance.Initialize(this);
+                        healthBarInstance.Hide();
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (healthBarInstance != null)
+        {
+            Destroy(healthBarInstance.gameObject);
+        }
+    }
+    public void OnMouseOver()
+    {
+        healthBarInstance.Show();
+    }
+    public void OnMouseExit()
+    {
+        healthBarInstance.Hide();
     }
 
     public void FixedUpdate()
@@ -104,10 +144,10 @@ public class Enemy : MonoBehaviour
             }
             else if (walkType == WalkType.flying)
             {
-                if(roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
+                if (roadTarget == null) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
                 for (int i = 0; i < roadMaker.branchFronts.Count; i++)
                 {
-                    if(roadTarget == null)
+                    if (roadTarget == null)
                     {
                         roadTarget = roadMaker.branchFronts[i].transform;
                         continue;
@@ -202,7 +242,6 @@ public class Enemy : MonoBehaviour
 
         if (actualKnockback <= 0) return;
 
-
         float knockbackSpeed = actualKnockback * 5f;
         knockbackVelocity = knockbackDirection.normalized * knockbackSpeed;
         isBeingKnockedBack = true;
@@ -245,6 +284,11 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (healthBarInstance != null)
+        {
+            healthBarInstance.Hide();
+        }
+
         if (wavesAlive >= maxWavesAlive)
         {
             Destroy(corpse);
@@ -252,7 +296,7 @@ public class Enemy : MonoBehaviour
             Destroy(this);
         }
 
-        corpse = Instantiate(corpsePrefab,transform.position,Quaternion.identity);
+        corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity);
 
         deathPosition = transform.position;
         hasDied = true;
@@ -284,6 +328,11 @@ public class Enemy : MonoBehaviour
 
         isBeingKnockedBack = false;
         knockbackVelocity = Vector3.zero;
+
+        if (healthBarInstance != null && isMouseOver)
+        {
+            healthBarInstance.Show();
+        }
     }
 
     public float MaxHealth => maxHealth;
