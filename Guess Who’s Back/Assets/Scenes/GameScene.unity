@@ -156,7 +156,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   roadsParent: {fileID: 1021450467}
-  branchChance: 0.2
+  branchChance: 0.02
   branchFronts: []
   fakeFronts: []
   formerBranchFronts: []
