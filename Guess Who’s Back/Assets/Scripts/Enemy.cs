@@ -242,6 +242,7 @@ public class Enemy : MonoBehaviour
     {
         if (wavesAlive >= maxWavesAlive)
         {
+            Destroy(corpse);
             Destroy(gameObject);
             Destroy(this);
         }
