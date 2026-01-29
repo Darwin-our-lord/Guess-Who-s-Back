@@ -6,8 +6,27 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
+[System.Serializable]
+public struct Wave
+{
+    public int waveNr;
+    public List<EnemyGroup> enemyGroups;
+    public bool respawnEnemies;
+    public int roadsToCreate;
+    public int newSpawnRate;
+}
+
+[System.Serializable]
+public struct EnemyGroup
+{
+    public GameObject enemy;
+    public int amount;
+}
+
 public class EnemySpawner : MonoBehaviour
 {
+    public List<Wave> specialWaves = new List<Wave>();
+
     public List<GameObject> enemies = new List<GameObject>();
     public int wave = 1;
     public bool waveOngoing = false;
@@ -35,10 +54,58 @@ public class EnemySpawner : MonoBehaviour
         }
         nextWavebutton.SetActive(false);
         storebutton.SetActive(false);
-        if (!waveOngoing) StartCoroutine(SpawnWave());
+
+        bool special = false;
+        Wave specialWave= specialWaves[0];//it doesnt acutally use the first one in the list, just needed it to stop complaining
+        for (int i = 0; i < specialWaves.Count; i++)
+        {
+            if(wave == specialWaves[i].waveNr)
+            {
+                special = true;
+                specialWave = specialWaves[i];
+            }
+        }
+        if (!waveOngoing && !special) StartCoroutine(SpawnWave());
+        if (!waveOngoing && special) StartCoroutine(SpawnWaveSpecial(specialWave));
+
         if (menuManager.storeUI.activeSelf) menuManager.StoreButton();
 
 
+    }
+    IEnumerator SpawnWaveSpecial(Wave specialWave)
+    {
+        waveOngoing = true;
+        StoreManager.AddMoney((wave * 10) / 2 + 10);
+        StoreManager.RerollStore();
+
+        for (int i = 0; i < specialWave.roadsToCreate; i++)
+        {
+            yield return new WaitForSeconds(0.3f);
+            roadMaker.ExtendRoad();
+        }
+        if (specialWave.respawnEnemies)
+        {
+            foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
+            {
+                enemy.Respawn();
+            }
+        }
+
+        foreach (EnemyGroup group in specialWave.enemyGroups)
+        {
+            for(int i = 0; i < group.amount; i++)
+            {
+                Instantiate(group.enemy, spawnPoint.position, spawnPoint.rotation, enemiesParent.transform);
+                if(specialWave.newSpawnRate != 0)yield return new WaitForSeconds(specialWave.newSpawnRate);
+                else yield return new WaitForSeconds(rate);
+            }
+        }
+
+        int waveMod = (int)math.floor(wave / 10f);
+        waveValueTotal += waveMod + 1;
+
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(CheckForEnemies());
     }
     IEnumerator SpawnWave()
     {
