@@ -126,10 +126,10 @@ public class Road : MonoBehaviour
             }
 
             // Combine in + out directions
-            bool left = outDirs.Contains(Vector3Int.left) || inDir == Vector3Int.left;
-            bool right = outDirs.Contains(Vector3Int.right) || inDir == Vector3Int.right;
-            bool up = outDirs.Contains(Vector3Int.up) || inDir == Vector3Int.up;
-            bool down = outDirs.Contains(Vector3Int.down) || inDir == Vector3Int.down;
+            bool left = outDirs.Contains(Vector3Int.left) || inDir == Vector3Int.right;
+            bool right = outDirs.Contains(Vector3Int.right) || inDir == Vector3Int.left;
+            bool up = outDirs.Contains(Vector3Int.up) || inDir == Vector3Int.down;
+            bool down = outDirs.Contains(Vector3Int.down) || inDir == Vector3Int.up;
 
             int connections =
                 (left ? 1 : 0) +
