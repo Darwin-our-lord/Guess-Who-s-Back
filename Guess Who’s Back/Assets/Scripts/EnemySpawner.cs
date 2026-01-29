@@ -13,7 +13,7 @@ public struct Wave
     public List<EnemyGroup> enemyGroups;
     public bool respawnEnemies;
     public int roadsToCreate;
-    public int newSpawnRate;
+    public float newSpawnRate;
 }
 
 [System.Serializable]

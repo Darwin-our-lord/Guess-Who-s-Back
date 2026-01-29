@@ -3525,9 +3525,18 @@ MonoBehaviour:
     enemyGroups:
     - enemy: {fileID: 42628739759191034, guid: f0f2733b26c83b54b95ed95fba926988, type: 3}
       amount: 5
-    respawnEnemies: 0
-    roadsToCreate: 5
+    respawnEnemies: 1
+    roadsToCreate: 2
     newSpawnRate: 0
+  - waveNr: 10
+    enemyGroups:
+    - enemy: {fileID: 42628739759191034, guid: f0f2733b26c83b54b95ed95fba926988, type: 3}
+      amount: 50
+    - enemy: {fileID: 42628739759191034, guid: 89db89cbc221404438b149bfd11eabf3, type: 3}
+      amount: 1
+    respawnEnemies: 1
+    roadsToCreate: 0
+    newSpawnRate: 0.01
   enemies:
   - {fileID: 42628739759191034, guid: da60c7bd9ca0a1a4b9b70a37b193ae36, type: 3}
   - {fileID: 42628739759191034, guid: c07b85769f2e9ce47838fdc7b70ca11b, type: 3}
