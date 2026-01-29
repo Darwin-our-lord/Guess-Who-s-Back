@@ -96,7 +96,7 @@ public class EnemySpawner : MonoBehaviour
             for(int i = 0; i < group.amount; i++)
             {
                 Instantiate(group.enemy, spawnPoint.position, spawnPoint.rotation, enemiesParent.transform);
-                if(specialWave.newSpawnRate != 0)yield return new WaitForSeconds(specialWave.newSpawnRate);
+                if(specialWave.newSpawnRate > 0)yield return new WaitForSeconds(specialWave.newSpawnRate);
                 else yield return new WaitForSeconds(rate);
             }
         }
