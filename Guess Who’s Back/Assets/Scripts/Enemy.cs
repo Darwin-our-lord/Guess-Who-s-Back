@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEditor.Rendering;
 using UnityEngine;
 public enum WalkType
 {
