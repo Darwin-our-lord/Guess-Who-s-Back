@@ -126,6 +126,9 @@ MonoBehaviour:
   AoeCircle: {fileID: 0}
   aoeDamageFalloff: 100
   isTrap: 1
+  isDirectional: 0
+  pierceCount: 0
+  directionalWidth: 0.5
   targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
 --- !u!61 &6415892694410887876

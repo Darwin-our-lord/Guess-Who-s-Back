@@ -68,6 +68,8 @@ public class Tower : MonoBehaviour
     private Vector3Int gridPosition;
     private float lastFireTime;
     private Enemy currentTarget;
+    private int towerRotation = 0;
+    private Grid grid;
 
     [Header("other")]
     public TargetType targetType = TargetType.first;
@@ -76,11 +78,16 @@ public class Tower : MonoBehaviour
     void Awake()
     {
         bulletParent = GameObject.Find("Bullets");
+        grid = FindObjectOfType<Grid>();
     }
 
     private void Update()
     {
-        if (Time.time >= lastFireTime + (fireRate))
+        if (isTrap)
+        {
+            CheckTrapTrigger();
+        }
+        else if (Time.time >= lastFireTime + (fireRate))
         {
             AcquireTarget();
 
@@ -90,10 +97,39 @@ public class Tower : MonoBehaviour
             }
         }
     }
+
+    private void CheckTrapTrigger()
+    {
+        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy enemy in allEnemies)
+        {
+            if (!enemy.gameObject.activeInHierarchy || enemy.HasDied) continue;
+
+            Vector3Int enemyGridPos = grid.WorldToCell(enemy.transform.position);
+
+            if (enemyGridPos == gridPosition)
+            {
+                if (hasSlow)
+                {
+                    enemy.ApplySlow(slowAmount, 0.1f);
+                }
+
+                if (Time.time >= lastFireTime + fireRate)
+                {
+                    currentTarget = enemy;
+                    ApplyDamageAndEffects(enemy);
+                    lastFireTime = Time.time;
+                }
+            }
+        }
+    }
+
     public void ResetFireRateTimer()
     {
         lastFireTime = 0;
     }
+
     private void AcquireTarget()
     {
         Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
@@ -150,7 +186,7 @@ public class Tower : MonoBehaviour
                     currentFirstEnemy = enemy;
                     continue;
                 }
-                
+
                 if (enemy.roadTargetNr > currentFirstEnemy.roadTargetNr)
                 {
                     currentFirstEnemy = enemy;
@@ -431,6 +467,7 @@ public class Tower : MonoBehaviour
 
         string desc = $"Cost: {cost}\nDmg: {damage}\nRange: {range}\nRate: {fireRate}";
 
+        if (isTrap) desc += "\n[TRAP]";
         if (hasKnockback) desc += $"\nKnockback: {knockbackDistance}";
         if (hasFreeze) desc += $"\nFreeze: {freezeChance}% ({freezeDuration}s)";
         if (hasSlow) desc += $"\nSlow: {slowAmount}% ({slowDuration}s)";
@@ -445,6 +482,18 @@ public class Tower : MonoBehaviour
         int count = System.Enum.GetValues(typeof(TargetType)).Length;
         int nextIndex = ((int)targetType + 1) % count;
         targetType = (TargetType)nextIndex;
+    }
+
+    public void SetRotation(int rotation)
+    {
+        towerRotation = rotation;
+        float angle = rotation * 90f;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    public void SetGridPosition(Vector3Int position)
+    {
+        gridPosition = position;
     }
 
     public float Damage => damage;
@@ -464,6 +513,13 @@ public class Tower : MonoBehaviour
         {
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
             Gizmos.DrawWireSphere(transform.position, aoeRadius);
+        }
+
+        if (isTrap && grid != null)
+        {
+            Gizmos.color = Color.yellow;
+            Vector3 cellCenter = grid.GetCellCenterWorld(gridPosition);
+            Gizmos.DrawWireCube(cellCenter, Vector3.one * 0.9f);
         }
     }
 }

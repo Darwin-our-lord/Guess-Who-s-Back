@@ -27,7 +27,7 @@ public class StoreManager : MonoBehaviour
     public int money = 50;
     private int yetToBeAddedMoney = 0;
 
-    private List<(Rarities, int, UnityEngine.Color)> allRarities = new List<(Rarities, int, Color)> 
+    private List<(Rarities, int, UnityEngine.Color)> allRarities = new List<(Rarities, int, Color)>
     {(Rarities.common,50,UnityEngine.Color.white),
      (Rarities.uncommon, 30, UnityEngine.Color.gray),
      (Rarities.rare,10,UnityEngine.Color.blue),
@@ -47,13 +47,13 @@ public class StoreManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            Rarities rarity = Rarities.common; 
+            Rarities rarity = Rarities.common;
             int totalWeight = 0;
-            for (int j = 0; j<allRarities.Count; j ++ )
+            for (int j = 0; j < allRarities.Count; j++)
             {
                 totalWeight += allRarities[j].Item2;
             }
-            
+
             float randomValue = Random.Range(0f, totalWeight);
 
             float currentWeight = 0f;
@@ -65,10 +65,10 @@ public class StoreManager : MonoBehaviour
                     rarity = option.Item1;
                 }
             }
-            while(true)
+            while (true)
             {
                 TowerEntry tower = towers[Random.Range(0, towers.Count)];
-                if(tower.rarity == rarity)
+                if (tower.rarity == rarity)
                 {
                     towersInShop[i] = tower;
                     break;
@@ -82,7 +82,7 @@ public class StoreManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            for (int j = 0; j < allRarities.Count; ++j) 
+            for (int j = 0; j < allRarities.Count; ++j)
             {
                 if (allRarities[j].Item1 == towersInShop[i].rarity)
                 {
@@ -109,11 +109,9 @@ public class StoreManager : MonoBehaviour
             placement.TowerObjPrefab = towersInShop[buttonID].towerPrefab;
             placement.TowerObjFake.GetComponent<SpriteRenderer>().sprite = towersInShop[buttonID].towerPrefab.GetComponent<SpriteRenderer>().sprite;
             placement.TowerObjFake.transform.localScale = towersInShop[buttonID].towerPrefab.transform.localScale;
+            placement.selectedTowerCost = towersInShop[buttonID].towerPrefab.GetComponent<Tower>().Cost;
             menuManager.StoreButton();
-            money -= towersInShop[buttonID].towerPrefab.GetComponent<Tower>().Cost;
-            RerollStore();
-            UpdateMoneyUI();
-            if (rerollButton.activeSelf)rerollButton.SetActive(false);
+            if (rerollButton.activeSelf) rerollButton.SetActive(false);
         }
     }
     public void UpdateMoneyUI()
@@ -121,7 +119,7 @@ public class StoreManager : MonoBehaviour
 
         moneyText.text = "Money: " + money.ToString();
         toBeAddedMoneyText.text = "+" + yetToBeAddedMoney.ToString();
-        
+
     }
     public void AddMoney(int amount)
     {
