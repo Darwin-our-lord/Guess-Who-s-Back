@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,10 +55,10 @@ public class EnemySpawner : MonoBehaviour
         storebutton.SetActive(false);
 
         bool special = false;
-        Wave specialWave= specialWaves[0];//it doesnt acutally use the first one in the list, just needed it to stop complaining
+        Wave specialWave = specialWaves[0];
         for (int i = 0; i < specialWaves.Count; i++)
         {
-            if(wave == specialWaves[i].waveNr)
+            if (wave == specialWaves[i].waveNr)
             {
                 special = true;
                 specialWave = specialWaves[i];
@@ -93,10 +92,10 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (EnemyGroup group in specialWave.enemyGroups)
         {
-            for(int i = 0; i < group.amount; i++)
+            for (int i = 0; i < group.amount; i++)
             {
                 Instantiate(group.enemy, spawnPoint.position, spawnPoint.rotation, enemiesParent.transform);
-                if(specialWave.newSpawnRate > 0)yield return new WaitForSeconds(specialWave.newSpawnRate);
+                if (specialWave.newSpawnRate > 0) yield return new WaitForSeconds(specialWave.newSpawnRate);
                 else yield return new WaitForSeconds(rate);
             }
         }
@@ -110,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
     IEnumerator SpawnWave()
     {
         waveOngoing = true;
-        StoreManager.AddMoney((wave*10)/2+10);
+        StoreManager.AddMoney((wave * 10) / 2 + 10);
         StoreManager.RerollStore();
 
         for (int i = 0; i < 2; i++)
@@ -124,11 +123,11 @@ public class EnemySpawner : MonoBehaviour
             enemy.Respawn();
         }
 
-        
+
         int waveValue = 0;
         int enemiesSpawned = 0;
 
-        while(waveValue < waveValueTotal && enemiesSpawned < 30)
+        while (waveValue < waveValueTotal && enemiesSpawned < 30)
         {
             GameObject highestValueEnemy = null;
             for (int i = 0; i < 3; i++)
@@ -139,9 +138,9 @@ public class EnemySpawner : MonoBehaviour
                 else if (enemiesChosen.GetComponent<Enemy>().WaveValue > highestValueEnemy.GetComponent<Enemy>().WaveValue)
                     highestValueEnemy = enemiesChosen;
             }
-            
-            if(highestValueEnemy.GetComponent<Enemy>().waveReq > wave) continue;
-            
+
+            if (highestValueEnemy.GetComponent<Enemy>().waveReq > wave) continue;
+
             if (highestValueEnemy.GetComponent<Enemy>().WaveValue + waveValue <= waveValueTotal)
             {
                 waveValue += highestValueEnemy.GetComponent<Enemy>().WaveValue;
@@ -152,7 +151,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         int waveMod = (int)math.floor(wave / 10f);
-        waveValueTotal+=waveMod+1;
+        waveValueTotal += waveMod + 1;
 
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(CheckForEnemies());
@@ -175,7 +174,7 @@ public class EnemySpawner : MonoBehaviour
             }
             foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>())
             {
-                if(enemy.walkType == WalkType.flying) enemy.UpdateFlyingTarget();
+                if (enemy.walkType == WalkType.flying) enemy.UpdateFlyingTarget();
             }
             yield return new WaitForSeconds(1f);
         }

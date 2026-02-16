@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour
                 if (roadTarget == null) roadTarget = roadMaker.firstRoad.transform;
 
                 direction = (roadTarget.position - transform.position).normalized;
-                transform.position += direction * speed * Time.deltaTime;
+                transform.position += direction * effectiveSpeed * Time.deltaTime;
 
                 if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
                 {
@@ -157,7 +157,7 @@ public class Enemy : MonoBehaviour
                 }
 
                 direction = (roadTarget.position - transform.position).normalized;
-                transform.position += direction * speed * Time.deltaTime;
+                transform.position += direction * effectiveSpeed * Time.deltaTime;
 
                 if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
                 {
