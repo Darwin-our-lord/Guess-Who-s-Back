@@ -111,7 +111,7 @@ MonoBehaviour:
   overrideDesc: 
   weaponVisual: {fileID: 4602335820611744101}
   hasKnockback: 1
-  knockbackDistance: 5
+  knockbackDistance: 10
   hasFreeze: 0
   freezeChance: 0
   freezeDuration: 0
