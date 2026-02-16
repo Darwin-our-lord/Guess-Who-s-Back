@@ -63,6 +63,7 @@ public class StoreManager : MonoBehaviour
                 if (randomValue <= currentWeight)
                 {
                     rarity = option.Item1;
+                    break;
                 }
             }
             while (true)
