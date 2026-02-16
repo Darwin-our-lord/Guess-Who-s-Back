@@ -171,11 +171,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void UpdateFlyingTarget()
-    {
-        if (walkType == WalkType.flying) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
-    }
-
     private void UpdateStatusEffects(float deltaTime)
     {
         if (freezeTimer > 0) freezeTimer -= deltaTime;
@@ -312,6 +307,8 @@ public class Enemy : MonoBehaviour
     {
         Destroy(corpse);
         corpse = null;
+
+        if (walkType == WalkType.flying) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
 
         wavesAlive++;
         currentHealth = maxHealth;
