@@ -287,6 +287,7 @@ public class Enemy : MonoBehaviour
             Destroy(corpse);
             Destroy(gameObject);
             Destroy(this);
+            return;
         }
 
         corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity);
