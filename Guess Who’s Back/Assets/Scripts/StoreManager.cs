@@ -33,7 +33,7 @@ public class StoreManager : MonoBehaviour
      (Rarities.rare,10,UnityEngine.Color.blue),
      (Rarities.epic,6,UnityEngine.Color.magenta),
      (Rarities.legendary,3,UnityEngine.Color.yellow),
-     (Rarities.mytical,2,UnityEngine.Color.black)};
+     (Rarities.mytical,1,UnityEngine.Color.black)};
 
 
     private void Awake()
@@ -60,7 +60,7 @@ public class StoreManager : MonoBehaviour
             foreach (var option in allRarities)
             {
                 currentWeight += option.Item2;
-                if (randomValue >= currentWeight)
+                if (randomValue <= currentWeight)
                 {
                     rarity = option.Item1;
                 }
