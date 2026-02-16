@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
 
     [Header("CorpseStuff")]
     public GameObject corpsePrefab;
+    public GameObject corpseParent;
     private GameObject corpse;
 
     [Header("HealthBar")]
@@ -55,6 +56,7 @@ public class Enemy : MonoBehaviour
     {
         roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
         storeManager = GameObject.Find("StoreManager").GetComponent<StoreManager>();
+        corpseParent = GameObject.Find("corpses");
         currentHealth = maxHealth;
         baseSpeed = speed;
 
@@ -290,7 +292,7 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity);
+        corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity,corpseParent.transform);
 
         deathPosition = transform.position;
         hasDied = true;
