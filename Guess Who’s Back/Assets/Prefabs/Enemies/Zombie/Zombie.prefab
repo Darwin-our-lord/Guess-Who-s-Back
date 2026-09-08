@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Zombie
   maxHealth: 75
   speed: 1
   waveValue: 1
@@ -109,6 +110,7 @@ MonoBehaviour:
   walkType: 1
   knockbackResistance: 0
   corpsePrefab: {fileID: 2419133657992460214, guid: e654efb58ee2fd944aade5c25cd4c433, type: 3}
+  corpseParent: {fileID: 0}
   healthBarPrefab: {fileID: 5485443110060960743, guid: 71813c995fd034d4b83ef04c4e5f5e94, type: 3}
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0

@@ -10,6 +10,7 @@ public enum WalkType
 public class Enemy : MonoBehaviour
 {
     [Header("Enemy Stats")]
+    [SerializeField] private string displayName = "Enemy";
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float speed = 2f;
     [SerializeField] private int waveValue = 1;
@@ -130,11 +131,7 @@ public class Enemy : MonoBehaviour
 
                     if (roadTarget.GetComponent<Road>().nextTiles.Count == 0)
                     {
-                        MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
-                        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
-                        Time.timeScale = 0f;
-                        menuManager.loseUI.SetActive(true);
-                        menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
+                        TriggerGameOver();
                     }
                     else
                     {
@@ -163,14 +160,24 @@ public class Enemy : MonoBehaviour
 
                 if (Vector3.Distance(transform.position, roadTarget.position) < 0.05f)
                 {
-                    MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
-                    EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
-                    Time.timeScale = 0f;
-                    menuManager.loseUI.SetActive(true);
-                    menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
+                    TriggerGameOver();
                 }
             }
         }
+    }
+    private void TriggerGameOver()
+    {
+        MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
+        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
+
+        if (LeaderboardClient.Instance != null)
+        {
+            LeaderboardClient.Instance.SubmitScore(enemySpawner.wave, displayName);
+        }
+
+        Time.timeScale = 0f;
+        menuManager.loseUI.SetActive(true);
+        menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
     }
 
     private void UpdateStatusEffects(float deltaTime)
@@ -292,7 +299,7 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity,corpseParent.transform);
+        corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity, corpseParent.transform);
 
         deathPosition = transform.position;
         hasDied = true;
@@ -333,6 +340,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public string DisplayName => displayName;
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealth;
     public float Speed => speed;

@@ -4999,6 +4999,7 @@ MonoBehaviour:
   VisualEffectsSettingsUI: {fileID: 0}
   OtherVisualSettingsUI: {fileID: 0}
   AudioSettingsUI: {fileID: 0}
+  DiscordLinkUI: {fileID: 0}
   storeUI: {fileID: 1103088292}
   loseUI: {fileID: 1409685538}
   storeManager: {fileID: 1557288661}

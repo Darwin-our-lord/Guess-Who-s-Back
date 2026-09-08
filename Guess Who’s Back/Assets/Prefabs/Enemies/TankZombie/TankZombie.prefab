@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Tank Zombie
   maxHealth: 2500
   speed: 0.3
   waveValue: 20
@@ -109,6 +110,7 @@ MonoBehaviour:
   walkType: 1
   knockbackResistance: 100
   corpsePrefab: {fileID: 2419133657992460214, guid: d0c1590ad698a664fbde54258a6d54ea, type: 3}
+  corpseParent: {fileID: 0}
   healthBarPrefab: {fileID: 5485443110060960743, guid: 71813c995fd034d4b83ef04c4e5f5e94, type: 3}
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
