@@ -160,6 +160,8 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator CheckForEnemies()
     {
+        yield return new WaitForSeconds(1f); // No skipping waves :>
+
         while (waveOngoing)
         {
             yield return new WaitForSeconds(rate);
