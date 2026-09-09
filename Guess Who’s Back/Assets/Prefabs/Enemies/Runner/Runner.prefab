@@ -101,13 +101,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Skeleton
+  displayName: Runner
   maxHealth: 20
-  speed: 2.5
+  speed: 4
   waveValue: 2
   maxWavesAlive: 5
   waveReq: 0
   walkType: 1
+  scalingStartWave: 10
+  hpGrowthPerWave: 0.03
   knockbackResistance: 0
   corpsePrefab: {fileID: 2419133657992460214, guid: b31163a97d1efe04eaf69a24a6ebee92, type: 3}
   corpseParent: {fileID: 0}

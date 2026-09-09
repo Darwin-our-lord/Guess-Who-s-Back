@@ -18,6 +18,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] public int waveReq = 0;
     [SerializeField] public WalkType walkType = WalkType.normal;
 
+    [Header("Wave Scaling")]
+    [SerializeField] private int scalingStartWave = 10;
+    [SerializeField] private float hpGrowthPerWave = 0.03f;
+    private float baseMaxHealth;
+    private EnemySpawner enemySpawner;
+
     [Header("Resistances")]
     [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
 
@@ -58,8 +64,11 @@ public class Enemy : MonoBehaviour
         roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
         storeManager = GameObject.Find("StoreManager").GetComponent<StoreManager>();
         corpseParent = GameObject.Find("corpses");
-        currentHealth = maxHealth;
+        enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
         baseSpeed = speed;
+
+        baseMaxHealth = maxHealth;
+        ApplyWaveScaling();
 
         if (healthBarPrefab != null)
         {
@@ -79,6 +88,15 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ApplyWaveScaling()
+    {
+        int currentWave = enemySpawner != null ? enemySpawner.wave : 1;
+        int wavesPastStart = Mathf.Max(0, currentWave - scalingStartWave);
+        float multiplier = Mathf.Pow(1f + hpGrowthPerWave, wavesPastStart);
+        maxHealth = baseMaxHealth * multiplier;
+        currentHealth = maxHealth;
     }
 
     private void OnDestroy()
@@ -168,7 +186,6 @@ public class Enemy : MonoBehaviour
     private void TriggerGameOver()
     {
         MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
-        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
 
         if (LeaderboardClient.Instance != null)
         {
@@ -321,7 +338,7 @@ public class Enemy : MonoBehaviour
         if (walkType == WalkType.flying) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
 
         wavesAlive++;
-        currentHealth = maxHealth;
+        ApplyWaveScaling();
         hasDied = false;
         gameObject.SetActive(true);
 

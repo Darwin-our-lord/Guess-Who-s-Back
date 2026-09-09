@@ -78,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 5560844239261396710, guid: bafe6714da634a44d89560f1c13427bd, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -108,6 +108,8 @@ MonoBehaviour:
   maxWavesAlive: 10
   waveReq: 10
   walkType: 0
+  scalingStartWave: 10
+  hpGrowthPerWave: 0.03
   knockbackResistance: 0
   corpsePrefab: {fileID: 2419133657992460214, guid: 5f597ad0ff878f742be9f72d12ea24c9, type: 3}
   corpseParent: {fileID: 0}
@@ -153,7 +155,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.16, y: 0.29}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

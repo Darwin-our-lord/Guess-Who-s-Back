@@ -45,6 +45,8 @@ public class EnemySpawner : MonoBehaviour
     public StoreManager StoreManager;
     public MenuManager menuManager;
 
+    private int waveGeneration = 0;
+
     public void StartWave()
     {
         foreach (Tower tower in towersParent.transform.GetComponentsInChildren<Tower>())
@@ -73,6 +75,8 @@ public class EnemySpawner : MonoBehaviour
     }
     IEnumerator SpawnWaveSpecial(Wave specialWave)
     {
+        waveGeneration++;
+        int myGeneration = waveGeneration;
         waveOngoing = true;
         StoreManager.AddMoney((wave * 10) / 2 + 10);
         StoreManager.RerollStore();
@@ -104,10 +108,12 @@ public class EnemySpawner : MonoBehaviour
         waveValueTotal += waveMod + 1;
 
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(CheckForEnemies());
+        StartCoroutine(CheckForEnemies(myGeneration));
     }
     IEnumerator SpawnWave()
     {
+        waveGeneration++;
+        int myGeneration = waveGeneration;
         waveOngoing = true;
         StoreManager.AddMoney((wave * 10) / 2 + 10);
         StoreManager.RerollStore();
@@ -154,17 +160,13 @@ public class EnemySpawner : MonoBehaviour
         waveValueTotal += waveMod + 1;
 
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(CheckForEnemies());
+        StartCoroutine(CheckForEnemies(myGeneration));
 
     }
-
-    IEnumerator CheckForEnemies()
+    IEnumerator CheckForEnemies(int myGeneration)
     {
-        yield return new WaitForSeconds(1f); // No skipping waves :>
-
-        while (waveOngoing)
+        while (waveOngoing && myGeneration == waveGeneration)
         {
-            yield return new WaitForSeconds(rate);
             if (enemiesParent.transform.Cast<Transform>().All(t => !t.gameObject.activeSelf))
             {
                 waveOngoing = false;
@@ -173,11 +175,10 @@ public class EnemySpawner : MonoBehaviour
                 nextWavebutton.SetActive(true);
                 storebutton.SetActive(true);
                 currentWaveText.text = "Next wave: " + wave.ToString();
+                yield break;
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(rate);
         }
-
-        yield return null;
     }
 
 }

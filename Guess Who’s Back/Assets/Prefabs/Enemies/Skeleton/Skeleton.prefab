@@ -101,14 +101,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966fd60d1b796944b56009dace3fd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Skeleton
   maxHealth: 50
   speed: 1.5
   waveValue: 0
   maxWavesAlive: 999
   waveReq: 3
   walkType: 1
+  scalingStartWave: 10
+  hpGrowthPerWave: 0.03
   knockbackResistance: 0
   corpsePrefab: {fileID: 2419133657992460214, guid: 991bbfab89d1dbf458b549932e18b618, type: 3}
+  corpseParent: {fileID: 0}
   healthBarPrefab: {fileID: 5485443110060960743, guid: 71813c995fd034d4b83ef04c4e5f5e94, type: 3}
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
