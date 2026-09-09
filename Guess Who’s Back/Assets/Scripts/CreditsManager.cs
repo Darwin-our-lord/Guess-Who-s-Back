@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -12,24 +11,25 @@ public struct Credit
 {
     public string title;
     public string name;
+    public bool guessed;
 }
 
 public class CreditsManager : MonoBehaviour
 {
-    [Header("idk yet")]
-    public List<Credit> credits = new List<Credit>();
+    [Header("Credits")]
+    [SerializeField] List<Credit> credits; //W credits:)
+    
+    [SerializeField] TMP_Text titleTxt;
+    [SerializeField] TMP_Text nameTxt;
 
-    public TMP_Text titleTxt;
-    public TMP_Text nameTxt;
+    [Header("UI")]
+    [SerializeField] GameObject MainUI;
+    [SerializeField] GameObject GuessUI;
 
     private string hiddenWord;
-    private int creditsCompleted = -1;
-    private void Awake()
-    {
-        creditsCompleted++;
-        MakeHiddenWord(creditsCompleted);
-        titleTxt.text = credits[creditsCompleted].title;
-    }
+    private int currentCreditNR = -1;
+    private bool isGuessing = false;
+
     private void MakeHiddenWord(int creditNr)
     {
         hiddenWord = "";
@@ -47,44 +47,42 @@ public class CreditsManager : MonoBehaviour
 
         nameTxt.text = hiddenWord;
     }
-    private IEnumerator StartNextCredit()
+    public void StartGuessCredit(int nr)
     {
-        if(creditsCompleted >= credits.Count)
-        {
-            yield return new WaitForSeconds(2);
-            //end credits
-        }
-        else
-        {
-            yield return new WaitForSeconds(2);
-            creditsCompleted++;
-            MakeHiddenWord(creditsCompleted);
-            titleTxt.text = credits[creditsCompleted].title;
-        }
+        if (credits[nr].guessed) return; //if already guessed, do nothing
 
+        isGuessing = true;
+        SwapGuessAndMainUI();
+        Debug.Log("Guessing credit: " + credits[nr].title + " - " + credits[nr].name);
+
+        currentCreditNR = nr;   
+        MakeHiddenWord(currentCreditNR);
+        titleTxt.text = credits[currentCreditNR].title;
     }
+
     private void OnGUI()
     {
+        if (isGuessing == false) return; //if no credit is being guessed, do nothing
+
         Event e = Event.current;
 
         if(e.type == EventType.KeyDown && e.keyCode.ToString().Length==1) //e.keyCode.ToString().Length==1 to prevent the "None" 
         {
-
             string keyPressed = e.keyCode.ToString();
             string result = "";
-            if (credits[creditsCompleted].name.Contains(keyPressed))
+            if (credits[currentCreditNR].name.ToUpper().Contains(keyPressed.ToUpper()))
             {
                 if (hiddenWord.Contains(keyPressed))
                 {
-                    StartCoroutine(ColorFlash(Color.yellow, Color.white));
+                    StartCoroutine(ColorFlash(Color.yellow, Color.white)); //same letter guessed again, flash yellow
                 }
                 else
                 {
-                    for(int i = 0; i < credits[creditsCompleted].name.Length; i++)
+                    for(int i = 0; i < credits[currentCreditNR].name.Length; i++)
                     {
-                        if (credits[creditsCompleted].name.ToUpper()[i].ToString() == keyPressed)
+                        if (credits[currentCreditNR].name.ToUpper()[i].ToString() == keyPressed)
                         {
-                            result+=keyPressed;
+                            result += keyPressed;
                         }
                         else
                         {
@@ -93,10 +91,10 @@ public class CreditsManager : MonoBehaviour
                     }
                     hiddenWord = result;
                     nameTxt.text = hiddenWord;
-                    if(hiddenWord == credits[creditsCompleted].name)
+                    if(hiddenWord.ToUpper() == credits[currentCreditNR].name.ToUpper()) //word guessed correctly
                     {
                         StartCoroutine(ColorFlash(Color.green, Color.white));
-                        StartCoroutine(StartNextCredit());
+                        StartCoroutine(Win());
                     }
                 }
             }
@@ -113,5 +111,21 @@ public class CreditsManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         nameTxt.color = colEnd;
     }
+    private IEnumerator Win()
+    {
+        isGuessing = false;
 
+        yield return new WaitForSeconds(2f);
+
+        Credit temp = credits[currentCreditNR];
+        temp.guessed = true;
+        credits[currentCreditNR] = temp;
+        
+        SwapGuessAndMainUI();
+    }
+    private void SwapGuessAndMainUI()
+    {
+        MainUI.SetActive(!MainUI.activeSelf);
+        GuessUI.SetActive(!GuessUI.activeSelf);
+    }
 }
