@@ -2,15 +2,16 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float cameraSpeed;
-    public float cameraSprintSpeed;
-    public float panBorderThickness;
-
+    [SerializeField] float cameraSpeed;
+    [SerializeField] float cameraSprintSpeed;
+    [SerializeField] float panBorderThickness;
+    TiledBackground tiledBackground;
     public GameObject monoChrome;
     public GameObject reverseColor;
     void Awake()
     {
-        if(Settings.monoChrome && monoChrome != null) monoChrome.SetActive(true);
+        tiledBackground = GameObject.Find("Backgroundtiles").GetComponent<TiledBackground>();
+        if (Settings.monoChrome && monoChrome != null) monoChrome.SetActive(true);
         else if(!Settings.monoChrome && monoChrome != null) monoChrome.SetActive(false);
         if (Settings.reverseColor && reverseColor != null) reverseColor.SetActive(true);
         else if (!Settings.reverseColor && reverseColor != null) reverseColor.SetActive(false);
@@ -33,6 +34,10 @@ public class CameraController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.T)) transform.position = new Vector3 (0, 0,-10);
 
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        this.gameObject.GetComponent<Camera>().orthographicSize -= scroll * 5;
+        if (this.gameObject.GetComponent<Camera>().orthographicSize < 5) this.gameObject.GetComponent<Camera>().orthographicSize = 5;
+        if (this.gameObject.GetComponent<Camera>().orthographicSize > 9) this.gameObject.GetComponent<Camera>().orthographicSize = 9;
         
     }
 }

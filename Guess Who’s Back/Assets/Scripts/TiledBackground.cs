@@ -26,8 +26,8 @@ public class TiledBackground : MonoBehaviour
         float camHeight = mainCamera.orthographicSize * 2;
         float camWidth = camHeight * mainCamera.aspect;
 
-        gridWidth = Mathf.CeilToInt(camWidth) + padding * 2;
-        gridHeight = Mathf.CeilToInt(camHeight) + padding * 2;
+        gridWidth = Mathf.CeilToInt(camWidth)*2 + padding * 2;
+        gridHeight = Mathf.CeilToInt(camHeight)*2 + padding * 2;
 
         tiles = new SpriteRenderer[gridWidth, gridHeight];
 
