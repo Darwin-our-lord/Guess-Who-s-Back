@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 
@@ -12,6 +13,7 @@ public struct Credit
     public string title;
     public string name;
     public bool guessed;
+    public GameObject ButtonOBJ;
 }
 
 public class CreditsManager : MonoBehaviour
@@ -29,6 +31,14 @@ public class CreditsManager : MonoBehaviour
     private string hiddenWord;
     private int currentCreditNR = -1;
     private bool isGuessing = false;
+
+    private void Awake()
+    {
+        foreach (Credit credit in credits)
+        {
+            credit.ButtonOBJ.transform.GetChild(0).GetComponent<TMP_Text>().text =  credit.title;
+        }
+    }
 
     private void MakeHiddenWord(int creditNr)
     {
@@ -119,6 +129,7 @@ public class CreditsManager : MonoBehaviour
 
         Credit temp = credits[currentCreditNR];
         temp.guessed = true;
+        temp.ButtonOBJ.transform.GetChild(1).GetComponent<TMP_Text>().text = temp.name;
         credits[currentCreditNR] = temp;
         
         SwapGuessAndMainUI();
