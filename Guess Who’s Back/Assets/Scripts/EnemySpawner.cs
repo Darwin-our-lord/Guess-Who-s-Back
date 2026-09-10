@@ -78,7 +78,6 @@ public class EnemySpawner : MonoBehaviour
         waveGeneration++;
         int myGeneration = waveGeneration;
         waveOngoing = true;
-        StoreManager.AddMoney((wave * 10) / 2 + 10);
         StoreManager.RerollStore();
 
         for (int i = 0; i < specialWave.roadsToCreate; i++)
@@ -115,7 +114,6 @@ public class EnemySpawner : MonoBehaviour
         waveGeneration++;
         int myGeneration = waveGeneration;
         waveOngoing = true;
-        StoreManager.AddMoney((wave * 10) / 2 + 10);
         StoreManager.RerollStore();
 
         for (int i = 0; i < 2; i++)
@@ -170,8 +168,9 @@ public class EnemySpawner : MonoBehaviour
             if (enemiesParent.transform.Cast<Transform>().All(t => !t.gameObject.activeSelf))
             {
                 waveOngoing = false;
-                StoreManager.AddMoney(0);
                 wave++;
+                StoreManager.AddMoney();
+                StoreManager.UpdateMoneyGained();
                 nextWavebutton.SetActive(true);
                 storebutton.SetActive(true);
                 currentWaveText.text = "Next wave: " + wave.ToString();

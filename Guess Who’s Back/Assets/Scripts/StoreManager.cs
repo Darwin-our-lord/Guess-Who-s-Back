@@ -13,16 +13,18 @@ public struct TowerEntry
 }
 public class StoreManager : MonoBehaviour
 {
-    public List<TowerEntry> towers = new List<TowerEntry>();
+    [SerializeField] List<TowerEntry> towers = new List<TowerEntry>();
 
-    public List<TowerEntry> towersInShop = new List<TowerEntry>();
-    public List<GameObject> towerButtons = new List<GameObject>();
-    public GameObject rerollButton;
-    public TMP_Text moneyText;
-    public TMP_Text toBeAddedMoneyText;
-
-    public Placement placement;
-    public MenuManager menuManager;
+    [SerializeField] List<TowerEntry> towersInShop = new List<TowerEntry>();
+    [SerializeField] List<GameObject> towerButtons = new List<GameObject>();
+    [Header("")]
+    [SerializeField] GameObject rerollButton;
+    [SerializeField] TMP_Text moneyText;
+    [SerializeField] TMP_Text toBeAddedMoneyText;
+    [Header("")]
+    [SerializeField] Placement placement;
+    [SerializeField] MenuManager menuManager;
+    [SerializeField] EnemySpawner EnemySpawner;
 
     public int money = 50;
     private int yetToBeAddedMoney = 0;
@@ -39,6 +41,7 @@ public class StoreManager : MonoBehaviour
     private void Awake()
     {
         money = 50;
+        UpdateMoneyGained();
         UpdateMoneyUI();
         RerollStore();
     }
@@ -117,25 +120,18 @@ public class StoreManager : MonoBehaviour
     }
     public void UpdateMoneyUI()
     {
-
         moneyText.text = "Money: " + money.ToString();
         toBeAddedMoneyText.text = "+" + yetToBeAddedMoney.ToString();
-
     }
-    public void AddMoney(int amount)
+    public void UpdateMoneyGained()
     {
-        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
-        if (enemySpawner.waveOngoing)
-        {
-            yetToBeAddedMoney += amount;
-            UpdateMoneyUI();
-        }
-        else
-        {
-            yetToBeAddedMoney += amount;
-            money += yetToBeAddedMoney;
-            yetToBeAddedMoney = 0;
-            UpdateMoneyUI();
-        }
+        yetToBeAddedMoney = EnemySpawner.wave * 5+20;
+        UpdateMoneyUI();
+    }
+    public void AddMoney(int? amount = null)
+    {
+        if (amount == null) amount = yetToBeAddedMoney;
+        money += (int)amount;
+        UpdateMoneyUI();
     }
 }

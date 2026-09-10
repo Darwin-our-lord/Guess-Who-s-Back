@@ -4824,6 +4824,7 @@ MonoBehaviour:
   toBeAddedMoneyText: {fileID: 1085703143}
   placement: {fileID: 1481348919}
   menuManager: {fileID: 1716182900}
+  EnemySpawner: {fileID: 1215443786}
   money: 50
 --- !u!4 &1557288662
 Transform:
