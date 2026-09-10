@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     public GameObject reverseColor;
     void Awake()
     {
-        tiledBackground = GameObject.Find("Backgroundtiles").GetComponent<TiledBackground>();
+        if(GameObject.Find("Backgroundtiles")) tiledBackground = GameObject.Find("Backgroundtiles").GetComponent<TiledBackground>();
         if (Settings.monoChrome && monoChrome != null) monoChrome.SetActive(true);
         else if(!Settings.monoChrome && monoChrome != null) monoChrome.SetActive(false);
         if (Settings.reverseColor && reverseColor != null) reverseColor.SetActive(true);
