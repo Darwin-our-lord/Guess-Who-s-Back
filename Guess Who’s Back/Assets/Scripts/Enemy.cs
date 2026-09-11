@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -28,8 +29,8 @@ public class Enemy : MonoBehaviour
     [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
 
     [Header("CorpseStuff")]
-    public GameObject corpsePrefab;
-    public GameObject corpseParent;
+    [SerializeField] GameObject corpsePrefab;
+    [SerializeField] GameObject corpseParent;
     private GameObject corpse;
 
     [Header("HealthBar")]
@@ -51,6 +52,7 @@ public class Enemy : MonoBehaviour
     private List<DotEffect> activeDots = new List<DotEffect>();
     private List<SlowEffect> activeSlows = new List<SlowEffect>();
     private float freezeTimer = 0f;
+    private bool canFreeze = true;
     private float baseSpeed;
 
     private bool isBeingKnockedBack = false;
@@ -200,7 +202,8 @@ public class Enemy : MonoBehaviour
     private void UpdateStatusEffects(float deltaTime)
     {
         if (freezeTimer > 0) freezeTimer -= deltaTime;
-
+        if (freezeTimer <= 0) StartCoroutine(AllowFreeze());
+        
         for (int i = activeDots.Count - 1; i >= 0; i--)
         {
             activeDots[i].timeSinceLastTick += deltaTime;
@@ -269,11 +272,18 @@ public class Enemy : MonoBehaviour
     public void ApplyFreeze(float duration)
     {
         if (hasDied) return;
+        if (!canFreeze) return;
 
         if (duration > freezeTimer)
         {
             freezeTimer = duration;
+            canFreeze = false;
         }
+    }
+    private IEnumerator AllowFreeze()
+    {
+        yield return new WaitForSeconds(1f);
+        canFreeze = true;
     }
 
     public void ApplySlow(float amount, float duration)
