@@ -48,6 +48,12 @@ public class StoreManager : MonoBehaviour
 
     public void RerollStore()
     {
+        int currentWave = EnemySpawner.wave;
+
+        List<TowerEntry> unlockedTowers = towers.FindAll(t =>
+            t.towerPrefab.GetComponent<Tower>().waveReq <= currentWave);
+        if (unlockedTowers.Count == 0) unlockedTowers = towers;
+
         for (int i = 0; i < 3; i++)
         {
             Rarities rarity = Rarities.common;
@@ -69,15 +75,12 @@ public class StoreManager : MonoBehaviour
                     break;
                 }
             }
-            while (true)
-            {
-                TowerEntry tower = towers[Random.Range(0, towers.Count)];
-                if (tower.rarity == rarity)
-                {
-                    towersInShop[i] = tower;
-                    break;
-                }
-            }
+
+            List<TowerEntry> candidates = unlockedTowers.FindAll(t => t.rarity == rarity);
+            //nono reroll forever :>
+            if (candidates.Count == 0) candidates = unlockedTowers;
+
+            towersInShop[i] = candidates[Random.Range(0, candidates.Count)];
         }
         UpdateStoreTowerVisuals();
     }
@@ -125,7 +128,7 @@ public class StoreManager : MonoBehaviour
     }
     public void UpdateMoneyGained()
     {
-        yetToBeAddedMoney = EnemySpawner.wave * 5+20;
+        yetToBeAddedMoney = EnemySpawner.wave * 5 + 20;
         UpdateMoneyUI();
     }
     public void AddMoney(int? amount = null)

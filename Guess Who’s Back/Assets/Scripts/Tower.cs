@@ -34,6 +34,7 @@ public class Tower : MonoBehaviour
     [SerializeField] private int cost = 50;
     [SerializeField] private string overrideDesc = "";
     [SerializeField] private GameObject weaponVisual;
+    [SerializeField] public int waveReq = 0;
 
     [Header("Special Stats - Knockback")]
     [SerializeField] private bool hasKnockback = false;

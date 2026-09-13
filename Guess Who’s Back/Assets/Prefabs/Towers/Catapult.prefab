@@ -110,6 +110,7 @@ MonoBehaviour:
   cost: 200
   overrideDesc: 
   weaponVisual: {fileID: 4602335820611744101}
+  waveReq: 10
   hasKnockback: 1
   knockbackDistance: 10
   hasFreeze: 0
