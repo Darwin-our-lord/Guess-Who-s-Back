@@ -20,7 +20,7 @@ public class CreditsManager : MonoBehaviour
 {
     [Header("Credits")]
     [SerializeField] List<Credit> credits; //W credits:)
-    
+
     [SerializeField] TMP_Text titleTxt;
     [SerializeField] TMP_Text nameTxt;
 
@@ -28,15 +28,69 @@ public class CreditsManager : MonoBehaviour
     [SerializeField] GameObject MainUI;
     [SerializeField] GameObject GuessUI;
 
+    [Header("Speedrun Timer")]
+    [SerializeField] TMP_Text timerTxt;
+
     private string hiddenWord;
     private int currentCreditNR = -1;
     private bool isGuessing = false;
+
+    private float elapsedTime = 0f;
+    private bool timerRunning = false;
+    private bool allGuessed = false;
 
     private void Awake()
     {
         foreach (Credit credit in credits)
         {
-            credit.ButtonOBJ.transform.GetChild(0).GetComponent<TMP_Text>().text =  credit.title;
+            credit.ButtonOBJ.transform.GetChild(0).GetComponent<TMP_Text>().text = credit.title;
+        }
+    }
+
+    private void Start()
+    {
+        elapsedTime = 0f;
+        timerRunning = true;
+        allGuessed = false;
+        UpdateTimerDisplay();
+    }
+
+    private void Update()
+    {
+        if (!timerRunning) return;
+
+        elapsedTime += Time.deltaTime;
+        UpdateTimerDisplay();
+    }
+
+    private void UpdateTimerDisplay()
+    {
+        if (timerTxt == null) return;
+        timerTxt.text = FormatTime(elapsedTime);
+    }
+
+    private string FormatTime(float time)
+    {
+        int minutes = (int)(time / 60f);
+        float seconds = time % 60f;
+        return $"{minutes:00}:{seconds:00.00}";
+    }
+
+    private void CheckAllGuessed()
+    {
+        if (allGuessed) return; // already finished, don't re-trigger
+
+        foreach (Credit c in credits)
+        {
+            if (!c.guessed) return; // still someone left to guess
+        }
+
+        allGuessed = true;
+        timerRunning = false;
+
+        if (timerTxt != null)
+        {
+            timerTxt.text = $"Guessed everyone in {FormatTime(elapsedTime)}!";
         }
     }
 
@@ -65,7 +119,7 @@ public class CreditsManager : MonoBehaviour
         SwapGuessAndMainUI();
         Debug.Log("Guessing credit: " + credits[nr].title + " - " + credits[nr].name);
 
-        currentCreditNR = nr;   
+        currentCreditNR = nr;
         MakeHiddenWord(currentCreditNR);
         titleTxt.text = credits[currentCreditNR].title;
     }
@@ -76,7 +130,7 @@ public class CreditsManager : MonoBehaviour
 
         Event e = Event.current;
 
-        if(e.type == EventType.KeyDown && e.keyCode.ToString().Length==1) //e.keyCode.ToString().Length==1 to prevent the "None" 
+        if (e.type == EventType.KeyDown && e.keyCode.ToString().Length == 1) //e.keyCode.ToString().Length==1 to prevent the "None" 
         {
             string keyPressed = e.keyCode.ToString();
             string result = "";
@@ -88,7 +142,7 @@ public class CreditsManager : MonoBehaviour
                 }
                 else
                 {
-                    for(int i = 0; i < credits[currentCreditNR].name.Length; i++)
+                    for (int i = 0; i < credits[currentCreditNR].name.Length; i++)
                     {
                         if (credits[currentCreditNR].name.ToUpper()[i].ToString() == keyPressed)
                         {
@@ -101,7 +155,7 @@ public class CreditsManager : MonoBehaviour
                     }
                     hiddenWord = result;
                     nameTxt.text = hiddenWord;
-                    if(hiddenWord.ToUpper() == credits[currentCreditNR].name.ToUpper()) //word guessed correctly
+                    if (hiddenWord.ToUpper() == credits[currentCreditNR].name.ToUpper()) //word guessed correctly
                     {
                         StartCoroutine(ColorFlash(Color.green, Color.white));
                         StartCoroutine(Win());
@@ -113,7 +167,7 @@ public class CreditsManager : MonoBehaviour
                 StartCoroutine(ColorFlash(Color.red, Color.white));
             }
         }
-        
+
     }
     private IEnumerator ColorFlash(Color colSwap, Color colEnd)
     {
@@ -131,8 +185,9 @@ public class CreditsManager : MonoBehaviour
         temp.guessed = true;
         temp.ButtonOBJ.transform.GetChild(1).GetComponent<TMP_Text>().text = temp.name;
         credits[currentCreditNR] = temp;
-        
+
         SwapGuessAndMainUI();
+        CheckAllGuessed();
     }
     private void SwapGuessAndMainUI()
     {
