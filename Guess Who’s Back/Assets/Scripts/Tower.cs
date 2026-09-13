@@ -80,6 +80,7 @@ public class Tower : MonoBehaviour
     {
         bulletParent = GameObject.Find("Bullets");
         grid = FindObjectOfType<Grid>();
+        lastFireTime = UnityEngine.Random.Range(0f, 0.1f);
     }
 
     private void Update()
@@ -128,7 +129,7 @@ public class Tower : MonoBehaviour
 
     public void ResetFireRateTimer()
     {
-        lastFireTime = 0;
+        lastFireTime = UnityEngine.Random.Range(0f, 0.1f);
     }
 
     private void AcquireTarget()
