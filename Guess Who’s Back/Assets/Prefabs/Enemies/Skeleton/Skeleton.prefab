@@ -106,7 +106,7 @@ MonoBehaviour:
   speed: 1.5
   waveValue: 0
   maxWavesAlive: 999
-  waveReq: 3
+  waveReq: 10
   walkType: 1
   scalingStartWave: 10
   hpGrowthPerWave: 0.03

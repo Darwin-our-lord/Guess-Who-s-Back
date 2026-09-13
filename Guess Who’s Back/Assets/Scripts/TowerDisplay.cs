@@ -13,13 +13,13 @@ public class TowerDisplay : MonoBehaviour
 
     void Update()
     {
-            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-            Vector3Int cellPos = grid.WorldToCell(mousePos);
+        Vector3Int cellPos = grid.WorldToCell(mousePos);
 
-            Vector3 worldCenterPos = grid.GetCellCenterWorld(cellPos);
+        Vector3 worldCenterPos = grid.GetCellCenterWorld(cellPos);
 
-            Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
+        Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
         if (hit != null)
         {
@@ -30,14 +30,14 @@ public class TowerDisplay : MonoBehaviour
 
                 towerUI.transform.GetChild(1).GetComponent<TMP_Text>().text = hit.gameObject.name;
                 towerUI.transform.GetChild(2).GetComponent<TMP_Text>().text = hit.gameObject.GetComponent<Tower>().GetDescription();
-                towerUI.transform.GetChild(3).GetComponent<TMP_Text>().text = "Target: "+hit.gameObject.GetComponent<Tower>().targetType.ToString();
+                towerUI.transform.GetChild(3).GetComponent<TMP_Text>().text = "Target: " + hit.gameObject.GetComponent<Tower>().targetType.ToString();
 
                 rangeCircle.SetActive(true);
                 rangeCircle.transform.position = hit.gameObject.transform.position;
                 rangeCircle.transform.localScale
                     = new Vector3(hit.gameObject.GetComponent<Tower>().Range * 2, hit.gameObject.GetComponent<Tower>().Range * 2, 1);
 
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     hit.gameObject.GetComponent<Tower>().ChangeTargetType();
                 }
@@ -51,8 +51,8 @@ public class TowerDisplay : MonoBehaviour
         else
         {
             towerUI.SetActive(false);
-            rangeCircle.transform.localScale = new Vector3(0,0,1);
+            rangeCircle.transform.localScale = new Vector3(0, 0, 1);
         }
-        
+
     }
 }
