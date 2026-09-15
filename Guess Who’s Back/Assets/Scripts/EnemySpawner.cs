@@ -82,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < specialWave.roadsToCreate; i++)
         {
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(specialWave.newSpawnRate);
             roadMaker.ExtendRoad();
         }
         if (specialWave.respawnEnemies)

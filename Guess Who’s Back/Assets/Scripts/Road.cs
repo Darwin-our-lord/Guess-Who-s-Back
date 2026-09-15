@@ -242,6 +242,18 @@ public class Road : MonoBehaviour
                 else if (!left) sr.sprite = roadSprites[18]; // T missing left
                 else if (!right) sr.sprite = roadSprites[17]; // T missing right
             }
+            else if(connections == 2)
+            {
+                //straits
+                if(up && down)sr.sprite = roadSprites[5];
+                else if(right && left)sr.sprite = roadSprites[4];
+
+                //curves
+                else if (up && left) sr.sprite = roadSprites[6];
+                else if(up && right)sr.sprite = roadSprites[7];
+                else if(down && right)sr.sprite = roadSprites[8];
+                else if(down && left)sr.sprite = roadSprites[9];  
+            }
             else
             {
                 sr.sprite = roadSprites[14];
