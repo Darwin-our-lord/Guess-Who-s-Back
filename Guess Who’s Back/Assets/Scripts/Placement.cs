@@ -65,7 +65,6 @@ public class Placement : MonoBehaviour
                     towerScript.SetRotation(currentRotation);
                     
                     storeManager.money -= selectedTowerCost;
-                    storeManager.RerollStore();
                     storeManager.UpdateMoneyUI();
                     storeManager.RemoveTowerFromStore(selectedTowerIndex);
 
