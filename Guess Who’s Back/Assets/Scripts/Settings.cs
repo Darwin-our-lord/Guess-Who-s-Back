@@ -2,16 +2,26 @@ using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-    [Header("GamePlay")]
-    public static bool cameraPan = false;
+    [Header("---GamePlay---")]
 
-    [Header("Visual")]
+    [Header("Camera")]
+    public static bool cameraPan = false;
+    public static float cameraPanSpeed = 7f;
+    public static float cameraSprintSpeed = 15f;
+
+    [Header("---Visual---")]
+
+    [Header("")]
     public static bool ShowBullets = true;
+
+    [Header("VisualEffects")]
     public static bool monoChrome = false;
     public static bool reverseColor = false;
 
-    //[Header("audio")]
-    void Awake()
+    [Header("audio")]
+    public static bool BackgroundMusic = true; //does nothing yet
+
+    /*void Awake()
     {
         //gameplay---
         cameraPan = false;
@@ -20,13 +30,16 @@ public class Settings : MonoBehaviour
         ShowBullets = true;
         monoChrome = false;
         reverseColor = false;
-    }
+    }*/
+
     #region gameplay
 
+    #region Camera
     public static void ChangeCameraPan()
     {
         cameraPan = !cameraPan;
     }
+    #endregion
 
     #endregion
 
@@ -36,6 +49,8 @@ public class Settings : MonoBehaviour
     {
         ShowBullets = !ShowBullets;
     }
+
+    #region VisualEffects
     public static void ChangeMonoChrome()
     {
         monoChrome = !monoChrome;
@@ -44,6 +59,7 @@ public class Settings : MonoBehaviour
     {
         reverseColor = !reverseColor;
     }
+    #endregion
 
     #endregion
 

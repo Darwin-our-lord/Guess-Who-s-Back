@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] float cameraSpeed;
-    [SerializeField] float cameraSprintSpeed;
-    [SerializeField] float panBorderThickness;
+    [SerializeField] float cameraSpeed; //is set using the settings script at the start of the game
+    [SerializeField] float cameraSprintSpeed; //is set using the settings script at the start of the game
+    [SerializeField] float panBorderThickness; 
     TiledBackground tiledBackground;
     public GameObject monoChrome;
     public GameObject reverseColor;
@@ -15,6 +15,9 @@ public class CameraController : MonoBehaviour
         else if(!Settings.monoChrome && monoChrome != null) monoChrome.SetActive(false);
         if (Settings.reverseColor && reverseColor != null) reverseColor.SetActive(true);
         else if (!Settings.reverseColor && reverseColor != null) reverseColor.SetActive(false);
+
+        cameraSpeed = Settings.cameraPanSpeed;
+        cameraSprintSpeed = Settings.cameraSprintSpeed;
     }
     void Update()
     {
