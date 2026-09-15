@@ -39,6 +39,14 @@ public class Settings : MonoBehaviour
     {
         cameraPan = !cameraPan;
     }
+    public void ChangeCameraSpeed(float speed)
+    {
+        cameraPanSpeed = speed;
+    }
+    public void ChangeCameraSprintSpeed(float speed)
+    {
+        cameraSprintSpeed = speed;
+    }
     #endregion
 
     #endregion

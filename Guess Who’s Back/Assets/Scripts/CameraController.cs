@@ -4,13 +4,13 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] float cameraSpeed; //is set using the settings script at the start of the game
     [SerializeField] float cameraSprintSpeed; //is set using the settings script at the start of the game
-    [SerializeField] float panBorderThickness; 
-    TiledBackground tiledBackground;
-    public GameObject monoChrome;
-    public GameObject reverseColor;
+    [SerializeField] float panBorderThickness;
+
+    [Header("")]
+    [SerializeField] GameObject monoChrome;
+    [SerializeField] GameObject reverseColor;
     void Awake()
     {
-        if(GameObject.Find("Backgroundtiles")) tiledBackground = GameObject.Find("Backgroundtiles").GetComponent<TiledBackground>();
         if (Settings.monoChrome && monoChrome != null) monoChrome.SetActive(true);
         else if(!Settings.monoChrome && monoChrome != null) monoChrome.SetActive(false);
         if (Settings.reverseColor && reverseColor != null) reverseColor.SetActive(true);
