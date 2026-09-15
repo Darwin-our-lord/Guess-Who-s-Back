@@ -4959,6 +4959,7 @@ MonoBehaviour:
   playlist:
   - {fileID: 8300000, guid: d6ff5c1339a3a3a4ea9ba82fc864c3ec, type: 3}
   - {fileID: 8300000, guid: ff9842146ac7429478c0ec632a9c5ef9, type: 3}
+  - {fileID: 8300000, guid: bba0f4383545a0d41b2db35afdff709d, type: 3}
   shufflePlaylist: 1
   musicVolume: 0.5
 --- !u!4 &1622787124
