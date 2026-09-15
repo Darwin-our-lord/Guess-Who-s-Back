@@ -13,6 +13,7 @@ public class Placement : MonoBehaviour
 
     private int currentRotation = 0;
     public int selectedTowerCost = 0;
+    public int selectedTowerIndex = -1;
 
     private StoreManager storeManager;
 
@@ -62,10 +63,11 @@ public class Placement : MonoBehaviour
 
                     Tower towerScript = clone.GetComponent<Tower>();
                     towerScript.SetRotation(currentRotation);
-
+                    
                     storeManager.money -= selectedTowerCost;
                     storeManager.RerollStore();
                     storeManager.UpdateMoneyUI();
+                    storeManager.RemoveTowerFromStore(selectedTowerIndex);
 
                     TowerObjPrefab = null;
                     TowerObjFake.GetComponent<SpriteRenderer>().sprite = null;

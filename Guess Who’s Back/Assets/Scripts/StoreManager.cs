@@ -18,7 +18,6 @@ public class StoreManager : MonoBehaviour
     [SerializeField] List<TowerEntry> towersInShop = new List<TowerEntry>();
     [SerializeField] List<GameObject> towerButtons = new List<GameObject>();
     [Header("")]
-    [SerializeField] GameObject rerollButton;
     [SerializeField] TMP_Text moneyText;
     [SerializeField] TMP_Text toBeAddedMoneyText;
     [Header("")]
@@ -45,8 +44,35 @@ public class StoreManager : MonoBehaviour
         UpdateMoneyUI();
         RerollStore();
     }
-
-    public void RerollStore()
+    public void RestockStoreButton()
+    {
+        if (money >= 10)
+        {
+            money -= 20;
+            UpdateMoneyUI();
+            RestockStore();
+        }
+    }
+    public void RestockStore()
+    {
+        int[] indexes = new int[] { towerButtons[0].activeSelf ? 1 : 0, towerButtons[1].activeSelf ? 1 : 0, towerButtons[2].activeSelf ? 1 : 0 }; //check if they are active or not
+        RerollStore(indexes);
+        for (int i = 0; i < 3; i++)
+        {
+            towerButtons[i].gameObject.SetActive(true);
+        }
+        UpdateStoreTowerVisuals();
+    }
+    public void RerollStoreButton()
+    {
+        if(money >= 30)
+        {
+            money -= 30;
+            UpdateMoneyUI();
+            RerollStore();
+        }
+    }
+    public void RerollStore(int[] indexes = null)
     {
         int currentWave = EnemySpawner.wave;
 
@@ -56,6 +82,10 @@ public class StoreManager : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
+            if (indexes != null && indexes[i] == 1)
+            {
+                continue;
+            }
             Rarities rarity = Rarities.common;
             int totalWeight = 0;
             for (int j = 0; j < allRarities.Count; j++)
@@ -85,7 +115,7 @@ public class StoreManager : MonoBehaviour
         UpdateStoreTowerVisuals();
     }
 
-    public void UpdateStoreTowerVisuals()
+    void UpdateStoreTowerVisuals()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -117,9 +147,13 @@ public class StoreManager : MonoBehaviour
             placement.TowerObjFake.GetComponent<SpriteRenderer>().sprite = towersInShop[buttonID].towerPrefab.GetComponent<SpriteRenderer>().sprite;
             placement.TowerObjFake.transform.localScale = towersInShop[buttonID].towerPrefab.transform.localScale;
             placement.selectedTowerCost = towersInShop[buttonID].towerPrefab.GetComponent<Tower>().Cost;
+            placement.selectedTowerIndex = buttonID;
             menuManager.StoreButton();
-            if (rerollButton.activeSelf) rerollButton.SetActive(false);
         }
+    }
+    public void RemoveTowerFromStore(int index)
+    {
+        towerButtons[index].gameObject.SetActive(false);
     }
     public void UpdateMoneyUI()
     {

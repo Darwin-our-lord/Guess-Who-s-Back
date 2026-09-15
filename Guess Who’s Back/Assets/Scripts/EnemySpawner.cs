@@ -79,6 +79,7 @@ public class EnemySpawner : MonoBehaviour
         int myGeneration = waveGeneration;
         waveOngoing = true;
         StoreManager.RerollStore();
+        StoreManager.RestockStore();
 
         for (int i = 0; i < specialWave.roadsToCreate; i++)
         {
@@ -115,6 +116,7 @@ public class EnemySpawner : MonoBehaviour
         int myGeneration = waveGeneration;
         waveOngoing = true;
         StoreManager.RerollStore();
+        StoreManager.RestockStore();
 
         for (int i = 0; i < 2; i++)
         {
