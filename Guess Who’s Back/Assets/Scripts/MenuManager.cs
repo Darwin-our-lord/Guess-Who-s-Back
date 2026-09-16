@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
@@ -115,11 +116,39 @@ public class MenuManager : MonoBehaviour
         mainUI.gameObject.SetActive(true);
         settingsUI.gameObject.SetActive(false);
     }
+
+
+    #region Only in game
+
+    public void ResumeButton()
+    {
+        Time.timeScale = 1f;
+        pauseUI.SetActive(false);
+    }
+    public void RestartButton()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1f;
+    }
+    public void SurenderButton()
+    {
+        EnemySpawner enemySpawner = GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>();
+
+        if (LeaderboardClient.Instance != null)
+        {
+            LeaderboardClient.Instance.SubmitScore(enemySpawner.wave, "Surrender");
+        }
+
+        Time.timeScale = 0f;
+        loseUI.SetActive(true);
+        loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
+        pauseUI.SetActive(false);
+    }
     public void StoreButton()
     {
-        if (placement.TowerObjPrefab != null) 
-        { 
-            placement.CancelPlacement(); 
+        if (placement.TowerObjPrefab != null)
+        {
+            placement.CancelPlacement();
             storeUI.SetActive(true);
         }
 
@@ -128,4 +157,7 @@ public class MenuManager : MonoBehaviour
 
         storeManager.UpdateMoneyUI();
     }
+
+
+    #endregion
 }
