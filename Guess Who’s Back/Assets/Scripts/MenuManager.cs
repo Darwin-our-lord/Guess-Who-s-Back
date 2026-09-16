@@ -3,20 +3,51 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [Header("MainMenu")]
-    public GameObject mainUI;
-    public GameObject settingsUI;
-    public GameObject GameplaySettingsUI;
-    public GameObject VisualSettingsUI;
-    public GameObject VisualEffectsSettingsUI;
-    public GameObject OtherVisualSettingsUI;
-    public GameObject AudioSettingsUI;
-    public GameObject DiscordLinkUI;
+    [SerializeField] GameObject mainUI;
+    [SerializeField] GameObject settingsUI;
+    [SerializeField] GameObject GameplaySettingsUI;
+    [SerializeField] GameObject VisualSettingsUI;
+    [SerializeField] GameObject VisualEffectsSettingsUI;
+    [SerializeField] GameObject OtherVisualSettingsUI;
+    [SerializeField] GameObject AudioSettingsUI;
+    [SerializeField] GameObject DiscordLinkUI;
+
     [Header("During Game")]
     public GameObject storeUI;
     public GameObject loseUI;
-    public StoreManager storeManager;
-    public Placement placement;
-    private bool inStore = false;
+    [SerializeField] GameObject pauseUI;
+    [Header("")]
+    [SerializeField] StoreManager storeManager;
+    [SerializeField] Placement placement;
+
+    #region pausemenu
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && storeUI != null && pauseUI != null)
+        {
+            if (!storeUI.activeSelf)
+            {
+                if (Time.timeScale == 1f)
+                {
+                    Time.timeScale = 0f;
+                    pauseUI.SetActive(true);
+                }
+                else if (Time.timeScale == 0f)
+                {
+                    Time.timeScale = 1f;
+                    pauseUI.SetActive(false);
+
+                }
+            }
+            else
+            {
+                storeUI.SetActive(false);
+            }
+        }
+    }
+
+    #endregion
     //button functions
     public void StartButton()
     {
@@ -86,10 +117,15 @@ public class MenuManager : MonoBehaviour
     }
     public void StoreButton()
     {
-        if (placement.TowerObjPrefab != null || inStore) storeUI.SetActive(false);
-        else if (!inStore) storeUI.SetActive(true);
-        inStore = !inStore;
-        storeManager.UpdateMoneyUI();
+        if (placement.TowerObjPrefab != null) 
+        { 
+            placement.CancelPlacement(); 
+            storeUI.SetActive(true);
+        }
 
+        else if (storeUI.activeSelf) storeUI.SetActive(false);
+        else if (!storeUI.activeSelf) storeUI.SetActive(true);
+
+        storeManager.UpdateMoneyUI();
     }
 }

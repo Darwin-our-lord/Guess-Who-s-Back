@@ -104,7 +104,7 @@ public class Placement : MonoBehaviour
         TowerObjFake.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-    private void CancelPlacement()
+    public void CancelPlacement()
     {
         TowerObjPrefab = null;
         TowerObjFake.GetComponent<SpriteRenderer>().sprite = null;

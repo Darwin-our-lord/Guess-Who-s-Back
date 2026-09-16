@@ -148,7 +148,7 @@ public class StoreManager : MonoBehaviour
             placement.TowerObjFake.transform.localScale = towersInShop[buttonID].towerPrefab.transform.localScale;
             placement.selectedTowerCost = towersInShop[buttonID].towerPrefab.GetComponent<Tower>().Cost;
             placement.selectedTowerIndex = buttonID;
-            menuManager.StoreButton();
+            menuManager.storeUI.SetActive(false);
         }
     }
     public void RemoveTowerFromStore(int index)
