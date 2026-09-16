@@ -33,17 +33,17 @@ public class EnemySpawner : MonoBehaviour
     public TMP_Text currentWaveText;
 
     public Transform spawnPoint;
-    public float timeBetweenWaves = 5f;
-    public float rate = 1f;
-
-    public GameObject nextWavebutton;
-    public GameObject storebutton;
-    public GameObject enemiesParent;
-    public GameObject towersParent;
-
-    public RoadMaker roadMaker;
-    public StoreManager StoreManager;
-    public MenuManager menuManager;
+    [SerializeField] float timeBetweenWaves = 5f;
+    [SerializeField] float rate = 1f;
+    [Header("Objects")]
+    [SerializeField] GameObject nextWavebutton;
+    [SerializeField] GameObject storebutton;
+    [SerializeField] GameObject enemiesParent;
+    [SerializeField] GameObject towersParent;
+    [Header("Scripts")]
+    [SerializeField] RoadMaker roadMaker;
+    [SerializeField] StoreManager StoreManager;
+    [SerializeField] MenuManager menuManager;
 
     private int waveGeneration = 0;
 
