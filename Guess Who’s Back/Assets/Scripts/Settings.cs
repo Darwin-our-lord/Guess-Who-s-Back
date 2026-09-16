@@ -8,6 +8,8 @@ public class Settings : MonoBehaviour
     public static bool cameraPan = false;
     public static float cameraPanSpeed = 7f;
     public static float cameraSprintSpeed = 15f;
+    public static bool ZoomInOnMouse = true;
+    public static float cameraZoomSpeed = 2f;
 
     [Header("---Visual---")]
 
@@ -38,6 +40,14 @@ public class Settings : MonoBehaviour
     public static void ChangeCameraPan()
     {
         cameraPan = !cameraPan;
+    }
+    public static void ChangeZoomInOnMouse()
+    {
+        ZoomInOnMouse = !ZoomInOnMouse;
+    }
+    public void ChangeCameraZoomSpeed(float speed)
+    {
+        cameraZoomSpeed = speed;
     }
     public void ChangeCameraSpeed(float speed)
     {

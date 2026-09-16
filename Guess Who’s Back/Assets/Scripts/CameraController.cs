@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -37,10 +38,23 @@ public class CameraController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.T)) transform.position = new Vector3 (0, 0,-10);
 
+
+        Camera cam = GetComponent<Camera>();
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        this.gameObject.GetComponent<Camera>().orthographicSize -= scroll * 5;
-        if (this.gameObject.GetComponent<Camera>().orthographicSize < 5) this.gameObject.GetComponent<Camera>().orthographicSize = 5;
-        if (this.gameObject.GetComponent<Camera>().orthographicSize > 9) this.gameObject.GetComponent<Camera>().orthographicSize = 9;
-        
+
+        if (scroll != 0)
+        {
+            Vector3 mouseWorldBefore = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -cam.transform.position.z));
+
+            cam.orthographicSize -= scroll * Settings.cameraZoomSpeed;
+            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 5f, 9f);
+
+            Vector3 mouseWorldAfter = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -cam.transform.position.z));
+
+            if (Settings.ZoomInOnMouse)
+            {
+                transform.position += mouseWorldBefore - mouseWorldAfter;
+            }
+        }
     }
 }
