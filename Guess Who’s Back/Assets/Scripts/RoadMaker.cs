@@ -43,7 +43,7 @@ public class RoadMaker : MonoBehaviour
 
     public void ExtendRoad()
     {
-        if (branchFronts.Count == 0)
+        if (branchFronts.Count == 0)  //make the first road if there are no roads yet
         {
             GameObject oldRoad = Instantiate(RoadStartObjPrefab, new Vector2(0.5f, 0.5f), Quaternion.identity, roadsParent.transform);
             GameObject newRoad = Instantiate(RoadObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
@@ -55,7 +55,7 @@ public class RoadMaker : MonoBehaviour
 
             firstRoad = newRoad;
         }
-        if (Random.value < branchChance && enemySpawner.wave >= 10)
+        if (Random.value < branchChance && enemySpawner.wave >= 10) //check if a branch should be made
         {
             List<int> possibleBranches = new List<int>();
             for (int i = 0; i < branchFronts.Count;i++) 
@@ -150,7 +150,7 @@ public class RoadMaker : MonoBehaviour
                 }
                 else if (hit.gameObject.CompareTag("Road"))
                 {
-                    if (hit.gameObject.name == RoadStartObjPrefab.name) continue;
+                    if (hit.gameObject.name == RoadStartObjPrefab.name+"(clone)") continue;
 
                     #region checkForValidSpotElsewhere
                     Vector2 roadTest = branchFronts[branchStart].transform.position;
@@ -292,7 +292,7 @@ public class RoadMaker : MonoBehaviour
                 }
                 else if (hit.gameObject.CompareTag("Road"))
                 {
-                    if (hit.gameObject.name == RoadStartObjPrefab.name) continue;
+                    if (hit.gameObject.name == RoadStartObjPrefab.name + "(clone)") continue;
 
                     #region checkForValidSpotElsewhere
                     Vector2 roadTest = branchFronts[i].transform.position;
