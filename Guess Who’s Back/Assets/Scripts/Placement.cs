@@ -68,8 +68,8 @@ public class Placement : MonoBehaviour
             if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject() || 
                 Input.GetMouseButton(0) && TowerObjPrefab != null && TowerObjPrefab.GetComponent<Tower>().isTrap)
             {
-                Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(TowerObjFake.transform.localScale.x * 0.9f, TowerObjFake.transform.localScale.y * 0.9f), 0f, layerMask);
-                if (hit == null && !TowerObjPrefab.GetComponent<Tower>().isTrap)
+                Collider2D[] hits = Physics2D.OverlapBoxAll(worldCenterPos,new Vector2(TowerObjFake.transform.localScale.x * 0.9f,TowerObjFake.transform.localScale.y * 0.9f),0f,layerMask);
+                if (hits == null && !TowerObjPrefab.GetComponent<Tower>().isTrap)
                 {
                     GameObject clone = Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
                     clone.name = TowerObjPrefab.name;
@@ -77,7 +77,7 @@ public class Placement : MonoBehaviour
                     Tower towerScript = clone.GetComponent<Tower>();
                     towerScript.SetRotation(currentRotation);
                     
-                    storeManager.money -= selectedTowerCost;
+                    storeManager.money -= selectedTowerCost; 
                     storeManager.UpdateMoneyUI();
                     storeManager.RemoveTowerFromStore(selectedTowerIndex);
 
@@ -88,8 +88,26 @@ public class Placement : MonoBehaviour
                     selectedTowerCost = 0;
                     //tower placesssed do!!! 
                 }
-                else if (hit != null && hit.CompareTag("Road") && TowerObjPrefab.GetComponent<Tower>().isTrap)
+                else if (hits != null && TowerObjPrefab.GetComponent<Tower>().isTrap)
                 {
+                    bool ?canPlaceTrap = null;
+                    foreach (Collider2D collider in hits)
+                    {
+                        if (collider.CompareTag("Road"))
+                        {
+                            canPlaceTrap = true;
+                        }
+                    }
+                    foreach (Collider2D collider in hits)
+                    {
+                        if (collider.CompareTag("Tower"))
+                        {
+                            canPlaceTrap = false;
+                        }
+                    }
+                    
+                    if (!canPlaceTrap == true) return;
+                    
                     GameObject clone = Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
                     clone.name = TowerObjPrefab.name;
 
