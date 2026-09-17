@@ -16,8 +16,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] private int waveValue = 1;
     [SerializeField] private int maxWavesAlive = 10;
-    [SerializeField] public int waveReq = 0;
-    [SerializeField] public WalkType walkType = WalkType.normal;
+    public int waveReq = 0;
+    public WalkType walkType = WalkType.normal;
 
     [Header("Wave Scaling")]
     [SerializeField] private int scalingStartWave = 10;

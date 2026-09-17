@@ -49,11 +49,24 @@ public class Placement : MonoBehaviour
             if (TowerObjPrefab.transform.localScale.x % 2 == 0 || TowerObjPrefab.transform.localScale.y % 2 == 0) worldCenterPos += new Vector3(0.5f, 0.5f, 0);
 
             TowerObjFake.transform.position = worldCenterPos;
-            RangeCicle.transform.localScale
-                = new Vector3(TowerObjPrefab.GetComponent<Tower>().Range * 2, TowerObjPrefab.GetComponent<Tower>().Range * 2, 1);
-            RangeCicle.transform.position = worldCenterPos;
+            if (!TowerObjPrefab.GetComponent<Tower>().isTrap)
+            {
+                RangeCicle.transform.localScale = new Vector3(TowerObjPrefab.GetComponent<Tower>().Range * 2, TowerObjPrefab.GetComponent<Tower>().Range * 2, 1);
+                RangeCicle.transform.position = worldCenterPos;
+            }
+            else
+            {
+                GameObject[] roadTiles = GameObject.FindGameObjectsWithTag("Road");
+                for (int i = 0; i < roadTiles.Length; i++)
+                {
+                    roadTiles[i].GetComponent<SpriteRenderer>().color = Color.cyan;
+                }
+            }
+
+
             //places object---
-            if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject() || Input.GetMouseButton(0) && TowerObjPrefab != null && TowerObjPrefab.GetComponent<Tower>().isTrap)
+            if (Input.GetMouseButton(0) && TowerObjPrefab != null && !EventSystem.current.IsPointerOverGameObject() || 
+                Input.GetMouseButton(0) && TowerObjPrefab != null && TowerObjPrefab.GetComponent<Tower>().isTrap)
             {
                 Collider2D hit = Physics2D.OverlapBox(worldCenterPos, new Vector2(TowerObjFake.transform.localScale.x * 0.9f, TowerObjFake.transform.localScale.y * 0.9f), 0f, layerMask);
                 if (hit == null && !TowerObjPrefab.GetComponent<Tower>().isTrap)
@@ -75,7 +88,7 @@ public class Placement : MonoBehaviour
                     selectedTowerCost = 0;
                     //tower placesssed do!!! 
                 }
-                else if (hit.CompareTag("Road") && TowerObjPrefab.GetComponent<Tower>().isTrap)
+                else if (hit != null && hit.CompareTag("Road") && TowerObjPrefab.GetComponent<Tower>().isTrap)
                 {
                     GameObject clone = Instantiate(TowerObjPrefab, worldCenterPos, Quaternion.identity, towersParent.transform);
                     clone.name = TowerObjPrefab.name;
@@ -84,15 +97,22 @@ public class Placement : MonoBehaviour
                     towerScript.SetGridPosition(cellPos);
 
                     storeManager.money -= selectedTowerCost;
-                    storeManager.RerollStore();
                     storeManager.UpdateMoneyUI();
+                    storeManager.RemoveTowerFromStore(selectedTowerIndex);
 
                     TowerObjPrefab = null;
                     TowerObjFake.GetComponent<SpriteRenderer>().sprite = null;
                     RangeCicle.transform.localScale = new Vector3(0, 0, 1);
                     currentRotation = 0;
                     selectedTowerCost = 0;
-                    //tower placesssed do!!! 
+
+                    GameObject[] roadTiles = GameObject.FindGameObjectsWithTag("Road");
+                    for (int i = 0; i < roadTiles.Length; i++)
+                    {
+                        roadTiles[i].GetComponent<SpriteRenderer>().color = Color.white;
+                    }
+
+                    //trap tower placesssed do!!! 
                 }
             }
         }

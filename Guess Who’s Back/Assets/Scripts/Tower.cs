@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public enum TargetType
 {
@@ -85,11 +86,8 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        if (isTrap)
-        {
-            CheckTrapTrigger();
-        }
-        else if (Time.time >= lastFireTime + (fireRate))
+
+        if (Time.time >= lastFireTime + (fireRate) && !isTrap)
         {
             AcquireTarget();
 
@@ -99,30 +97,22 @@ public class Tower : MonoBehaviour
             }
         }
     }
-
-    private void CheckTrapTrigger()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-        foreach (Enemy enemy in allEnemies)
+        if (collision.GetComponent<Enemy>())
         {
-            if (!enemy.gameObject.activeInHierarchy || enemy.HasDied) continue;
-
-            Vector3Int enemyGridPos = grid.WorldToCell(enemy.transform.position);
-
-            if (enemyGridPos == gridPosition)
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy.walkType != WalkType.flying)
             {
-                if (hasSlow)
+                if (isTrap)
                 {
-                    enemy.ApplySlow(slowAmount, 0.1f);
+                    if (hasSlow)
+                    {
+                        enemy.ApplySlow(slowAmount, 0.1f);
+                    }
+                    ApplyDamageAndEffects(enemy);
                 }
 
-                if (Time.time >= lastFireTime + fireRate)
-                {
-                    currentTarget = enemy;
-                    ApplyDamageAndEffects(enemy);
-                    lastFireTime = Time.time;
-                }
             }
         }
     }
