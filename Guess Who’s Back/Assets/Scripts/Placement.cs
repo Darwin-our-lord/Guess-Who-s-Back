@@ -151,5 +151,12 @@ public class Placement : MonoBehaviour
         RangeCicle.transform.localScale = new Vector3(0, 0, 1);
         currentRotation = 0;
         selectedTowerCost = 0;
+        
+        GameObject[] roadTiles = GameObject.FindGameObjectsWithTag("Road");
+        for (int i = 0; i < roadTiles.Length; i++)
+        {
+            roadTiles[i].GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
     }
 }

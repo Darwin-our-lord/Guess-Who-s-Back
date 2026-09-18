@@ -31,7 +31,7 @@ public class StoreManager : MonoBehaviour
     private List<(Rarities, int, UnityEngine.Color)> allRarities = new List<(Rarities, int, Color)>
     {(Rarities.common,50,UnityEngine.Color.white),
      (Rarities.uncommon, 30, UnityEngine.Color.gray),
-     (Rarities.rare,10,UnityEngine.Color.blue),
+     (Rarities.rare,10,UnityEngine.Color.cyan),
      (Rarities.epic,6,UnityEngine.Color.magenta),
      (Rarities.legendary,3,UnityEngine.Color.yellow),
      (Rarities.mytical,1,UnityEngine.Color.black)};
@@ -123,18 +123,18 @@ public class StoreManager : MonoBehaviour
             {
                 if (allRarities[j].Item1 == towersInShop[i].rarity)
                 {
-                    towerButtons[i].transform.GetChild(0).GetComponent<Image>().color = allRarities[j].Item3;
+                    towerButtons[i].transform.GetChild(4).GetComponent<TMP_Text>().color = allRarities[j].Item3;
                 }
             }
-            towerButtons[i].transform.GetChild(1).GetComponent<Image>().sprite = towersInShop[i].towerPrefab.GetComponent<SpriteRenderer>().sprite;
-            towerButtons[i].transform.GetChild(2).gameObject.SetActive(false);
+            towerButtons[i].transform.GetChild(2).GetComponent<Image>().sprite = towersInShop[i].towerPrefab.GetComponent<SpriteRenderer>().sprite;
+            towerButtons[i].transform.GetChild(3).gameObject.SetActive(false);
             if (towersInShop[i].towerPrefab.transform.childCount != 0)
             {
-                towerButtons[i].transform.GetChild(2).gameObject.SetActive(true);
-                towerButtons[i].transform.GetChild(2).GetComponent<Image>().sprite = towersInShop[i].towerPrefab.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                towerButtons[i].transform.GetChild(3).gameObject.SetActive(true);
+                towerButtons[i].transform.GetChild(3).GetComponent<Image>().sprite = towersInShop[i].towerPrefab.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
             }
-            towerButtons[i].transform.GetChild(3).GetComponent<TMP_Text>().text = towersInShop[i].towerPrefab.name;
-            towerButtons[i].transform.GetChild(4).GetComponent<TMP_Text>().text = towersInShop[i].towerPrefab.GetComponent<Tower>().GetDescription();
+            towerButtons[i].transform.GetChild(4).GetComponent<TMP_Text>().text = towersInShop[i].towerPrefab.name;
+            towerButtons[i].transform.GetChild(5).GetComponent<TMP_Text>().text = towersInShop[i].towerPrefab.GetComponent<Tower>().GetDescription();
         }
 
     }
