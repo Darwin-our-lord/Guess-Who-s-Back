@@ -11,6 +11,10 @@ public struct Wave
     public int waveNr;
     public List<EnemyGroup> enemyGroups;
     public bool respawnEnemies;
+    [Header("")]
+    public int startPosMoveNr;
+    public float newStartMoveRate;
+    [Header("")]
     public int roadsToCreate;
     public float newSpawnRate;
 }
@@ -86,6 +90,11 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(specialWave.newSpawnRate);
             roadMaker.ExtendRoad();
         }
+        for (int i = 0; i < specialWave.startPosMoveNr; i++)
+        {
+            yield return new WaitForSeconds(specialWave.newStartMoveRate);
+            roadMaker.MoveStartRoad();
+        }
         if (specialWave.respawnEnemies)
         {
             foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
@@ -122,6 +131,12 @@ public class EnemySpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
             roadMaker.ExtendRoad();
+        }
+
+        if(wave > 15 && wave % 2 == 1)
+        {
+            yield return new WaitForSeconds(1f);
+            roadMaker.MoveStartRoad();
         }
 
         foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))

@@ -21,10 +21,14 @@ public class RoadMaker : MonoBehaviour
     public float branchChance = 0.02f;
     public List<GameObject> branchFronts = new List<GameObject>();
     public List<GameObject> fakeFronts = new List<GameObject>();
-    public List<GameObject> formerBranchFronts = new List<GameObject>();
+    public List<GameObject> formerBranchFronts = new List<GameObject>(); //all roads that arent the current branch front
     public GameObject firstRoad;
+    public GameObject startRoad;
 
-    public EnemySpawner enemySpawner;
+    [SerializeField] EnemySpawner enemySpawner;
+
+    [Header("")]
+    [SerializeField] Sprite[] roadStartSprites;
 
     private void Start()
     {
@@ -45,14 +49,21 @@ public class RoadMaker : MonoBehaviour
     {
         if (branchFronts.Count == 0)  //make the first road if there are no roads yet
         {
+            int randomDir;
+            Vector2 direction = (randomDir = Random.Range(1, 5)) == 1 ? new Vector2(0.5f, 1.5f) : randomDir == 2 ? new Vector2(1.5f, 0.5f) : randomDir == 3 ? new Vector2(0.5f, -0.5f) : new Vector2(-0.5f, 0.5f);
+
             GameObject oldRoad = Instantiate(RoadStartObjPrefab, new Vector2(0.5f, 0.5f), Quaternion.identity, roadsParent.transform);
-            GameObject newRoad = Instantiate(RoadObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
+            GameObject newRoad = Instantiate(RoadObjPrefab, direction, Quaternion.identity, roadsParent.transform);
             GameObject fakeRoad = Instantiate(RoadEndObjPrefab, new Vector2(0.5f, 1.5f), Quaternion.identity, roadsParent.transform);
+            
+            GameObject startSpriteRoad = Instantiate(RoadObjPrefab, new Vector2(0.5f, 0.5f), Quaternion.identity, roadsParent.transform);
+            startSpriteRoad.GetComponent<SpriteRenderer>().sprite = roadStartSprites[randomDir-1];
 
             fakeFronts.Add(fakeRoad);
             branchFronts.Add(newRoad);
             formerBranchFronts.Add(oldRoad);
 
+            startRoad = oldRoad;
             firstRoad = newRoad;
         }
         if (Random.value < branchChance && enemySpawner.wave >= 10) //check if a branch should be made
@@ -379,4 +390,55 @@ public class RoadMaker : MonoBehaviour
             }
         }
     }
+
+    public void MoveStartRoad()
+    {
+        startRoad.transform.position = firstRoad.transform.position;
+
+        //GameObject ripMrRoad = firstRoad; //store the road so that it can be destroyed after the firstRoad variable is updated to the next road
+        
+        if(firstRoad.GetComponent<Road>().nextTiles.Count > 1)
+        {
+            int randomDir = Random.Range(0, firstRoad.GetComponent<Road>().nextTiles.Count - 1);
+
+            /*for (int i = 0; i < firstRoad.GetComponent<Road>().nextTiles.Count; i++)
+            {
+                if (i != randomDir)
+                {
+                    if(firstRoad.GetComponent<Road>().nextTiles[i].gameObject.GetComponent<Road>().nextTiles.Count < 0)
+                    {
+
+                    }
+                    Destroy(firstRoad.GetComponent<Road>().nextTiles[i].gameObject);
+                }
+            }*/
+
+            enemySpawner.spawnPoint.position = firstRoad.transform.position;
+            firstRoad = firstRoad.GetComponent<Road>().nextTiles[randomDir].gameObject;
+        }
+        else
+        {
+            enemySpawner.spawnPoint.position = firstRoad.transform.position;
+            firstRoad = firstRoad.GetComponent<Road>().nextTiles[0].gameObject;
+        }
+
+
+        //Destroy(ripMrRoad);
+    }
+
+    /*void DestroyRoadBranch(GameObject roadObject)  //could be used to destroy a branch of roads, but currently not used cuz we lwk gotta talk about this type shit
+    {
+        Road road = roadObject.GetComponent<Road>();
+
+        foreach (Transform nextTile in road.nextTiles)
+        {
+            if (nextTile != null)
+            {
+                DestroyRoadBranch(nextTile.gameObject);
+            }
+        }
+
+        Destroy(roadObject);
+    }*/
+
 }

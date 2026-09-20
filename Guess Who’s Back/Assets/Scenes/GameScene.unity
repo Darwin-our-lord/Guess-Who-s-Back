@@ -297,7 +297,13 @@ MonoBehaviour:
   fakeFronts: []
   formerBranchFronts: []
   firstRoad: {fileID: 0}
+  startRoad: {fileID: 0}
   enemySpawner: {fileID: 1215443786}
+  roadStartSprites:
+  - {fileID: -1190185306, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+  - {fileID: 949408473, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+  - {fileID: 760963953, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
+  - {fileID: -1387427807, guid: 5c8d13f7a7bb65f418c2b5be97a0de76, type: 3}
 --- !u!4 &28553211
 Transform:
   m_ObjectHideFlags: 0
@@ -4907,6 +4913,8 @@ MonoBehaviour:
     - enemy: {fileID: 42628739759191034, guid: 89db89cbc221404438b149bfd11eabf3, type: 3}
       amount: 1
     respawnEnemies: 1
+    startPosMoveNr: 0
+    newStartMoveRate: 0
     roadsToCreate: 0
     newSpawnRate: 0.02
   enemies:
