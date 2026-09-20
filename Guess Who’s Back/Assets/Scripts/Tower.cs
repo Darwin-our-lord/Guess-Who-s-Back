@@ -81,7 +81,7 @@ public class Tower : MonoBehaviour
     {
         bulletParent = GameObject.Find("Bullets");
         grid = FindObjectOfType<Grid>();
-        lastFireTime = UnityEngine.Random.Range(0f, 0.1f);
+        lastFireTime = UnityEngine.Random.Range(0f, 0.5f);
     }
 
     private void Update()
@@ -132,6 +132,7 @@ public class Tower : MonoBehaviour
         foreach (Enemy enemy in allEnemies)
         {
             if (!enemy.gameObject.activeInHierarchy) continue;
+            if (enemy.soonToDie) continue;
 
             Vector2 directionToEnemy = (enemy.transform.position - transform.position);
             float distance = directionToEnemy.magnitude;
@@ -281,7 +282,11 @@ public class Tower : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        lastFireTime = Time.time;
+        lastFireTime = Time.time + UnityEngine.Random.Range(-0.1f, 0.1f);
+
+        Enemy targetEnemy = currentTarget.GetComponent<Enemy>();
+        if (targetEnemy.CurrentHealth - damage <= 0) targetEnemy.soonToDie = true;
+        
 
         if (Settings.ShowBullets)
         {

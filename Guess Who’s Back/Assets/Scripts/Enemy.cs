@@ -47,6 +47,7 @@ public class Enemy : MonoBehaviour
     private bool hasDied = false;
     private RoadMaker roadMaker;
     private StoreManager storeManager;
+
     public int roadTargetNr = 0;
 
     private List<DotEffect> activeDots = new List<DotEffect>();
@@ -60,6 +61,8 @@ public class Enemy : MonoBehaviour
     private float knockbackDecay = 10f;
 
     public Transform roadTarget;
+
+    public bool soonToDie = false;
 
     private void Awake()
     {
@@ -344,6 +347,8 @@ public class Enemy : MonoBehaviour
     {
         Destroy(corpse);
         corpse = null;
+
+        soonToDie = false;
 
         if (walkType == WalkType.flying) roadTarget = roadMaker.branchFronts[UnityEngine.Random.Range(0, roadMaker.branchFronts.Count)].transform;
 
