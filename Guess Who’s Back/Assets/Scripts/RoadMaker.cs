@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -281,7 +282,7 @@ public class RoadMaker : MonoBehaviour
 
                     formerBranchFronts[i] = branchFronts[i];
                     branchFronts[i] = newRoad;
-                    fakeFronts[i] =fakeRoad;
+                    fakeFronts[i] = fakeRoad;
 
                     break;
                 }
@@ -391,13 +392,29 @@ public class RoadMaker : MonoBehaviour
         }
     }
 
-    public void MoveStartRoad()
+    public IEnumerator MoveStartRoad(float duration)
     {
-        startRoad.transform.position = firstRoad.transform.position;
+        Vector3 startPosition = startRoad.transform.position;
+
+
+        Vector3 targetPosition = firstRoad.transform.position;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = elapsed / duration;
+            startRoad.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            yield return null;
+        }
+
+        startRoad.transform.position = targetPosition;
 
         //GameObject ripMrRoad = firstRoad; //store the road so that it can be destroyed after the firstRoad variable is updated to the next road
-        
-        if(firstRoad.GetComponent<Road>().nextTiles.Count > 1)
+
+        if (firstRoad.GetComponent<Road>().nextTiles.Count > 1)
         {
             int randomDir = Random.Range(0, firstRoad.GetComponent<Road>().nextTiles.Count - 1);
 
@@ -422,8 +439,8 @@ public class RoadMaker : MonoBehaviour
             firstRoad = firstRoad.GetComponent<Road>().nextTiles[0].gameObject;
         }
 
-
         //Destroy(ripMrRoad);
+
     }
 
     /*void DestroyRoadBranch(GameObject roadObject)  //could be used to destroy a branch of roads, but currently not used cuz we lwk gotta talk about this type shit
