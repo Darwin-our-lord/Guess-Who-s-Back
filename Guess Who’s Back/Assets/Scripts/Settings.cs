@@ -36,6 +36,12 @@ public class Settings : MonoBehaviour
 
     #region gameplay
 
+    public static void ChangeRunInBackground()
+    {
+        Application.runInBackground = !Application.runInBackground;
+        Debug.Log("Run in background: " + Application.runInBackground);
+    }
+
     #region Camera
     public static void ChangeCameraPan()
     {
@@ -67,6 +73,32 @@ public class Settings : MonoBehaviour
     {
         ShowBullets = !ShowBullets;
     }
+
+    #region screenSettings
+    public static void ChangeScreenMode(int value)
+    {
+        switch (value)
+        {
+            case 0:
+                // Fullscreen
+                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.ExclusiveFullScreen);
+                Debug.Log("0 Fullscreen mode set to: fullscreen");
+                break;
+
+            case 1:
+                // Borderless Windowed
+                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
+                Debug.Log("1 Fullscreen mode set to: fullscreenwindow");
+                break;
+
+            case 2:
+                // Windowed
+                Screen.SetResolution(1280,720,FullScreenMode.Windowed);
+                Debug.Log("2 Fullscreen mode set to: windowed");
+                break;
+        }
+    }
+    #endregion
 
     #region VisualEffects
     public static void ChangeMonoChrome()
