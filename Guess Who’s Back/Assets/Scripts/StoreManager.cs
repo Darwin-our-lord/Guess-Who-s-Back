@@ -48,7 +48,7 @@ public class StoreManager : MonoBehaviour
     {
         if (money >= 10)
         {
-            money -= 20;
+            money -= 10;
             UpdateMoneyUI();
             RestockStore();
         }

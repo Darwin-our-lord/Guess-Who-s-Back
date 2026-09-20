@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] float panBorderThickness;
 
     [Header("")]
+    [SerializeField] GameObject resetText;
+
+    [Header("")]
     [SerializeField] GameObject monoChrome;
     [SerializeField] GameObject reverseColor;
     void Awake()
@@ -38,6 +41,8 @@ public class CameraController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.T)) transform.position = new Vector3 (0, 0,-10);
 
+        if (transform.position.magnitude > 50) resetText.SetActive(true);
+        else resetText.SetActive(false);
 
         Camera cam = GetComponent<Camera>();
         float scroll = Input.GetAxis("Mouse ScrollWheel");

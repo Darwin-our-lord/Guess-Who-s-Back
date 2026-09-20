@@ -33,7 +33,7 @@ public class Road : MonoBehaviour
 
         foreach (Collider2D hit in hits)
         {
-            if (hit != null && hit != GetComponent<Collider2D>())
+            if (hit != null && hit != GetComponent<Collider2D>() && !hit.CompareTag("Tower"))
             {
                 stacked = true;
 
