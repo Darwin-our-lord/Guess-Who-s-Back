@@ -39,7 +39,7 @@ public class StoreManager : MonoBehaviour
 
     private void Awake()
     {
-        money = 50;
+        money = 75;
         UpdateMoneyGained();
         UpdateMoneyUI();
         RerollStore();

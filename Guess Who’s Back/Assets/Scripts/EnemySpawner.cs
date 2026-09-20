@@ -133,10 +133,11 @@ public class EnemySpawner : MonoBehaviour
             roadMaker.ExtendRoad();
         }
 
-        if(wave > 15 && wave % 2 == 1)
+        if(wave >= 5 && wave % 2 == 1)
         {
             yield return new WaitForSeconds(1f);
             roadMaker.MoveStartRoad();
+            yield return new WaitForSeconds(0.5f);
         }
 
         foreach (Enemy enemy in enemiesParent.transform.GetComponentsInChildren<Enemy>(true))
