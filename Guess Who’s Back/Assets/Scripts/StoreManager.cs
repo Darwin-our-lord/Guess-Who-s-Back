@@ -48,6 +48,8 @@ public class StoreManager : MonoBehaviour
     {
         if (money >= 10)
         {
+            int[] indexes = new int[] { towerButtons[0].activeSelf ? 1 : 0, towerButtons[1].activeSelf ? 1 : 0, towerButtons[2].activeSelf ? 1 : 0 }; //check if they are active or not
+            if (indexes[0] == 1 && indexes[1] == 1 && indexes[2] == 1) return; //if all are active, do nothing
             money -= 10;
             UpdateMoneyUI();
             RestockStore();
