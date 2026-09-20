@@ -42,6 +42,8 @@ public class EnemySpawner : MonoBehaviour
     [Header("Objects")]
     [SerializeField] GameObject nextWavebutton;
     [SerializeField] GameObject storebutton;
+    [SerializeField] GameObject moneyText;
+    [SerializeField] GameObject yetToBeAddedMoneyText;
     [SerializeField] GameObject enemiesParent;
     [SerializeField] GameObject towersParent;
     [Header("Scripts")]
@@ -91,6 +93,9 @@ public class EnemySpawner : MonoBehaviour
             roadMaker.ExtendRoad();
         }
 
+        yield return new WaitForSeconds(specialWave.newSpawnRate);
+        roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt();
+
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < specialWave.startPosMoveNr; i++)
@@ -139,7 +144,9 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             roadMaker.ExtendRoad();
         }
+
         yield return new WaitForSeconds(0.5f);
+        roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt();
 
         if (wave >= 5 && wave % 2 == 1)
         {

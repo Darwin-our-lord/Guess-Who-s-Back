@@ -44,6 +44,8 @@ public class RoadMaker : MonoBehaviour
             ExtendRoad();
             yield return new WaitForSeconds(0.1f);
         }
+        CheckIfRoadIsOnRoadAndMaybeExtendIt();
+        yield return new WaitForSeconds(0.1f);
     }
 
     public void ExtendRoad()
@@ -386,6 +388,26 @@ public class RoadMaker : MonoBehaviour
                 else
                 {
                     Debug.LogError("INFINITE LOOP");
+                    break;
+                }
+            }
+        }
+    }
+    public void CheckIfRoadIsOnRoadAndMaybeExtendIt()
+    {
+        for (int i = 0; i < branchFronts.Count; i++)
+        {
+            Collider2D[] hit = Physics2D.OverlapBoxAll(branchFronts[i].transform.position, new Vector2(0.9f, 0.9f), 0f, layerMask);
+            for (int j = 0; j < hit.Length; j++)
+            {
+                if (hit[j].gameObject == branchFronts[i])continue;
+
+                if (hit[j].gameObject == fakeFronts[i])continue;
+
+                if (hit[j].gameObject.CompareTag("Road"))
+                {
+                    ExtendRoad();
+                    CheckIfRoadIsOnRoadAndMaybeExtendIt();
                     break;
                 }
             }
