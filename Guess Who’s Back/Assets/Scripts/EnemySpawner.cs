@@ -61,6 +61,8 @@ public class EnemySpawner : MonoBehaviour
         }
         nextWavebutton.SetActive(false);
         storebutton.SetActive(false);
+        moneyText.SetActive(false);
+        yetToBeAddedMoneyText.SetActive(false);
 
         bool special = false;
         Wave specialWave = specialWaves[0];
