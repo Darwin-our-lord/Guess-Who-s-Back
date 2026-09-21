@@ -210,6 +210,8 @@ public class EnemySpawner : MonoBehaviour
                 StoreManager.UpdateMoneyGained();
                 nextWavebutton.SetActive(true);
                 storebutton.SetActive(true);
+                moneyText.SetActive(true);
+                yetToBeAddedMoneyText.SetActive(true);
                 currentWaveText.text = "Next wave: " + wave.ToString();
                 yield break;
             }
