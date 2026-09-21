@@ -98,7 +98,7 @@ public class EnemySpawner : MonoBehaviour
 
         yield return new WaitForSeconds(specialWave.newSpawnRate);
         RoadCheckComplete = false;
-        roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt();
+        StartCoroutine(roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt());
 
         while (!RoadCheckComplete)
         {
@@ -156,11 +156,12 @@ public class EnemySpawner : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         RoadCheckComplete = false;
-        roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt();
+        StartCoroutine(roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt());
 
         while (!RoadCheckComplete)
         {
             yield return null;
+            Debug.Log("waiting for road checkup...");
         }
 
         if (wave >= 5 && wave % 2 == 1)

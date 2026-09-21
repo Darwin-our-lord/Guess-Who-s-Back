@@ -45,7 +45,7 @@ public class RoadMaker : MonoBehaviour
             ExtendRoad();
             yield return new WaitForSeconds(0.1f);
         }
-        CheckIfRoadIsOnRoadAndMaybeExtendIt();
+        StartCoroutine(CheckIfRoadIsOnRoadAndMaybeExtendIt());
         yield return new WaitForSeconds(0.1f);
     }
 
@@ -448,7 +448,7 @@ public class RoadMaker : MonoBehaviour
                 {
                     ExtendRoad();
                     yield return new WaitForSeconds(0.25f);
-                    CheckIfRoadIsOnRoadAndMaybeExtendIt();
+                    StartCoroutine(CheckIfRoadIsOnRoadAndMaybeExtendIt());
                     break;
                 }
             }
