@@ -111,9 +111,9 @@ MonoBehaviour:
   scalingStartWave: 10
   hpGrowthPerWave: 0.03
   knockbackResistance: 0
-  corpsePrefab: {fileID: 0}
+  corpsePrefab: {fileID: 2419133657992460214, guid: c70a55b02f5d15640909c7e5cc1f76fb, type: 3}
   corpseParent: {fileID: 0}
-  healthBarPrefab: {fileID: 0}
+  healthBarPrefab: {fileID: 5485443110060960743, guid: 71813c995fd034d4b83ef04c4e5f5e94, type: 3}
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
   roadTarget: {fileID: 0}
