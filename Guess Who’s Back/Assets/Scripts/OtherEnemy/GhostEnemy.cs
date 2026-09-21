@@ -18,6 +18,7 @@ public class GhostEnemy : Enemy
         if(resistanceCheck < ghostlyResistance)
         {
             StartCoroutine(ShowMissText());
+            soonToDie = false;
             return;
         }
         currentHealth -= damage;
