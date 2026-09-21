@@ -104,7 +104,7 @@ MonoBehaviour:
   displayName: Flyer
   maxHealth: 50
   speed: 1
-  waveValue: 5
+  waveValue: 7
   maxWavesAlive: 10
   waveReq: 10
   walkType: 0
@@ -117,6 +117,7 @@ MonoBehaviour:
   direction: {x: 0, y: 0, z: 0}
   roadTargetNr: 0
   roadTarget: {fileID: 0}
+  soonToDie: 0
 --- !u!61 &8543426855282585174
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -155,7 +156,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.29}
+    oldSize: {x: 1, y: 1.8125}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
