@@ -301,7 +301,6 @@ public class RoadMaker : MonoBehaviour
                         }
                     }
                 }
-                Debug.Log("HitTower: " + HitTower + " HitRoad: " + HitRoad + " HitStart: " + HitStart + " HitWall: " + HitWall);
 
                 if (HitStart) continue;
 
