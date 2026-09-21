@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -272,9 +273,39 @@ public class RoadMaker : MonoBehaviour
 
                 if (newRoadPos == new Vector2(formerBranchFronts[i].transform.position.x, formerBranchFronts[i].transform.position.y)) continue;
 
-                Collider2D hit = Physics2D.OverlapBox(newRoadPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
+                Collider2D[] hit = Physics2D.OverlapBoxAll(newRoadPos, new Vector2(0.9f, 0.9f), 0f, layerMask);
 
-                if (hit == null)
+                bool HitTower = false;
+                bool HitRoad = false;
+                bool HitStart = false;
+                bool HitWall = false;
+                if (hit != null)
+                {
+                    foreach (Collider2D collider in hit)
+                    {
+                        if (collider.CompareTag("Tower"))
+                        {
+                            HitTower = true;
+                        }
+                        if (collider.CompareTag("Road"))
+                        {
+                            HitRoad = true;
+                        }
+                        if(collider.gameObject == startRoad)
+                        {
+                            HitStart = true;
+                        }
+                        if (collider.gameObject.CompareTag("Wall"))
+                        {
+                            HitWall = true;
+                        }
+                    }
+                }
+                Debug.Log("HitTower: " + HitTower + " HitRoad: " + HitRoad + " HitStart: " + HitStart + " HitWall: " + HitWall);
+
+                if (HitStart) continue;
+
+                if (hit.Length == 0)
                 {
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
@@ -288,9 +319,15 @@ public class RoadMaker : MonoBehaviour
 
                     break;
                 }
-                else if (hit.gameObject.CompareTag("Tower"))
+                else if (HitTower && !HitRoad)
                 {
-                    Destroy(hit.gameObject);
+                    foreach (Collider2D collider in hit)
+                    {
+                        if (collider.CompareTag("Tower"))
+                        {
+                            Destroy(collider.gameObject);
+                        }
+                    }
 
                     GameObject fakeRoad = Instantiate(RoadEndObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
                     GameObject newRoad = Instantiate(RoadObjPrefab, newRoadPos, Quaternion.identity, roadsParent.transform);
@@ -304,10 +341,8 @@ public class RoadMaker : MonoBehaviour
 
                     break;
                 }
-                else if (hit.gameObject.CompareTag("Road"))
+                else if (HitRoad)
                 {
-                    if (hit.gameObject.name == RoadStartObjPrefab.name + "(clone)") continue;
-
                     #region checkForValidSpotElsewhere
                     Vector2 roadTest = branchFronts[i].transform.position;
                     roadTest += new Vector2(1, 0);
@@ -350,7 +385,7 @@ public class RoadMaker : MonoBehaviour
 
                     break;
                 }
-                else if (hit.gameObject.CompareTag("Wall"))
+                else if (HitWall)
                 {
                     #region checkForValidSpotElsewhere
                     Vector2 roadTest = branchFronts[i].transform.position;
@@ -382,7 +417,13 @@ public class RoadMaker : MonoBehaviour
 
                     #endregion
 
-                    Destroy(hit.gameObject);
+                    foreach (Collider2D collider in hit)
+                    {
+                        if (collider.CompareTag("Wall"))
+                        {
+                            Destroy(collider.gameObject);
+                        }
+                    }
                     continue;
                 }
                 else
