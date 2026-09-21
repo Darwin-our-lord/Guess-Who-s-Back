@@ -25,8 +25,8 @@ public class GhostEnemy : Enemy
     private IEnumerator ShowMissText()
     {
         GameObject instantiatedMissText = 
-            Instantiate(missText, transform.position + new Vector3(0, 1 + Random.Range(-0.1f, 0.1f), 0.3f+Random.Range(-0.1f, 0.1f)), Quaternion.identity);
-        yield return new WaitForSeconds(0.5f);
+            Instantiate(missText, transform.position + new Vector3(0, 1 + Random.Range(-0.1f, 0.1f), 0.3f+Random.Range(-0.1f, 0.1f)), Quaternion.Euler(0, 0, Random.Range(-30f, 30f)));
+        yield return new WaitForSeconds(0.3f);
         Destroy(instantiatedMissText);
     }
 }
