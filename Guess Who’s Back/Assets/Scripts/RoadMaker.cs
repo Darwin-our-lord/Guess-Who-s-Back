@@ -433,7 +433,7 @@ public class RoadMaker : MonoBehaviour
             }
         }
     }
-    public void CheckIfRoadIsOnRoadAndMaybeExtendIt()
+    public IEnumerator CheckIfRoadIsOnRoadAndMaybeExtendIt()
     {
         for (int i = 0; i < branchFronts.Count; i++)
         {
@@ -447,11 +447,13 @@ public class RoadMaker : MonoBehaviour
                 if (hit[j].gameObject.CompareTag("Road"))
                 {
                     ExtendRoad();
+                    yield return new WaitForSeconds(0.25f);
                     CheckIfRoadIsOnRoadAndMaybeExtendIt();
                     break;
                 }
             }
         }
+        enemySpawner.RoadCheckComplete = true;
     }
 
     public IEnumerator MoveStartRoad(float duration)

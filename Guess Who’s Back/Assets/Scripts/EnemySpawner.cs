@@ -50,7 +50,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] RoadMaker roadMaker;
     [SerializeField] StoreManager StoreManager;
     [SerializeField] MenuManager menuManager;
-
+    [Header("--Dont touch--")]
+    public bool RoadCheckComplete = false;
     private int waveGeneration = 0;
 
     public void StartWave()
@@ -96,7 +97,13 @@ public class EnemySpawner : MonoBehaviour
         }
 
         yield return new WaitForSeconds(specialWave.newSpawnRate);
+        RoadCheckComplete = false;
         roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt();
+
+        while (!RoadCheckComplete)
+        {
+            yield return null;
+        }
 
         yield return new WaitForSeconds(0.5f);
 
@@ -148,7 +155,13 @@ public class EnemySpawner : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
+        RoadCheckComplete = false;
         roadMaker.CheckIfRoadIsOnRoadAndMaybeExtendIt();
+
+        while (!RoadCheckComplete)
+        {
+            yield return null;
+        }
 
         if (wave >= 5 && wave % 2 == 1)
         {
