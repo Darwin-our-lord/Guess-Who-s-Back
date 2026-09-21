@@ -11,60 +11,60 @@ public enum WalkType
 public class Enemy : MonoBehaviour
 {
     [Header("Enemy Stats")]
-    [SerializeField] private string displayName = "Enemy";
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float speed = 2f;
-    [SerializeField] private int waveValue = 1;
-    [SerializeField] private int maxWavesAlive = 10;
+    [SerializeField] protected string displayName = "Enemy";
+    [SerializeField] protected float maxHealth = 100f;
+    [SerializeField] protected float speed = 2f;
+    [SerializeField] protected int waveValue = 1;
+    [SerializeField] protected int maxWavesAlive = 10;
     public int waveReq = 0;
     public WalkType walkType = WalkType.normal;
 
     [Header("Wave Scaling")]
-    [SerializeField] private int scalingStartWave = 10;
-    [SerializeField] private float hpGrowthPerWave = 0.03f;
-    private float baseMaxHealth;
-    private EnemySpawner enemySpawner;
+    [SerializeField] protected int scalingStartWave = 10;
+    [SerializeField] protected float hpGrowthPerWave = 0.03f;
+    protected float baseMaxHealth;
+    protected EnemySpawner enemySpawner;
 
     [Header("Resistances")]
-    [SerializeField][Range(0, 100)] private float knockbackResistance = 0f;
+    [SerializeField][Range(0, 100)] protected float knockbackResistance = 0f;
 
     [Header("CorpseStuff")]
-    [SerializeField] GameObject corpsePrefab;
-    [SerializeField] GameObject corpseParent;
-    private GameObject corpse;
+    [SerializeField] protected GameObject corpsePrefab;
+    [SerializeField] protected GameObject corpseParent;
+    protected GameObject corpse;
 
     [Header("HealthBar")]
-    [SerializeField] private GameObject healthBarPrefab;
-    private EnemyHealthBar healthBarInstance;
-    private bool isMouseOver = false;
+    [SerializeField] protected GameObject healthBarPrefab;
+    protected EnemyHealthBar healthBarInstance;
+    protected bool isMouseOver = false;
 
     [Header("--DONT TOUCH--")]
     public Vector3 direction;
 
-    private int wavesAlive = 0;
-    private float currentHealth;
-    private Vector3 deathPosition;
-    private bool hasDied = false;
-    private RoadMaker roadMaker;
-    private StoreManager storeManager;
+    protected int wavesAlive = 0;
+    protected float currentHealth;
+    protected Vector3 deathPosition;
+    protected bool hasDied = false;
+    protected RoadMaker roadMaker;
+    protected StoreManager storeManager;
 
     public int roadTargetNr = 0;
 
-    private List<DotEffect> activeDots = new List<DotEffect>();
-    private List<SlowEffect> activeSlows = new List<SlowEffect>();
-    private float freezeTimer = 0f;
-    private bool canFreeze = true;
-    private float baseSpeed;
+    protected List<DotEffect> activeDots = new List<DotEffect>();
+    protected List<SlowEffect> activeSlows = new List<SlowEffect>();
+    protected float freezeTimer = 0f;
+    protected bool canFreeze = true;
+    protected float baseSpeed;
 
-    private bool isBeingKnockedBack = false;
-    private Vector3 knockbackVelocity = Vector3.zero;
-    private float knockbackDecay = 10f;
+    protected bool isBeingKnockedBack = false;
+    protected Vector3 knockbackVelocity = Vector3.zero;
+    protected float knockbackDecay = 10f;
 
     public Transform roadTarget;
 
     public bool soonToDie = false;
 
-    private void Awake()
+    protected void Awake()
     {
         roadMaker = GameObject.Find("RoadMaker").GetComponent<RoadMaker>();
         storeManager = GameObject.Find("StoreManager").GetComponent<StoreManager>();
@@ -95,7 +95,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void ApplyWaveScaling()
+    protected void ApplyWaveScaling()
     {
         int currentWave = enemySpawner != null ? enemySpawner.wave : 1;
         int wavesPastStart = Mathf.Max(0, currentWave - scalingStartWave);
@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         if (healthBarInstance != null)
         {
@@ -188,7 +188,7 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    private void TriggerGameOver()
+    protected void TriggerGameOver()
     {
         MenuManager menuManager = GameObject.Find("UI").GetComponent<MenuManager>();
 
@@ -202,7 +202,7 @@ public class Enemy : MonoBehaviour
         menuManager.loseUI.transform.GetChild(1).GetComponent<TMP_Text>().text = "you made it to wave: " + enemySpawner.wave;
     }
 
-    private void UpdateStatusEffects(float deltaTime)
+    protected void UpdateStatusEffects(float deltaTime)
     {
         if (freezeTimer > 0) freezeTimer -= deltaTime;
         if (freezeTimer <= 0) StartCoroutine(AllowFreeze());
@@ -234,7 +234,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private float CalculateEffectiveSpeed()
+    protected float CalculateEffectiveSpeed()
     {
         if (freezeTimer > 0)
             return 0f;
@@ -250,7 +250,7 @@ public class Enemy : MonoBehaviour
         return speed * (1f - totalSlowPercent / 100f);
     }
 
-    public void TakeDamage(float damage, bool isDot = false)
+    public virtual void TakeDamage(float damage, bool isDot = false)
     {
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -283,7 +283,7 @@ public class Enemy : MonoBehaviour
             canFreeze = false;
         }
     }
-    private IEnumerator AllowFreeze()
+    protected IEnumerator AllowFreeze()
     {
         yield return new WaitForSeconds(1f);
         canFreeze = true;
@@ -314,7 +314,7 @@ public class Enemy : MonoBehaviour
         });
     }
 
-    private void Die()
+    protected virtual void Die()
     {
         if (healthBarInstance != null)
         {
