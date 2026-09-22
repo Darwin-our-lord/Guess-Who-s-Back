@@ -10,6 +10,7 @@ public class LeaderboardClient : MonoBehaviour
     [Tooltip("e.g. https://your-app.up.railway.app")]
     [SerializeField] private string backendBaseUrl = "https://your-backend-url.example.com";
     [SerializeField] private string apiKey = "change-this-to-something-random";
+    [SerializeField] private string gameVersion = "0.0.1";
 
     private void Awake()
     {
@@ -28,7 +29,8 @@ public class LeaderboardClient : MonoBehaviour
         var body = "{\"discordId\":" + discordIdJson + "," +
                     "\"wave\":" + waveReached + "," +
                     "\"name\":\"" + Escape(PlayerIdentity.DisplayName) + "\"," +
-                    "\"killedBy\":" + killedByJson + "}";
+                    "\"killedBy\":" + killedByJson + "," +
+                    "\"gameVersion\":\"" + Escape(gameVersion) + "\"}";
 
         StartCoroutine(PostJson(
             "/api/score",
