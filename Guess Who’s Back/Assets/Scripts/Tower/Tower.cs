@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public enum TargetType
 {
@@ -35,36 +32,15 @@ public class Tower : MonoBehaviour
     [SerializeField] private int cost = 50;
     [SerializeField] private string overrideDesc = "";
     [SerializeField] private GameObject weaponVisual;
+    [SerializeField] public bool isTrap = false;
     [SerializeField] public int waveReq = 0;
 
-    [Header("Special Stats - Knockback")]
-    [SerializeField] private bool hasKnockback = false;
-    [SerializeField] private float knockbackDistance = 0f;
+    [Header("other")]
+    public TargetType targetType = TargetType.first;
+    public GameObject bulletPrefab;
 
-    [Header("Special Stats - Freeze")]
-    [SerializeField] private bool hasFreeze = false;
-    [SerializeField][Range(0, 100)] private float freezeChance = 0f;
-    [SerializeField] private float freezeDuration = 0f;
-
-    [Header("Special Stats - Slow")]
-    [SerializeField] private bool hasSlow = false;
-    [SerializeField][Range(0, 100)] private float slowAmount = 0f;
-    [SerializeField] private float slowDuration = 0f;
-
-    [Header("Special Stats - DOT")]
-    [SerializeField] private bool hasDot = false;
-    [SerializeField] private float dotDamage = 0f;
-    [SerializeField] private float dotDuration = 0f;
-    [SerializeField] private float dotTickRate = 0.5f;
-
-    [Header("Special Stats - AOE")]
-    [SerializeField] private bool hasAoe = false;
-    [SerializeField] private float aoeRadius = 0f;
-    [SerializeField] private GameObject AoeCircle;
-    [SerializeField][Range(0, 100)] private float aoeDamageFalloff = 100f;
-
-    [Header("Special Stats - Trap")]
-    [SerializeField] public bool isTrap = false;
+    // Drawn by TowerEditor as the "On-hit effects" list
+    [SerializeReference] private List<TowerModule> modules = new List<TowerModule>();
 
     private GameObject bulletParent;
     private Vector3Int gridPosition;
@@ -73,21 +49,19 @@ public class Tower : MonoBehaviour
     private int towerRotation = 0;
     private Grid grid;
 
-    [Header("other")]
-    public TargetType targetType = TargetType.first;
-    public GameObject bulletPrefab;
-
     void Awake()
     {
         bulletParent = GameObject.Find("Bullets");
-        grid = FindObjectOfType<Grid>();
-        lastFireTime = UnityEngine.Random.Range(0f, 0.5f);
+        grid = FindFirstObjectByType<Grid>();
     }
 
     private void Update()
     {
-
-        if (Time.time >= lastFireTime + (fireRate) && !isTrap)
+        if (isTrap)
+        {
+            CheckTrapTrigger();
+        }
+        else if (Time.time >= lastFireTime + (fireRate))
         {
             AcquireTarget();
 
@@ -97,29 +71,37 @@ public class Tower : MonoBehaviour
             }
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void CheckTrapTrigger()
     {
-        if (collision.GetComponent<Enemy>())
+        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy enemy in allEnemies)
         {
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy.walkType != WalkType.flying)
+            if (!enemy.gameObject.activeInHierarchy || enemy.HasDied) continue;
+
+            Vector3Int enemyGridPos = grid.WorldToCell(enemy.transform.position);
+
+            if (enemyGridPos == gridPosition)
             {
-                if (isTrap)
+                foreach (TowerModule module in modules)
                 {
-                    if (hasSlow)
-                    {
-                        enemy.ApplySlow(slowAmount, 0.1f);
-                    }
-                    ApplyDamageAndEffects(enemy);
+                    if (module != null) module.OnTrapStay(this, enemy);
                 }
 
+                if (Time.time >= lastFireTime + fireRate)
+                {
+                    currentTarget = enemy;
+                    ApplyDamageAndEffects(enemy);
+                    lastFireTime = Time.time;
+                }
             }
         }
     }
 
     public void ResetFireRateTimer()
     {
-        lastFireTime = UnityEngine.Random.Range(0f, 0.1f);
+        lastFireTime = 0;
     }
 
     private void AcquireTarget()
@@ -132,7 +114,6 @@ public class Tower : MonoBehaviour
         foreach (Enemy enemy in allEnemies)
         {
             if (!enemy.gameObject.activeInHierarchy) continue;
-            if (enemy.soonToDie) continue;
 
             Vector2 directionToEnemy = (enemy.transform.position - transform.position);
             float distance = directionToEnemy.magnitude;
@@ -282,11 +263,7 @@ public class Tower : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        lastFireTime = Time.time + UnityEngine.Random.Range(-0.1f, 0.1f);
-
-        Enemy targetEnemy = currentTarget.GetComponent<Enemy>();
-        if (targetEnemy.CurrentHealth - damage <= 0) targetEnemy.soonToDie = true;
-        
+        lastFireTime = Time.time;
 
         if (Settings.ShowBullets)
         {
@@ -331,103 +308,72 @@ public class Tower : MonoBehaviour
         }
     }
 
+    //Modules
     public void ApplyDamageAndEffects(Enemy target)
     {
         if (target == null || target.HasDied) return;
 
-        target.TakeDamage(damage);
+        Vector3 impactPosition = target.transform.position;
 
-        if (hasKnockback && knockbackDistance > 0)
+        ApplyHit(target, transform.position, 1f);
+
+        foreach (TowerModule module in modules)
         {
-            Vector3 knockbackDir = (target.transform.position - transform.position).normalized;
-            target.ApplyKnockback(knockbackDistance, knockbackDir);
-        }
-
-        if (hasFreeze && UnityEngine.Random.Range(0f, 100f) < freezeChance)
-        {
-            target.ApplyFreeze(freezeDuration);
-        }
-
-        if (hasSlow)
-        {
-            target.ApplySlow(slowAmount, slowDuration);
-        }
-
-        if (hasDot)
-        {
-            string dotSourceId = gameObject.GetInstanceID().ToString();
-            target.ApplyDot(dotDamage, dotDuration, dotTickRate, dotSourceId);
-        }
-
-        if (hasAoe && aoeRadius > 0)
-        {
-            StartCoroutine(AOECircleSpawn(target.transform.position));
-
-            ApplyAoeDamage(target.transform.position);
+            if (module is AoeModule aoe && aoe.radius > 0)
+            {
+                if (aoe.circlePrefab != null) StartCoroutine(SpawnAoeCircle(aoe, impactPosition));
+                ApplySplash(aoe, target, impactPosition);
+            }
         }
     }
 
-    private IEnumerator AOECircleSpawn(Vector3 impactPosition)
+    private void ApplyHit(Enemy enemy, Vector3 hitFrom, float multiplier)
     {
-        GameObject cloe = Instantiate(AoeCircle);
-        cloe.transform.position = impactPosition;
-        cloe.GetComponent<SpriteRenderer>().sortingOrder = 500;
-        cloe.transform.localScale = new Vector3(aoeRadius, aoeRadius, 1);
-        yield return new WaitForSeconds(0.3f);
-        Destroy(cloe);
+        enemy.TakeDamage(damage * multiplier);
+
+        foreach (TowerModule module in modules)
+        {
+            if (module == null || enemy.HasDied) continue;
+            module.OnHit(this, enemy, hitFrom, multiplier);
+        }
     }
-    private void ApplyAoeDamage(Vector3 impactPosition)
+
+    private void ApplySplash(AoeModule aoe, Enemy primaryTarget, Vector3 impactPosition)
     {
         Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
         foreach (Enemy enemy in allEnemies)
         {
             if (!enemy.gameObject.activeInHierarchy || enemy.HasDied) continue;
-            if (enemy == currentTarget) continue;
+            if (enemy == primaryTarget) continue;
 
             float distance = Vector3.Distance(impactPosition, enemy.transform.position);
+            if (distance > aoe.radius) continue;
 
-            if (distance <= aoeRadius)
-            {
-                float damageMultiplier = CalculateAoeDamageMultiplier(distance);
-                float aoeDamage = damage * damageMultiplier;
-
-                enemy.TakeDamage(aoeDamage);
-
-                if (hasKnockback && knockbackDistance > 0)
-                {
-                    Vector3 knockbackDir = (enemy.transform.position - impactPosition).normalized;
-                    enemy.ApplyKnockback(knockbackDistance * damageMultiplier, knockbackDir);
-                }
-
-                if (hasFreeze && UnityEngine.Random.Range(0f, 100f) < freezeChance)
-                {
-                    enemy.ApplyFreeze(freezeDuration);
-                }
-
-                if (hasSlow)
-                {
-                    enemy.ApplySlow(slowAmount * damageMultiplier, slowDuration);
-                }
-
-                if (hasDot)
-                {
-                    string dotSourceId = gameObject.GetInstanceID().ToString();
-                    enemy.ApplyDot(dotDamage * damageMultiplier, dotDuration, dotTickRate, dotSourceId);
-                }
-            }
+            ApplyHit(enemy, impactPosition, aoe.GetMultiplier(distance));
         }
     }
 
-    private float CalculateAoeDamageMultiplier(float distance)
+    private IEnumerator SpawnAoeCircle(AoeModule aoe, Vector3 impactPosition)
     {
-        if (distance >= aoeRadius) return 0f;
-
-        float falloffMultiplier = aoeDamageFalloff / 100f;
-        float distanceRatio = distance / aoeRadius;
-
-        return 1f - (distanceRatio * (1f - falloffMultiplier));
+        GameObject circle = Instantiate(aoe.circlePrefab);
+        circle.transform.position = impactPosition;
+        circle.GetComponent<SpriteRenderer>().sortingOrder = 500;
+        circle.transform.localScale = new Vector3(aoe.radius, aoe.radius, 1);
+        yield return new WaitForSeconds(0.3f);
+        Destroy(circle);
     }
+
+    public T GetModule<T>() where T : TowerModule
+    {
+        foreach (TowerModule module in modules)
+        {
+            if (module is T typed) return typed;
+        }
+        return null;
+    }
+
+    // No more module shit
 
     float CalculateInterceptTime(Vector2 shooterPos, Vector2 targetPos, Vector2 targetVelocity, float bulletSpeed)
     {
@@ -465,11 +411,11 @@ public class Tower : MonoBehaviour
         string desc = $"Cost: {cost}\nDmg: {damage}\nRange: {range}\nRate: {fireRate}";
 
         if (isTrap) desc += "\n[TRAP]";
-        if (hasKnockback) desc += $"\nKnockback: {knockbackDistance}";
-        if (hasFreeze) desc += $"\nFreeze: {freezeChance}% ({freezeDuration}s)";
-        if (hasSlow) desc += $"\nSlow: {slowAmount}% ({slowDuration}s)";
-        if (hasDot) desc += $"\nDOT: {dotDamage}/tick ({dotDuration}s)";
-        if (hasAoe) desc += $"\nAOE: {aoeRadius} radius";
+
+        foreach (TowerModule module in modules)
+        {
+            if (module != null) desc += "\n" + module.GetDescription();
+        }
 
         return desc;
     }
@@ -498,18 +444,20 @@ public class Tower : MonoBehaviour
     public float FireRate => fireRate;
     public int Cost => cost;
     public Vector3Int GridPosition => gridPosition;
-    public bool HasAoe => hasAoe;
-    public float AoeRadius => aoeRadius;
+    public bool HasAoe => GetModule<AoeModule>() != null;
+    public float AoeRadius => GetModule<AoeModule>()?.radius ?? 0f;
+    public IReadOnlyList<TowerModule> Modules => modules;
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
 
-        if (hasAoe && aoeRadius > 0)
+        AoeModule aoe = GetModule<AoeModule>();
+        if (aoe != null && aoe.radius > 0)
         {
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
-            Gizmos.DrawWireSphere(transform.position, aoeRadius);
+            Gizmos.DrawWireSphere(transform.position, aoe.radius);
         }
 
         if (isTrap && grid != null)
