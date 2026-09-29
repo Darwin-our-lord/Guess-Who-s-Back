@@ -102,10 +102,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Ghost
-  maxHealth: 400
+  maxHealth: 250
   speed: 2
   waveValue: 15
-  maxWavesAlive: 13
+  maxWavesAlive: 10
   waveReq: 17
   walkType: 1
   scalingStartWave: 10
