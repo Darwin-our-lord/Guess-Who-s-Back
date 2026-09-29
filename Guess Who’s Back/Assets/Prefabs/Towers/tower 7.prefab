@@ -109,26 +109,45 @@ MonoBehaviour:
   cost: 200
   overrideDesc: 
   weaponVisual: {fileID: 0}
-  waveReq: 25
-  hasKnockback: 1
-  knockbackDistance: 1
-  hasFreeze: 1
-  freezeChance: 50
-  freezeDuration: 2
-  hasSlow: 1
-  slowAmount: 20
-  slowDuration: 5
-  hasDot: 1
-  dotDamage: 3
-  dotDuration: 5
-  dotTickRate: 0.5
-  hasAoe: 1
-  aoeRadius: 3
-  AoeCircle: {fileID: 5419374562607776820, guid: 1003387f9b3855846be3d98e3b1b2a7c, type: 3}
-  aoeDamageFalloff: 50
   isTrap: 0
+  waveReq: 25
   targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
+  modules:
+  - rid: 1236998507074682962
+  - rid: 1236998507074682963
+  - rid: 1236998507074682964
+  - rid: 1236998507074682965
+  - rid: 1236998507074682966
+  references:
+    version: 2
+    RefIds:
+    - rid: 1236998507074682962
+      type: {class: AoeModule, ns: , asm: Assembly-CSharp}
+      data:
+        radius: 3
+        damageFalloff: 50
+        circlePrefab: {fileID: 5419374562607776820, guid: 1003387f9b3855846be3d98e3b1b2a7c, type: 3}
+    - rid: 1236998507074682963
+      type: {class: DotModule, ns: , asm: Assembly-CSharp}
+      data:
+        damage: 3
+        duration: 5
+        tickRate: 0.5
+    - rid: 1236998507074682964
+      type: {class: FreezeModule, ns: , asm: Assembly-CSharp}
+      data:
+        chance: 50
+        duration: 2
+    - rid: 1236998507074682965
+      type: {class: KnockbackModule, ns: , asm: Assembly-CSharp}
+      data:
+        distance: 1
+    - rid: 1236998507074682966
+      type: {class: SlowModule, ns: , asm: Assembly-CSharp}
+      data:
+        amount: 20
+        duration: 5
 --- !u!61 &6415892694410887876
 BoxCollider2D:
   m_ObjectHideFlags: 0

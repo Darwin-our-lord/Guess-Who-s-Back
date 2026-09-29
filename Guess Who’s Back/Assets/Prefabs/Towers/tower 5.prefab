@@ -109,26 +109,19 @@ MonoBehaviour:
   cost: 60
   overrideDesc: 
   weaponVisual: {fileID: 0}
-  waveReq: 5
-  hasKnockback: 1
-  knockbackDistance: 3
-  hasFreeze: 0
-  freezeChance: 0
-  freezeDuration: 0
-  hasSlow: 0
-  slowAmount: 0
-  slowDuration: 0
-  hasDot: 0
-  dotDamage: 0
-  dotDuration: 0
-  dotTickRate: 0.5
-  hasAoe: 0
-  aoeRadius: 0
-  AoeCircle: {fileID: 0}
-  aoeDamageFalloff: 100
   isTrap: 0
+  waveReq: 5
   targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: 87749ecac9cc0de49aeb3d5e5cf4d3b2, type: 3}
+  modules:
+  - rid: 1236998507074682960
+  references:
+    version: 2
+    RefIds:
+    - rid: 1236998507074682960
+      type: {class: KnockbackModule, ns: , asm: Assembly-CSharp}
+      data:
+        distance: 3
 --- !u!61 &6415892694410887876
 BoxCollider2D:
   m_ObjectHideFlags: 0

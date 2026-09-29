@@ -110,26 +110,28 @@ MonoBehaviour:
   cost: 60
   overrideDesc: 
   weaponVisual: {fileID: 7294698453796576895}
-  waveReq: 5
-  hasKnockback: 0
-  knockbackDistance: 5
-  hasFreeze: 0
-  freezeChance: 25.2
-  freezeDuration: 5
-  hasSlow: 0
-  slowAmount: 0
-  slowDuration: 0
-  hasDot: 1
-  dotDamage: 10
-  dotDuration: 5
-  dotTickRate: 0.5
-  hasAoe: 1
-  aoeRadius: 1
-  AoeCircle: {fileID: 5419374562607776820, guid: 1003387f9b3855846be3d98e3b1b2a7c, type: 3}
-  aoeDamageFalloff: 100
   isTrap: 0
+  waveReq: 5
   targetType: 1
   bulletPrefab: {fileID: 6408441081318662872, guid: dac738a9e1978494ba51cb867fe727b9, type: 3}
+  modules:
+  - rid: 1236998507074682958
+  - rid: 1236998507074682959
+  references:
+    version: 2
+    RefIds:
+    - rid: 1236998507074682958
+      type: {class: AoeModule, ns: , asm: Assembly-CSharp}
+      data:
+        radius: 1
+        damageFalloff: 100
+        circlePrefab: {fileID: 5419374562607776820, guid: 1003387f9b3855846be3d98e3b1b2a7c, type: 3}
+    - rid: 1236998507074682959
+      type: {class: DotModule, ns: , asm: Assembly-CSharp}
+      data:
+        damage: 10
+        duration: 5
+        tickRate: 0.5
 --- !u!61 &6415892694410887876
 BoxCollider2D:
   m_ObjectHideFlags: 0
